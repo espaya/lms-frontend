@@ -1,37 +1,62 @@
-name: Build and Deploy React App
+# name: Build and Deploy React App
+
+# on:
+#   push:
+#     branches:
+#       - main
+
+# jobs:
+#   build-deploy:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v3
+
+#       - name: Set up Node.js
+#         uses: actions/setup-node@v3
+#         with:
+#           node-version: 20 # Vite works best with Node 18 or 20
+
+#       - name: Install dependencies
+#         run: npm install
+
+#       - name: Ensure vite is executable
+#         run: chmod +x node_modules/.bin/vite
+
+#       - name: Build React app
+#         run: npm run build
+
+#       - name: Deploy via FTP
+#         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+#         with:
+#           server: 88.223.84.65
+#           username: u480978523.lms.1staccesshomecareinc.com
+#           password: ${{ secrets.FTP_PASSWORD }}
+#           local-dir: dist/
+#           server-dir: public_html/
+
+name: Deploy to Hostinger via FTP
 
 on:
   push:
     branches:
-      - main
+      - main # or use "master" if that's your main branch
 
 jobs:
-  build-deploy:
+  ftp-deploy:
+    name: Upload via FTP
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 20 # Vite works best with Node 18 or 20
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Ensure vite is executable
-        run: chmod +x node_modules/.bin/vite
-
-      - name: Build React app
-        run: npm run build
-
-      - name: Deploy via FTP
+      - name: Upload to FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
           server: 88.223.84.65
           username: u480978523.lms.1staccesshomecareinc.com
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: dist/
-          server-dir: public_html/
+          server-dir: domains/lms.1staccesshomecareinc.com/public_html/
