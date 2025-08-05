@@ -1,3 +1,11 @@
 export default function Spinner() {
-  return <>Spinnr</>;
+  return (
+    <>
+      <div id="preloader">
+        <i>.</i>
+        <i>.</i>
+        <i>.</i>
+      </div>
+    </>
+  );
 }
