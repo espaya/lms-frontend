@@ -1,6 +1,7 @@
 export default function Home() {
   return (
     <>
+      <title>Login - 1staccess</title>
       <div className="authincation section-padding">
         <div className="container h-100">
           <div className="row justify-content-center h-100 align-items-center">
@@ -45,7 +46,9 @@ export default function Home() {
                             className="form-check-input "
                             value=""
                           />
-                          <label className="form-check-label">Remember me</label>
+                          <label className="form-check-label">
+                            Remember me
+                          </label>
                         </div>
                       </div>
                       <div className="col-6 text-end">
@@ -59,9 +62,9 @@ export default function Home() {
                     </div>
                   </form>
                   <p className="mt-16 mb-0">
-                    Don't have an account? 
+                    Don't have an account?
                     <a className="text-primary" href="signup.html">
-                       Sign up
+                      Sign up
                     </a>
                   </p>
                 </div>
