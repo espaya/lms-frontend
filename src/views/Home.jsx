@@ -26,6 +26,7 @@ export default function Home() {
                           className="form-control"
                           value=""
                           autoComplete="off"
+                          placeholder="example@email.com"
                         />
                       </div>
                       <div className="col-12 mb-16">
