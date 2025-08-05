@@ -1,3 +1,3 @@
 export default function Home() {
-  return <h1>Home Page is working now</h1>;
+  return <h1>Home Page is working.</h1>;
 }
