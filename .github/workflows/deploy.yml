@@ -34,4 +34,4 @@ jobs:
           username: u480978523.lms.1staccesshomecareinc.com
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: dist/
-          server-dir: /
+          server-dir: public_html/
