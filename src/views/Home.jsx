@@ -1,4 +1,8 @@
+import { Eye, EyeOff } from "lucide-react";
+import { useState } from "react";
+
 export default function Home() {
+  const [showPassword, setShowPassword] = useState(false);
   return (
     <>
       <title>Login - 1staccess</title>
@@ -34,10 +38,24 @@ export default function Home() {
                         <input
                           name="password"
                           type="password"
-                          className="form-control"
+                          className="form-control pe-5"
                           value=""
                           autoComplete="off"
                         />
+                        <span
+                          onClick={() => setShowPassword(!showPassword)}
+                          className="position-absolute top-50 translate-middle-x"
+                          style={{
+                            right: "15px", // manually control right offset
+                            cursor: "pointer",
+                          }}
+                        >
+                          {showPassword ? (
+                            <EyeOff size={20} />
+                          ) : (
+                            <Eye size={20} />
+                          )}
+                        </span>
                       </div>
                       <div className="col-6">
                         <div className="form-check">
