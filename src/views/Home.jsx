@@ -1,22 +1,20 @@
 import { Eye, EyeOff } from "lucide-react";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../auth/AuthContext";
 
 export default function Home() {
   const navigate = useNavigate();
-
-  const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState({});
-  const [successMsg, setSuccessMsg] = useState("");
-  const apiBase = import.meta.env.VITE_API_URL;
-
   const [formData, setFormData] = useState({
     email: "",
     password: "",
     remember: false,
   });
+  const { login, loading, successMsg, errors, setErrors, setSuccessMsg } =
+    useContext(AuthContext);
+
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleOnChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -29,51 +27,36 @@ export default function Home() {
   const handleOnSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
-    setLoading(true);
+    // setLoading(true); // Add loading state if not already present
 
     try {
-      await fetch(`${apiBase}/sanctum/csrf-cookie`, {
-        credentials: "include",
-      });
+      const userData = await login(formData);
 
-      const csrfToken = Cookies.get("XSRF-TOKEN");
-
-      const response = await fetch(`${apiBase}/api/login`, {
-        method: "POST",
-        body: JSON.stringify(formData),
-        credentials: "include",
-        headers: {
-          Accept: "application/json", // ✅ FIXED typo here
-          "Content-Type": "application/json",
-          "X-XSRF-TOKEN": decodeURIComponent(csrfToken),
-        },
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        if (data.errors) {
-          setErrors(data.errors);
-        } else {
-          setErrors({ general: data.message });
-        }
-      } else {
-        setSuccessMsg(data.message);
+      // Double-check userData exists and has role
+      if (userData?.role) {
         setFormData({ email: "", password: "", remember: false });
 
-        setTimeout(() => setSuccessMsg(""), 3500);
+        // Add debug logs
+        console.log("Login successful, user role:", userData.role);
+        console.log(
+          "Navigating to:",
+          userData.role === "ADMIN" ? "/admin/dashboard" : "/user/dashboard"
+        );
 
-        // ✅ OPTIONAL: Redirect based on role
-        if (data?.user?.role === "ADMIN") {
-          window.location.href = "/admin/dashboard";
-        } else {
-          window.location.href = "/user/account";
-        }
+        // Use setTimeout to ensure React's state updates are complete
+        setTimeout(() => {
+          setSuccessMsg("");
+          navigate(
+            userData.role === "ADMIN" ? "/admin/dashboard" : "/user/dashboard",
+            { replace: true }
+          );
+        }, 3500);
       }
-    } catch (err) {
-      setErrors({ general: err.message });
+    } catch (error) {
+      console.error("Login error:", error);
+      setErrors({ general: error.message || "Login failed" });
     } finally {
-      setLoading(false);
+      // setLoading(false);
     }
   };
 
