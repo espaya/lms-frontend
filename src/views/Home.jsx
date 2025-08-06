@@ -61,11 +61,13 @@ export default function Home() {
         setSuccessMsg(data.message);
         setFormData({ email: "", password: "", remember: false });
 
+        setTimeout(() => setSuccessMsg(""), 3500);
+
         // ✅ OPTIONAL: Redirect based on role
         if (data?.user?.role === "ADMIN") {
           navigate("/admin/dashboard");
         } else {
-          navigate("/account");
+          navigate("/user/account");
         }
       }
     } catch (err) {
@@ -77,7 +79,7 @@ export default function Home() {
 
   return (
     <>
-      <title>Login - 1staccess</title>
+      <title>Login - 1staccess Home Care</title>
       <div className="authincation section-padding">
         <div className="container h-100">
           <div className="row justify-content-center h-100 align-items-center">
