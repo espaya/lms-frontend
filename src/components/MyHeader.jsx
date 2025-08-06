@@ -23,7 +23,7 @@ export default function MyHeader() {
               <div className="header-content">
                 <div className="header-left">
                   <div className="brand-logo">
-                    <a className="mini-logo" href="index.html">
+                    <a className="mini-logo" href="/admin/dashboard">
                       <img src="/assets/images/logo.png" alt="" width={40} />
                     </a>
                   </div>
@@ -173,8 +173,23 @@ export default function MyHeader() {
                             <img src="/assets/images/avatar/1.png" alt="" />
                           </span>
                           <div>
-                            <h5>Fiaz Abdullah</h5>
-                            <span>codeefly@gmail.com</span>
+                            <h5>
+                              {(() => {
+                                if (!user || typeof user.name !== "string")
+                                  return "N/A";
+                                return (
+                                  user.name.charAt(0).toUpperCase() +
+                                  user.name.slice(1)
+                                );
+                              })()}
+                            </h5>
+                            <span>
+                              {(() => {
+                                if (!user || typeof user.email !== "string")
+                                  return "N/A";
+                                return user.email;
+                              })()}
+                            </span>
                           </div>
                         </div>
                       </div>

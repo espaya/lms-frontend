@@ -6,13 +6,14 @@ import { AuthContext } from "../auth/AuthContext";
 
 export default function Home() {
   const navigate = useNavigate();
+  const { login, loading, successMsg, errors, setErrors, setSuccessMsg, user } =
+    useContext(AuthContext);
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
     remember: false,
   });
-  const { login, loading, successMsg, errors, setErrors, setSuccessMsg } =
-    useContext(AuthContext);
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -50,7 +51,7 @@ export default function Home() {
             userData.role === "ADMIN" ? "/admin/dashboard" : "/user/dashboard",
             { replace: true }
           );
-        }, 3500);
+        }, 2000);
       }
     } catch (error) {
       console.error("Login error:", error);

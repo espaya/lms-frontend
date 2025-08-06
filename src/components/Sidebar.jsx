@@ -3,59 +3,51 @@ export default function Sidebar() {
     <>
       <div className="sidebar">
         <div className="brand-logo text-center">
-          <a className="mini-logo" href="index.html">
+          <a className="mini-logo" href="/admin/dashboard">
             <img src="/assets/images/logo.png" alt="" width={30} />
           </a>
         </div>
         <div className="menu">
           <ul>
             <li className="undefined">
-              <a href="index.html">
+              <a href="/admin/dashboard">
                 <span>
                   <i className="ri-grid-fill" />
                 </span>
                 <span className="nav-text">Dashboard</span>
               </a>
             </li>
-            <li className="undefined">
-              <a href="courses.html">
+
+            <li className="nav-item dropdown">
+              <a
+                href="#"
+                className="nav-link dropdown-toggle"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
                 <span>
                   <i className="ri-stack-fill" />
                 </span>
-                <span className="nav-text">Courses</span>
+                <span className="nav-text">Question Manager</span>
               </a>
-            </li>
-            <li className="undefined">
-              <a href="wallet.html">
-                <span>
-                  <i className="ri-wallet-3-fill" />
-                </span>
-                <span className="nav-text">Wallet</span>
-              </a>
-            </li>
-            <li className="undefined">
-              <a href="withdraw.html">
-                <span>
-                  <i className="ri-hand-coin-fill" />
-                </span>
-                <span className="nav-text">Withdraw</span>
-              </a>
-            </li>
-            <li className="undefined">
-              <a href="upload.html">
-                <span>
-                  <i className="ri-upload-cloud-2-fill" />
-                </span>
-                <span className="nav-text">Upload</span>
-              </a>
-            </li>
-            <li className="undefined">
-              <a href="leader-board.html">
-                <span>
-                  <i className="ri-empathize-fill" />
-                </span>
-                <span className="nav-text">Board</span>
-              </a>
+              <ul className="dropdown-menu dark-dropdown">
+                <li>
+                  <a className="dropdown-item" href="courses.html">
+                    All Courses
+                  </a>
+                </li>
+                <li>
+                  <a
+                    className="dropdown-item"
+                    href="/admin/dashboard/question-manager"
+                  >
+                    Upload New
+                  </a>
+                </li>
+                <li>
+                  <hr className="dropdown-divider" />
+                </li>
+              </ul>
             </li>
           </ul>
         </div>

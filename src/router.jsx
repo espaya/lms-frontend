@@ -6,15 +6,21 @@ import Account from "./views/Account";
 import AdminDashboard from "./views/admin/AdminDashboard";
 import UserDashboard from "./views/student/UserDashboard";
 import Home from "./views/Home";
+import QuestionManager from "./views/admin/QuestionManager";
 
 // Centralized route configuration with metadata
 export const ROUTE_CONFIG = {
   // router.js
   HOME: {
     path: "/",
-    element: <Home />,
+    element: (
+      <GuestRoute>
+        <Home />
+      </GuestRoute>
+    ),
     name: "Home",
     isProtected: false,
+    // roles: ["guest"]
   },
   ACCOUNT: {
     path: "/account",
@@ -30,6 +36,15 @@ export const ROUTE_CONFIG = {
     isProtected: true,
     roles: ["ADMIN"], // ✅ restrict to ADMIN only
   },
+
+  QUESTION_MANAGER: {
+    path: "/admin/dashboard/question-manager",
+    element: <QuestionManager />,
+    name: "Quation Manager",
+    isProtected: true,
+    roles: ["ADMIN"], // ✅ restrict to ADMIN only
+  },
+
   USER_DASHBOARD: {
     path: "/user/dashboard",
     element: <UserDashboard />,
