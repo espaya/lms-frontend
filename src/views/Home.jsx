@@ -65,9 +65,9 @@ export default function Home() {
 
         // ✅ OPTIONAL: Redirect based on role
         if (data?.user?.role === "ADMIN") {
-          navigate("/admin/dashboard");
+          window.location.href = "/admin/dashboard";
         } else {
-          navigate("/user/account");
+          window.location.href = "/user/account";
         }
       }
     } catch (err) {
