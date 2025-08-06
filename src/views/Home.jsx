@@ -64,7 +64,7 @@ export default function Home() {
         // TODO: Redirect user based on role
       }
     } catch (err) {
-      setErrors({ general: "Something went wrong. Please try again." });
+      setErrors({ general: err });
     } finally {
       setLoading(false);
     }
@@ -77,18 +77,22 @@ export default function Home() {
         <div className="container h-100">
           <div className="row justify-content-center h-100 align-items-center">
             <div className="col-xl-5 col-md-6">
+              <div className="mini-logo text-center mb-35">
+                <a href="/">
+                  <img
+                    width={200}
+                    src="/assets/images/main_logo.png"
+                    alt="logo"
+                  />
+                </a>
+              </div>
+
               {successMsg && (
                 <small className="alert alert-success">{successMsg}</small>
               )}
               {errors.general && (
                 <small className="alert alert-danger">{errors.general}</small>
               )}
-
-              <div className="mini-logo text-center mb-35">
-                <a href="/">
-                  <img width={200} src="/assets/images/main_logo.png" alt="logo" />
-                </a>
-              </div>
 
               <div className="card">
                 <div className="card-header justify-content-center">
