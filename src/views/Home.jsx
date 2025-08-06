@@ -81,6 +81,12 @@ export default function Home() {
       <div className="authincation section-padding">
         <div className="container h-100">
           <div className="row justify-content-center h-100 align-items-center">
+            {successMsg && (
+              <small className="alert alert-success">{successMsg}</small>
+            )}
+            {errors.general && (
+              <small className="alert alert-danger">{errors.general}</small>
+            )}
             <div className="col-xl-5 col-md-6">
               <div className="mini-logo text-center mb-35">
                 <a href="/">
@@ -91,13 +97,6 @@ export default function Home() {
                   />
                 </a>
               </div>
-              {successMsg && (
-                <small className="alert alert-success">{successMsg}</small>
-              )}
-              {errors.general && (
-                <small className="alert alert-danger">{errors.general}</small>
-              )}
-
               <div className="card mt-10">
                 <div className="card-header justify-content-center">
                   <h4 className="card-title">Sign in</h4>
