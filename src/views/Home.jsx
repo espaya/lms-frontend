@@ -10,7 +10,7 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [successMsg, setSuccessMsg] = useState("");
-  const apiBase = import.meta.env.VITE_API_URL || "http://localhost:8000";
+  const apiBase = import.meta.env.VITE_API_URL;
 
   const [formData, setFormData] = useState({
     email: "",
@@ -179,7 +179,7 @@ export default function Home() {
                         className="btn btn-primary mr-2"
                         disabled={loading}
                       >
-                        {loading ? "Signing In..." : "Sign In"}
+                        {loading ? "Signing in..." : "Sign In"}
                       </button>
                     </div>
                   </form>
