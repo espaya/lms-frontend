@@ -32,8 +32,11 @@ export default function Sidebar() {
               </a>
               <ul className="dropdown-menu dark-dropdown">
                 <li>
-                  <a className="dropdown-item" href="courses.html">
-                    All Courses
+                  <a
+                    className="dropdown-item"
+                    href="/admin/dashboard/all-questions"
+                  >
+                    All Questions
                   </a>
                 </li>
                 <li>

@@ -147,6 +147,45 @@ hr:not([size]) {
   margin: 0.5rem 0;
 }
 
+
+/*Custom icons css */
+.pdf-content {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.icon-link {
+  color: #6c757d;
+  transition: all 0.3s ease;
+  font-size: 18px;
+  display: inline-flex;
+  padding: 4px;
+}
+
+.icon-link:hover {
+  color: #0d6efd;
+  transform: scale(1.1);
+  text-decoration: none;
+}
+
+/* Specific colors for each action */
+.icon-link[title="View"]:hover {
+  color: #198754; /* Green for view */
+}
+
+.icon-link[title="Edit"]:hover {
+  color: #ffc107; /* Yellow for edit */
+}
+
+.icon-link[title="Delete"]:hover {
+  color: #dc3545; /* Red for delete */
+}
+
+.icon-link[title="Download PDF"]:hover {
+  color: #0d6efd; /* Blue for download */
+}
+
 h1,
 .h1,
 h2,
