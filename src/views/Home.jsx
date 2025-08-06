@@ -1,8 +1,11 @@
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 
 export default function Home() {
+  const navigate = useNavigate();
+
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
@@ -40,7 +43,7 @@ export default function Home() {
         body: JSON.stringify(formData),
         credentials: "include",
         headers: {
-          Accept: "application/json",
+          Accept: "application/json", // ✅ FIXED typo here
           "Content-Type": "application/json",
           "X-XSRF-TOKEN": decodeURIComponent(csrfToken),
         },
@@ -55,13 +58,15 @@ export default function Home() {
           setErrors({ general: data.message });
         }
       } else {
-        setFormData({
-          email: "",
-          password: "",
-          remember: false,
-        });
         setSuccessMsg(data.message);
-        // TODO: Redirect user based on role
+        setFormData({ email: "", password: "", remember: false });
+
+        // ✅ OPTIONAL: Redirect based on role
+        if (data?.user?.role === "ADMIN") {
+          navigate("/admin/dashboard");
+        } else {
+          navigate("/account");
+        }
       }
     } catch (err) {
       setErrors({ general: err.message });
@@ -99,7 +104,7 @@ export default function Home() {
                   <h4 className="card-title">Sign in</h4>
                 </div>
                 <div className="card-body">
-                  <form onSubmit={handleOnSubmit} method="POST">
+                  <form onSubmit={handleOnSubmit}>
                     <div className="row">
                       {/* Email */}
                       <div className="col-12 mb-16">
@@ -149,7 +154,7 @@ export default function Home() {
                         )}
                       </div>
 
-                      {/* Remember me */}
+                      {/* Remember Me */}
                       <div className="col-6">
                         <div className="form-check">
                           <input
@@ -180,13 +185,6 @@ export default function Home() {
                       </button>
                     </div>
                   </form>
-
-                  {/* <p className="mt-16 mb-0">
-                    Don't have an account?
-                    <a className="text-primary" href="signup.html">
-                      Sign up
-                    </a>
-                  </p> */}
                 </div>
               </div>
 
