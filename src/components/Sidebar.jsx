@@ -4,7 +4,7 @@ export default function Sidebar() {
       <div className="sidebar">
         <div className="brand-logo text-center">
           <a className="mini-logo" href="index.html">
-            <img src="assets/images/logoi.png" alt="" width={30} />
+            <img src="/assets/images/logo.png" alt="" width={30} />
           </a>
         </div>
         <div className="menu">

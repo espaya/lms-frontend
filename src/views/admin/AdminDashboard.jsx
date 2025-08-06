@@ -292,7 +292,7 @@ export default function AdminDashboard() {
                         <div className="student-query-inner d-flex justify-content-between align-items-start">
                           <img
                             className="me-20 rounded-circle"
-                            src="assets/images/avatar/7.jpg"
+                            src="/assets/images/avatar/7.jpg"
                             alt=""
                           />
                           <div className="student-query-details flex-basis-50 flex-grow-1 me-20">
@@ -320,7 +320,7 @@ export default function AdminDashboard() {
                         <div className="student-query-inner d-flex justify-content-between align-items-start">
                           <img
                             className="me-20 rounded-circle"
-                            src="assets/images/avatar/8.jpg"
+                            src="/assets/images/avatar/8.jpg"
                             alt=""
                           />
                           <div className="student-query-details flex-basis-50 flex-grow-1 me-20">
@@ -350,7 +350,7 @@ export default function AdminDashboard() {
                         <div className="student-query-inner d-flex justify-content-between align-items-start">
                           <img
                             className="me-20 rounded-circle"
-                            src="assets/images/avatar/9.jpg"
+                            src="/assets/images/avatar/9.jpg"
                             alt=""
                           />
                           <div className="student-query-details flex-basis-50 flex-grow-1 me-20">
@@ -380,7 +380,7 @@ export default function AdminDashboard() {
                         <div className="student-query-inner d-flex justify-content-between align-items-start">
                           <img
                             className="me-20 rounded-circle"
-                            src="assets/images/avatar/10.jpg"
+                            src="/assets/images/avatar/10.jpg"
                             alt=""
                           />
                           <div className="student-query-details flex-basis-50 flex-grow-1 me-20">
@@ -524,7 +524,7 @@ export default function AdminDashboard() {
                           <div className="rtable-cell--content title-content d-flex align-items-center">
                             <img
                               className="topic-cell-img "
-                              src="images/courses/10.jpg"
+                              src="/assets/images/courses/10.jpg"
                               width={95}
                               alt=""
                             />
@@ -564,7 +564,7 @@ export default function AdminDashboard() {
                           <div className="rtable-cell--content title-content d-flex align-items-center">
                             <img
                               className="topic-cell-img "
-                              src="images/courses/11.jpg"
+                              src="/assets/images/courses/11.jpg"
                               width={95}
                               alt=""
                             />
@@ -604,7 +604,7 @@ export default function AdminDashboard() {
                           <div className="rtable-cell--content title-content d-flex align-items-center">
                             <img
                               className="topic-cell-img "
-                              src="images/courses/12.jpg"
+                              src="/assets/images/courses/12.jpg"
                               width={95}
                               alt=""
                             />
@@ -644,7 +644,7 @@ export default function AdminDashboard() {
                           <div className="rtable-cell--content title-content d-flex align-items-center">
                             <img
                               className="topic-cell-img "
-                              src="images/courses/13.jpg"
+                              src="/assets/images/courses/13.jpg"
                               width={95}
                               alt=""
                             />
@@ -684,7 +684,7 @@ export default function AdminDashboard() {
                           <div className="rtable-cell--content title-content d-flex align-items-center">
                             <img
                               className="topic-cell-img "
-                              src="images/courses/14.jpg"
+                              src="/assets/images/courses/14.jpg"
                               width={95}
                               alt=""
                             />

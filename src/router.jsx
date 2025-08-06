@@ -70,7 +70,10 @@ const router = createBrowserRouter(
         element
       ),
     })
-  )
+  ),
+  {
+    basename: "/", // Add this if your app is at root, or "/subfolder" if applicable
+  }
 );
 
 export default router;
