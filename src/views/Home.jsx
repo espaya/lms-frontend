@@ -91,7 +91,6 @@ export default function Home() {
                   />
                 </a>
               </div>
-
               {successMsg && (
                 <small className="alert alert-success">{successMsg}</small>
               )}
@@ -99,7 +98,7 @@ export default function Home() {
                 <small className="alert alert-danger">{errors.general}</small>
               )}
 
-              <div className="card">
+              <div className="card mt-10">
                 <div className="card-header justify-content-center">
                   <h4 className="card-title">Sign in</h4>
                 </div>
