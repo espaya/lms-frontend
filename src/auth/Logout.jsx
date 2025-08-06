@@ -18,7 +18,7 @@ export const logoutUser = async (setUser, fetchUser) => {
             },
         });
 
-        window.location.href = '/login'; // or use `navigate('/login')`
+        window.location.href = '/'; // or use `navigate('/login')`
     } catch (err) {
         console.error('Logout failed: ' + err);
     }

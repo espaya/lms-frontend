@@ -11,7 +11,7 @@ const ProtectedRoute = ({ children, roles = [] }) => {
         return <Spinner />;
     }
 
-    if (!user) return <Navigate to="/login" state={{ from: location }} replace />;
+    if (!user) return <Navigate to="/" state={{ from: location }} replace />;
 
     if (roles.length > 0 && !roles.includes(user.role)) {
         return <Navigate to="/404" replace />;

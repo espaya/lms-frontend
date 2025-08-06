@@ -2,31 +2,48 @@ import { createBrowserRouter } from "react-router-dom";
 import GuestRoute from "./auth/GuestRoute";
 import ProtectedRoute from "./auth/ProtectedRoute";
 import NotFound from "./views/NotFound";
-import Home from "./views/Home";
 import Account from "./views/Account";
+import AdminDashboard from "./views/admin/AdminDashboard";
+import UserDashboard from "./views/student/UserDashboard";
+import Home from "./views/Home";
 
 // Centralized route configuration with metadata
 export const ROUTE_CONFIG = {
+  // router.js
   HOME: {
     path: "/",
     element: <Home />,
     name: "Home",
     isProtected: false,
   },
-  // Users route
   ACCOUNT: {
     path: "/account",
     element: <Account />,
     name: "Account",
     isProtected: true,
+    roles: ["USER", "ADMIN"], // ✅ optional
   },
-  
-  // NOT_FOUND: {
-  //   path: "*",
-  //   element: <NotFound />,
-  //   name: "Not Found",
-  //   isProtected: false,
-  // },
+  ADMIN_DASHBOARD: {
+    path: "/admin/dashboard",
+    element: <AdminDashboard />,
+    name: "Admin Dashboard",
+    isProtected: true,
+    roles: ["ADMIN"], // ✅ restrict to ADMIN only
+  },
+  USER_DASHBOARD: {
+    path: "/user/dashboard",
+    element: <UserDashboard />,
+    name: "User Dashboard",
+    isProtected: true,
+    roles: ["USER"],
+  },
+
+  NOT_FOUND: {
+    path: "*",
+    element: <NotFound />,
+    name: "Not Found",
+    isProtected: false,
+  },
 };
 
 // Helper functions for route access
