@@ -64,7 +64,7 @@ export default function Home() {
         // TODO: Redirect user based on role
       }
     } catch (err) {
-      setErrors({ general: err });
+      setErrors({ general: err.message });
     } finally {
       setLoading(false);
     }
