@@ -34,14 +34,15 @@ export default function Sidebar() {
                 className="dropdown-menu dark-dropdown"
                 style={{ color: "black" }}
               >
-                <li>
+                {/* <li>
                   <a
                     className="dropdown-item"
                     href="/admin/dashboard/all-questions"
                   >
                     All Questions
                   </a>
-                </li>
+                </li> */}
+
                 <li>
                   <a
                     className="dropdown-item"
@@ -50,9 +51,20 @@ export default function Sidebar() {
                     Upload New
                   </a>
                 </li>
+
                 <li>
-                  <hr className="dropdown-divider" />
+                  <a class="dropdown-item" href="/admin/dashboard/subjects">
+                    Subject
+                  </a>
                 </li>
+                <li>
+                  <a class="dropdown-item" href="/admin/dashboard/topics">
+                    Topics
+                  </a>
+                </li>
+                {/* <li>
+                  <hr className="dropdown-divider" />
+                </li> */}
               </ul>
             </li>
           </ul>
