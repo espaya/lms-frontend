@@ -1,12 +1,21 @@
 import { useContext } from "react";
 import { Navigate } from "react-router-dom";
-import { AuthContext } from "./AuthContext"; // Make sure this path is correct
+import { AuthContext } from "./AuthContext";
 
 const GuestRoute = ({ children }) => {
   const { user } = useContext(AuthContext);
 
-  // If user is already logged in, redirect to account page (or wherever you want)
-  if (user) return <Navigate to="/account" />;
+  if (user) {
+    // Redirect based on user role
+    switch (user.role) {
+      case "admin":
+        return <Navigate to="/admin/dashboard" />;
+      case "teacher":
+        return <Navigate to="/user/dashboard" />;
+      default:
+        return <Navigate to="/" />;
+    }
+  }
 
   return children;
 };
