@@ -34,14 +34,14 @@ export default function Sidebar() {
                 className="dropdown-menu dark-dropdown"
                 style={{ color: "black" }}
               >
-                {/* <li>
+                <li>
                   <a
                     className="dropdown-item"
                     href="/admin/dashboard/all-questions"
                   >
                     All Questions
                   </a>
-                </li> */}
+                </li>
 
                 <li>
                   <a
