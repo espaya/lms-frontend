@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import MyHeader from "../../components/MyHeader";
 import Sidebar from "../../components/Sidebar";
@@ -14,6 +14,8 @@ export default function AllQuestions() {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const apiBase = import.meta.env.VITE_API_URL;
+  const [visibleQuestions, setVisibleQuestions] = useState({});
+  const [questionsByTopic, setQuestionsByTopic] = useState({});
 
   const fetchQuestions = async (page = 1) => {
     setLoading(true);
@@ -69,6 +71,53 @@ export default function AllQuestions() {
     fetchQuestions(page);
   };
 
+  const fetchQuestionsForTopic = async (topicId) => {
+    if (questionsByTopic[topicId]) {
+      // Already fetched, just toggle
+      setVisibleQuestions((prev) => ({
+        ...prev,
+        [topicId]: !prev[topicId],
+      }));
+      return;
+    }
+
+    try {
+      const csrfToken = Cookies.get("XSRF-TOKEN");
+      const authToken = localStorage.getItem("auth_token");
+
+      const response = await fetch(
+        `${apiBase}/api/topics/${topicId}/questions`,
+        {
+          credentials: "include",
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            "X-XSRF-TOKEN": csrfToken ? decodeURIComponent(csrfToken) : "",
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to fetch questions");
+      }
+
+      setQuestionsByTopic((prev) => ({
+        ...prev,
+        [topicId]: data.questions,
+      }));
+
+      setVisibleQuestions((prev) => ({
+        ...prev,
+        [topicId]: true,
+      }));
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <>
       <title>All Questions - 1staccess Home Care</title>
@@ -93,10 +142,10 @@ export default function AllQuestions() {
                     </span>
                     <a href="#">Manage Questions</a>
                   </div>
-                  <div className="d-flex justify-content-between align-items-center mt-20">
+                  <div className="d-flex justify-content-between align-items-center">
                     <a
                       href="/admin/dashboard/question-manager"
-                      className="btn btn-primary btn-sm"
+                      className="btn btn-primary mt-10"
                     >
                       Add New Question
                     </a>
@@ -139,71 +188,110 @@ export default function AllQuestions() {
 
                           {questions.map((subject) =>
                             subject.topics.map((topic) => (
-                              <div
-                                className="rtable-row"
-                                key={`${subject.id}-${topic.id}`}
-                              >
-                                <div className="rtable-cell topic-cell">
-                                  <div className="rtable-cell--content title-content">
-                                    <h5>{subject.name}</h5>
+                              <React.Fragment key={`${subject.id}-${topic.id}`}>
+                                {/* Main topic row */}
+                                <div className="rtable-row">
+                                  <div className="rtable-cell topic-cell">
+                                    <div className="rtable-cell--content title-content">
+                                      <h5>{subject.name}</h5>
+                                    </div>
+                                  </div>
+                                  <div className="rtable-cell id-cell">
+                                    <div className="rtable-cell--heading">
+                                      Topic
+                                    </div>
+                                    <div className="rtable-cell--content date-content">
+                                      {topic.name}
+                                    </div>
+                                  </div>
+                                  <div className="rtable-cell rtable-cell--foot status-cell">
+                                    <div className="rtable-cell--heading">
+                                      Created At
+                                    </div>
+                                    <div className="rtable-cell--content purchase-content">
+                                      {new Date(
+                                        topic.created_at
+                                      ).toLocaleDateString()}
+                                    </div>
+                                  </div>
+                                  <div className="rtable-cell rtable-cell--foot receipt-cell">
+                                    <div className="rtable-cell--heading">
+                                      Actions
+                                    </div>
+                                    <div className="rtable-cell--content pdf-content">
+                                      <a
+                                        href="#"
+                                        className="icon-link"
+                                        title="View"
+                                        onClick={(e) => {
+                                          e.preventDefault();
+                                          fetchQuestionsForTopic(topic.id);
+                                        }}
+                                      >
+                                        <i
+                                          style={{ fontSize: "18px" }}
+                                          className="ri-eye-line"
+                                        />
+                                      </a>
+                                      <a
+                                        href="#"
+                                        className="icon-link"
+                                        title="Delete"
+                                      >
+                                        <i
+                                          style={{ fontSize: "18px" }}
+                                          className="ri-delete-bin-line"
+                                        ></i>
+                                      </a>
+                                    </div>
                                   </div>
                                 </div>
-                                <div className="rtable-cell id-cell">
-                                  <div className="rtable-cell--heading">
-                                    Topic
-                                  </div>
-                                  <div className="rtable-cell--content date-content">
-                                    {topic.name}
-                                  </div>
-                                </div>
-                                <div className="rtable-cell rtable-cell--foot status-cell">
-                                  <div className="rtable-cell--heading">
-                                    Created At
-                                  </div>
-                                  <div className="rtable-cell--content purchase-content">
-                                    {new Date(
-                                      topic.created_at
-                                    ).toLocaleDateString()}
-                                  </div>
-                                </div>
-                                <div className="rtable-cell rtable-cell--foot receipt-cell">
-                                  <div className="rtable-cell--heading">
-                                    Actions
-                                  </div>
-                                  <div className="rtable-cell--content pdf-content">
-                                    <a
-                                      href="#"
-                                      className="icon-link"
-                                      title="View"
+
+                                {/* Expanded questions row */}
+                                {visibleQuestions[topic.id] && (
+                                  <div className="rtable-row bg-light">
+                                    <div
+                                      className="rtable-cell"
+                                      style={{ padding: "20px" }}
+                                      colSpan={4}
                                     >
-                                      <i
-                                        style={{ fontSize: "18px" }}
-                                        className="ri-eye-line"
-                                      />
-                                    </a>
-                                    <a
-                                      href="#"
-                                      className="icon-link"
-                                      title="Edit"
-                                    >
-                                      <i
-                                        style={{ fontSize: "18px" }}
-                                        className="ri-edit-line"
-                                      />
-                                    </a>
-                                    <a
-                                      href="#"
-                                      className="icon-link"
-                                      title="Delete"
-                                    >
-                                      <i
-                                        style={{ fontSize: "18px" }}
-                                        className="ri-delete-bin-line"
-                                      />
-                                    </a>
+                                      {questionsByTopic[topic.id]?.length >
+                                      0 ? (
+                                        <ul className="list-group list-group-flush">
+                                          {questionsByTopic[topic.id].map(
+                                            (question, index) => (
+                                              <li
+                                                key={question.id}
+                                                className="list-group-item"
+                                              >
+                                                <strong>Q{index + 1}:</strong>{" "}
+                                                {question.question_text}
+                                                <ul>
+                                                  {JSON.parse(
+                                                    question.options
+                                                  ).map((opt, i) => (
+                                                    <li key={i}>
+                                                      {opt}
+                                                      {i ===
+                                                        question.correct_index && (
+                                                        <span className="badge bg-success ms-2">
+                                                          Correct
+                                                        </span>
+                                                      )}
+                                                    </li>
+                                                  ))}
+                                                </ul>
+                                              </li>
+                                            )
+                                          )}
+                                        </ul>
+                                      ) : (
+                                        <p>No questions found.</p>
+                                      )}
+                                    </div>
                                   </div>
-                                </div>
-                              </div>
+                                )}
+                              </React.Fragment>
                             ))
                           )}
                         </div>

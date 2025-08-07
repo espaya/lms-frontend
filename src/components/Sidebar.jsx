@@ -52,7 +52,7 @@ export default function Sidebar() {
                   </a>
                 </li>
 
-                <li>
+                {/* <li>
                   <a class="dropdown-item" href="/admin/dashboard/subjects">
                     Subject
                   </a>
@@ -61,7 +61,7 @@ export default function Sidebar() {
                   <a class="dropdown-item" href="/admin/dashboard/topics">
                     Topics
                   </a>
-                </li>
+                </li> */}
                 {/* <li>
                   <hr className="dropdown-divider" />
                 </li> */}
