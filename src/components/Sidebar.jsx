@@ -30,7 +30,10 @@ export default function Sidebar() {
                 </span>
                 <span className="nav-text">Question Manager</span>
               </a>
-              <ul className="dropdown-menu dark-dropdown">
+              <ul
+                className="dropdown-menu dark-dropdown"
+                style={{ color: "black" }}
+              >
                 <li>
                   <a
                     className="dropdown-item"
