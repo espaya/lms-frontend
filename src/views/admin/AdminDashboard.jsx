@@ -17,7 +17,7 @@ export default function AdminDashboard() {
                 <div className="col-md-6">
                   <div className="page-title-content">
                     <h3>Dashboard</h3>
-                    <p className="mb-2">Welcome to Edunet Dashboard</p>
+                    <p className="mb-2">Welcome to 1staccess LMS Dashboard</p>
                   </div>
                 </div>
                 <div className="col-auto">
