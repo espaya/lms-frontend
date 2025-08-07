@@ -37,13 +37,6 @@ export default function Home() {
       if (userData?.role) {
         setFormData({ email: "", password: "", remember: false });
 
-        // Add debug logs
-        console.log("Login successful, user role:", userData.role);
-        console.log(
-          "Navigating to:",
-          userData.role === "ADMIN" ? "/admin/dashboard" : "/user/dashboard"
-        );
-
         // Use setTimeout to ensure React's state updates are complete
         setTimeout(() => {
           setSuccessMsg("");
@@ -56,8 +49,6 @@ export default function Home() {
     } catch (error) {
       console.error("Login error:", error);
       setErrors({ general: error.message || "Login failed" });
-    } finally {
-      // setLoading(false);
     }
   };
 

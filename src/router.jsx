@@ -10,6 +10,7 @@ import QuestionManager from "./views/admin/QuestionManager";
 import AllQuestions from "./views/admin/AllQuestions";
 import Subject from "./views/admin/Subject";
 import Topic from "./views/admin/Topic";
+import Questions from "./views/student/Questions";
 
 // Centralized route configuration with metadata
 export const ROUTE_CONFIG = {
@@ -71,9 +72,18 @@ export const ROUTE_CONFIG = {
     roles: ["ADMIN"], // ✅ restrict to ADMIN only
   },
 
+
   USER_DASHBOARD: {
     path: "/user/dashboard",
     element: <UserDashboard />,
+    name: "User Dashboard",
+    isProtected: true,
+    roles: ["USER"],
+  },
+
+  USER_QUESTION: {
+    path: "/user/dashboard/questions",
+    element: <Questions />,
     name: "User Dashboard",
     isProtected: true,
     roles: ["USER"],

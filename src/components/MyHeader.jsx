@@ -23,7 +23,7 @@ export default function MyHeader() {
               <div className="header-content">
                 <div className="header-left">
                   <div className="brand-logo">
-                    <a className="mini-logo" href="/admin/dashboard">
+                    <a className="mini-logo" href="#">
                       <img src="/assets/images/logo.png" alt="" width={40} />
                     </a>
                   </div>

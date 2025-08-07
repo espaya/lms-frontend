@@ -1,4 +1,5 @@
 import { createContext, useEffect, useState } from "react";
+import Cookies from "js-cookie";
 
 export const AuthContext = createContext();
 
@@ -22,10 +23,12 @@ export const AuthProvider = ({ children }) => {
         credentials: "include",
       });
 
-      const csrfToken = document.cookie
-        .split("; ")
-        .find((row) => row.startsWith("XSRF-TOKEN="))
-        ?.split("=")[1];
+      // const csrfToken = document.cookie
+      //   .split("; ")
+      //   .find((row) => row.startsWith("XSRF-TOKEN="))
+      //   ?.split("=")[1];
+
+      const csrfToken = Cookies.get("XSRF-TOKEN");
 
       const response = await fetch(`${apiBase}/api/login`, {
         method: "POST",
@@ -54,9 +57,6 @@ export const AuthProvider = ({ children }) => {
 
         setSuccessMsg(data.message || "Login successful!");
         setUser(data.user); // Set the user data immediately from login response
-
-        console.log(data);
-
         return data.user; // Return the user data directly from login response
       }
     } catch (error) {
