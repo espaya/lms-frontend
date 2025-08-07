@@ -93,6 +93,14 @@ export default function AllQuestions() {
                     </span>
                     <a href="#">Manage Questions</a>
                   </div>
+                  <div className="d-flex justify-content-between align-items-center mt-20">
+                    <a
+                      href="/admin/dashboard/question-manager"
+                      className="btn btn-primary btn-sm"
+                    >
+                      Add New Question
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>

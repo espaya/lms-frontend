@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import MyHeader from "../../components/MyHeader";
 import Sidebar from "../../components/Sidebar";
 import Cookies from "js-cookie";
@@ -9,6 +9,8 @@ export default function QuestionManager() {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const apiBase = import.meta.env.VITE_API_URL;
+  const [allSubjects, setAllSubjects] = useState([]);
+  const [allTopics, setAllTopics] = useState([]);
 
   const [formData, setFormData] = useState({
     subject: "",
@@ -183,6 +185,84 @@ export default function QuestionManager() {
     }
   };
 
+  // Get all subjects
+  useEffect(() => {
+    const fetchSubjects = async () => {
+      try {
+        await fetch(`${apiBase}/sanctum/csrf-cookie`, {
+          credentials: "include",
+        });
+
+        const csrfToken = Cookies.get("XSRF-TOKEN");
+        const authToken = localStorage.getItem("auth_token");
+
+        const res = await fetch(`${apiBase}/api/subjects`, {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            "X-XSRF-TOKEN": csrfToken ? decodeURIComponent(csrfToken) : "",
+          },
+        });
+
+        const data = await res.json();
+
+        console.log(data.data);
+
+        if (!res.ok) {
+          console.log(data.message);
+        } else {
+          setAllSubjects(data.data || []);
+        }
+      } catch (err) {
+        console.error("Error fetching subjects:", err);
+      }
+    };
+
+    fetchSubjects();
+  }, []);
+
+    // Get all topics
+  useEffect(() => {
+    const fetchTopics = async () => {
+      try {
+        await fetch(`${apiBase}/sanctum/csrf-cookie`, {
+          credentials: "include",
+        });
+
+        const csrfToken = Cookies.get("XSRF-TOKEN");
+        const authToken = localStorage.getItem("auth_token");
+
+        const res = await fetch(`${apiBase}/api/topics`, {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            "X-XSRF-TOKEN": csrfToken ? decodeURIComponent(csrfToken) : "",
+          },
+        });
+
+        const data = await res.json();
+
+        console.log(data.data);
+
+        if (!res.ok) {
+          console.log(data.message);
+        } else {
+          setAllTopics(data.data || []);
+        }
+      } catch (err) {
+        console.error("Error fetching subjects:", err);
+      }
+    };
+
+    fetchTopics();
+  }, []);
+
   // === UI ===
   return (
     <>
@@ -206,23 +286,41 @@ export default function QuestionManager() {
                 {step === 1 && (
                   <>
                     <h4>Step 1: Add Subject</h4>
+                    <select
+                      className="form-select mb-2"
+                      value={formData.subject}
+                      onChange={(e) => {
+                        const selected = e.target.value;
+                        setFormData((prev) => ({ ...prev, subject: selected }));
+                      }}
+                    >
+                      <option value="">-- Select an existing subject --</option>
+                      {allSubjects.map((subj) => (
+                        <option key={subj.id} value={subj.name}>
+                          {subj.name}
+                        </option>
+                      ))}
+                    </select>
+
+                    <p className="text-muted mt-10">Or enter a new subject:</p>
                     <input
                       type="text"
                       className={`form-control mb-3 ${
                         errors.subject ? "is-invalid" : ""
                       }`}
-                      placeholder="Enter Subject"
+                      placeholder="Enter New Subject"
                       value={formData.subject}
                       onChange={(e) =>
                         setFormData({ ...formData, subject: e.target.value })
                       }
                       autoComplete="off"
                     />
+
                     {errors.subject && (
                       <div className="invalid-feedback">{errors.subject}</div>
                     )}
                     <button
-                      className="btn btn-primary"
+                      className="btn btn-primary mt-10"
                       onClick={() => {
                         if (formData.subject.trim()) setStep(2);
                       }}
@@ -242,23 +340,37 @@ export default function QuestionManager() {
                       </div>
                     )}
                     {formData.topics.map((topic, index) => (
-                      <div key={index} className="input-group mb-2">
+                      <div key={index} className="mb-3">
+                        <label>Topic {index + 1}</label>
+                        <select
+                          className="form-select mb-1"
+                          value={topic}
+                          onChange={(e) => updateTopic(index, e.target.value)}
+                        >
+                          <option value="">-- Select existing topic --</option>
+                          {allTopics.map((t) => (
+                            <option key={t.id} value={t.name}>
+                              {t.name}
+                            </option>
+                          ))}
+                        </select>
+
                         <input
                           type="text"
-                          className={`form-control ${
-                            errors.topics ? "is-invalid" : ""
-                          }`}
-                          placeholder={`Topic ${index + 1}`}
+                          className="form-control"
+                          placeholder="Or enter new topic"
                           value={topic}
                           onChange={(e) => updateTopic(index, e.target.value)}
                         />
-                        <button
-                          className="btn btn-outline-danger"
-                          onClick={() => removeTopic(index)}
-                          disabled={formData.topics.length <= 1}
-                        >
-                          &times;
-                        </button>
+
+                        {formData.topics.length > 1 && (
+                          <button
+                            className="btn btn-outline-danger mt-1"
+                            onClick={() => removeTopic(index)}
+                          >
+                            &times; Remove
+                          </button>
+                        )}
                       </div>
                     ))}
 

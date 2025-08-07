@@ -99,10 +99,10 @@ export default function Subject() {
                   <div className="card-header d-flex justify-content-between align-items-center">
                     <h4 className="card-title">All Subjects</h4>
                     <a
-                      href="/subjects/create"
+                      href="/admin/dashboard/question-manager"
                       className="btn btn-primary btn-sm"
                     >
-                      Add New Subject
+                      Add New Question
                     </a>
                   </div>
                   <div className="card-body">
