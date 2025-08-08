@@ -24,7 +24,7 @@ export default function MyHeader() {
                 <div className="header-left">
                   <div className="brand-logo">
                     <a className="mini-logo" href="#">
-                      <img src="/assets/images/logo.png" alt="" width={40} />
+                      <img src="/assets/images/favicon.png" alt="" width={40} />
                     </a>
                   </div>
                   <div className="search">
@@ -157,7 +157,7 @@ export default function MyHeader() {
                     <div data-bs-toggle="dropdown">
                       <div className="user icon-menu active">
                         <span className="thumb">
-                          <img src="/assets/images/avatar/1.png" alt="" />
+                          <img src="/assets/images/user.png" alt="" />
                         </span>
                       </div>
                     </div>
@@ -170,7 +170,7 @@ export default function MyHeader() {
                       <div className="user-email">
                         <div className="user">
                           <span className="thumb">
-                            <img src="/assets/images/avatar/1.png" alt="" />
+                            <img src="/assets/images/user.png" alt="" />
                           </span>
                           <div>
                             <h5>

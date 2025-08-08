@@ -25,10 +25,10 @@ export default function UserHeader() {
                 <div className="header-left">
                   <div className="brand-logo">
                     <a className="mini-logo" href="#">
-                      <img src="/assets/images/logo.png" alt="" width={40} />
+                      <img src="/assets/images/favicon.png" alt="" width={40} />
                     </a>
                   </div>
-                  <div className="search">
+                  {/* <div className="search">
                     <form action="#">
                       <div className="input-group">
                         <input
@@ -41,7 +41,7 @@ export default function UserHeader() {
                         </span>
                       </div>
                     </form>
-                  </div>
+                  </div> */}
                 </div>
                 <div className="header-right">
                   <div className="dark-light-toggle">
@@ -53,13 +53,13 @@ export default function UserHeader() {
                     </span>
                   </div>
                   <div className="nav-item dropdown notification dropdown">
-                    <div data-bs-toggle="dropdown">
+                    {/* <div data-bs-toggle="dropdown">
                       <div className="notify-bell icon-menu">
                         <span>
                           <i className="ri-notification-2-line" />
                         </span>
                       </div>
-                    </div>
+                    </div> */}
                     <div
                       tabIndex={-1}
                       role="menu"
@@ -158,7 +158,7 @@ export default function UserHeader() {
                     <div data-bs-toggle="dropdown">
                       <div className="user icon-menu active">
                         <span className="thumb">
-                          <img src="/assets/images/avatar/1.png" alt="" />
+                          <img src="/assets/images/user.png" alt="" />
                         </span>
                       </div>
                     </div>
@@ -171,7 +171,7 @@ export default function UserHeader() {
                       <div className="user-email">
                         <div className="user">
                           <span className="thumb">
-                            <img src="/assets/images/avatar/1.png" alt="" />
+                            <img src="/assets/images/user.png" alt="" />
                           </span>
                           <div>
                             <h5>
@@ -194,7 +194,7 @@ export default function UserHeader() {
                           </div>
                         </div>
                       </div>
-                      <a
+                      {/* <a
                         className="dropdown-item ps-20 pe-20 pt-10 pb-10 d-flex align-items-center border-top  undefined"
                         href={PATHS.USER_PROFILE}
                       >
@@ -211,7 +211,7 @@ export default function UserHeader() {
                           <i className="ri-settings-3-line" />
                         </span>
                         Settings
-                      </a>
+                      </a> */}
                       <a
                         className="dropdown-item ps-20 pe-20 pt-10 pb-10 d-flex align-items-center border-top  text-danger"
                         href="#"

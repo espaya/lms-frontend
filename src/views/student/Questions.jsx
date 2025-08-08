@@ -142,7 +142,7 @@ export default function Questions() {
                 <div className="col-md-6">
                   <div className="page-title-content">
                     <h3>Manage Questions</h3>
-                    <p className="mb-2">Manage all available questions here</p>
+                    <p className="mb-2">Answer all available questions here</p>
                   </div>
                 </div>
                 <div className="col-auto">

@@ -4,7 +4,7 @@ export default function UserSidebar() {
       <div className="sidebar">
         <div className="brand-logo text-center">
           <a className="mini-logo" href="">
-            <img src="/assets/images/logo.png" alt="" width={30} />
+            <img src="/assets/images/favicon.png" alt="" width={30} />
           </a>
         </div>
         <div className="menu">
