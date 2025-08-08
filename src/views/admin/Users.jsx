@@ -3,6 +3,8 @@ import MyHeader from "../../components/MyHeader";
 import Sidebar from "../../components/Sidebar";
 import Cookies from "js-cookie";
 import Pagination from "../../components/Pagination"; // You'll need to create this component
+import { PATHS } from "../../router";
+import { Link } from "react-router-dom";
 
 export default function Users() {
   const [users, setUsers] = useState([]);
@@ -86,13 +88,15 @@ export default function Users() {
                 <div className="col-auto">
                   <div className="breadcrumbs">
                     <a href="#">Home</a>
-                    <span><i className="ri-arrow-right-s-line" /></span>
+                    <span>
+                      <i className="ri-arrow-right-s-line" />
+                    </span>
                     <a href="#">All Users</a>
                   </div>
                 </div>
               </div>
             </div>
-            
+
             {errors.general && (
               <div className="alert alert-danger">{errors.general}</div>
             )}
@@ -145,12 +149,14 @@ export default function Users() {
                               </div>
                               <div className="rtable-cell date-cell">
                                 <div className="rtable-cell--content">
-                                  {new Date(user.created_at).toLocaleDateString()}
+                                  {new Date(
+                                    user.created_at
+                                  ).toLocaleDateString()}
                                 </div>
                               </div>
                               <div className="rtable-cell amount-cell">
                                 <div className="rtable-cell--content">
-                                  {user.privacy_level || 'Standard'}
+                                  {user.privacy_level || "Standard"}
                                 </div>
                               </div>
                               <div className="rtable-cell card-cell">
@@ -160,9 +166,16 @@ export default function Users() {
                               </div>
                               <div className="rtable-cell receipt-cell">
                                 <div className="rtable-cell--content">
-                                  <button className="btn btn-sm btn-primary">
+                                  <Link
+                                  style={{fontSize: "12px"}}
+                                    to={`${PATHS.SINGLE_USER.replace(
+                                      ":username",
+                                      user.name
+                                    )}`}
+                                    className="btn btn-sm btn-primary"
+                                  >
                                     <i className="ri-eye-line" /> View
-                                  </button>
+                                  </Link>
                                 </div>
                               </div>
                             </div>

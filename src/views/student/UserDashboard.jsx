@@ -1,4 +1,4 @@
-import MyHeader from "../../components/MyHeader";
+import UserHeader from "../../components/users/UserHeader";
 import UserSidebar from "../../components/users/UserSidebar";
 
 export default function () {
@@ -7,7 +7,7 @@ export default function () {
       <title>Edunet - Personal LMS HTML Dashboard</title>
 
       <div id="main-wrapper">
-        <MyHeader />
+        <UserHeader />
 
         <UserSidebar />
 
@@ -18,7 +18,7 @@ export default function () {
                 <div className="col-md-6">
                   <div className="page-title-content">
                     <h3>Dashboard</h3>
-                    <p className="mb-2">Welcome to Edunet Dashboard</p>
+                    <p className="mb-2">Welcome 1staccess Home Care</p>
                   </div>
                 </div>
                 <div className="col-auto">
@@ -32,7 +32,7 @@ export default function () {
                 </div>
               </div>
             </div>
-            <div className="row">
+            {/* <div className="row">
               <div className="col-lg-4 col-sm-12">
                 <div className="color-widget stat-widget p-20 mb-160 mb-30">
                   <div className="d-flex align-items-center mb-20">
@@ -684,7 +684,7 @@ export default function () {
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
