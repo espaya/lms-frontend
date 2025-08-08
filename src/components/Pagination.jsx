@@ -9,7 +9,7 @@ const Pagination = ({ currentPage, lastPage, onPageChange }) => {
   }
 
   return (
-    <nav aria-label="Page navigation">
+    <nav aria-label="Page navigation" className="mt-20">
       <ul className="pagination justify-content-center">
         <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
           <button
