@@ -28,7 +28,6 @@ export const ROUTE_CONFIG = {
     ),
     name: "Home",
     isProtected: false,
-    // roles: ["guest"]
   },
   ACCOUNT: {
     path: "/account",

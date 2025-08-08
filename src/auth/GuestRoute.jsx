@@ -6,17 +6,16 @@ const GuestRoute = ({ children }) => {
   const { user } = useContext(AuthContext);
 
   if (user) {
-    // Redirect based on user role
-    switch (user.role) {
-      case "admin":
-        return <Navigate to="/admin/dashboard" />;
-      case "teacher":
-        return <Navigate to="/user/dashboard" />;
-      default:
-        return <Navigate to="/" />;
-    }
+    // User is logged in - redirect based on role
+    return (
+      <Navigate
+        to={user.role === "ADMIN" ? "/admin/dashboard" : "/user/dashboard"}
+        replace
+      />
+    );
   }
 
+  // User is not logged in - show the guest content (login page)
   return children;
 };
 

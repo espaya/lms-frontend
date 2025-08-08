@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { AuthContext } from "../auth/AuthContext";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 export default function MyHeader() {
   const { user, logout } = useContext(AuthContext);
@@ -11,6 +12,11 @@ export default function MyHeader() {
       await logout();
       navigate("/");
     } catch (err) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        
+      });
       console.log(err);
     }
   };
