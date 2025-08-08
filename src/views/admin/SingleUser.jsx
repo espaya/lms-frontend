@@ -22,16 +22,19 @@ export default function SingleUser() {
         const csrfToken = Cookies.get("XSRF-TOKEN");
         const authToken = localStorage.getItem("auth_token");
 
-        const response = await fetch(`${apiBase}/api/users/single/${username}`, {
-          credentials: "include",
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            "X-XSRF-TOKEN": decodeURIComponent(csrfToken),
-          },
-        });
+        const response = await fetch(
+          `${apiBase}/api/users/single/${username}`,
+          {
+            credentials: "include",
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+              "Content-Type": "application/json",
+              Accept: "application/json",
+              "X-XSRF-TOKEN": decodeURIComponent(csrfToken),
+            },
+          }
+        );
 
         const data = await response.json();
 
@@ -53,6 +56,12 @@ export default function SingleUser() {
 
   return (
     <>
+      <link
+        rel="icon"
+        type="image/png"
+        sizes="16x16"
+        href="assets/images/favicon.png"
+      />
       <title>Edunet - Personal LMS HTML Dashboard</title>
 
       <div id="main-wrapper">
@@ -79,7 +88,9 @@ export default function SingleUser() {
                     <a href="#">Profile</a>
                   </div>
                 </div>
-                {errors.general && (<div className="alert alert-danger">{errors.general}</div>)}
+                {errors.general && (
+                  <div className="alert alert-danger">{errors.general}</div>
+                )}
               </div>
             </div>
             <div className="row">

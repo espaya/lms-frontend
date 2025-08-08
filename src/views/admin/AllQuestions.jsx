@@ -120,6 +120,12 @@ export default function AllQuestions() {
 
   return (
     <>
+      <link
+        rel="icon"
+        type="image/png"
+        sizes="16x16"
+        href="assets/images/favicon.png"
+      />
       <title>All Questions - 1staccess Home Care</title>
       <div id="main-wrapper">
         <MyHeader />

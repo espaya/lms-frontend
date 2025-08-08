@@ -89,6 +89,12 @@ export default function AddUser() {
 
   return (
     <>
+      <link
+        rel="icon"
+        type="image/png"
+        sizes="16x16"
+        href="assets/images/favicon.png"
+      />
       <title>Add User - 1staccess Home Care Inc</title>
 
       <div id="main-wrapper">
@@ -101,7 +107,9 @@ export default function AddUser() {
                 <div className="col-md-6">
                   <div className="page-title-content">
                     <h3>Add User</h3>
-                    <p className="mb-2">Fill this form to manually add a user</p>
+                    <p className="mb-2">
+                      Fill this form to manually add a user
+                    </p>
                   </div>
                 </div>
                 <div className="col-auto">

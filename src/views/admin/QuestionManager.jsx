@@ -224,7 +224,7 @@ export default function QuestionManager() {
     fetchSubjects();
   }, []);
 
-    // Get all topics
+  // Get all topics
   useEffect(() => {
     const fetchTopics = async () => {
       try {
@@ -266,6 +266,12 @@ export default function QuestionManager() {
   // === UI ===
   return (
     <>
+      <link
+        rel="icon"
+        type="image/png"
+        sizes="16x16"
+        href="assets/images/favicon.png"
+      />
       <title>Question Manager - 1staccess Home Care</title>
       <div id="main-wrapper">
         <MyHeader />

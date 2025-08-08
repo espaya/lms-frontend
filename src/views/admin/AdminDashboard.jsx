@@ -4,12 +4,17 @@ import Sidebar from "../../components/Sidebar";
 export default function AdminDashboard() {
   return (
     <>
-      
       <title>Dashboard - 1staccess Home Care</title>
-      
+      <link
+        rel="icon"
+        type="image/png"
+        sizes="16x16"
+        href="assets/images/favicon.png"
+      />
+
       <div id="main-wrapper">
-        <MyHeader/>
-        <Sidebar/>
+        <MyHeader />
+        <Sidebar />
         <div className="content-body">
           <div className="container">
             <div className="page-title">
