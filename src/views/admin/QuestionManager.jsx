@@ -273,8 +273,8 @@ export default function QuestionManager() {
         <div className="content-body">
           <div className="container">
             <div className="page-title">
-              <h3>Upload</h3>
-              <p className="mb-2">Welcome to Edunet Upload page</p>
+              <h3>Add Questions</h3>
+              <p className="mb-2">Add multiple choice questions here</p>
             </div>
 
             {errors.general && (

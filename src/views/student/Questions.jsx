@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import MyHeader from "../../components/MyHeader";
-import Sidebar from "../../components/Sidebar";
 import ViewQuestions from "../../components/users/questions/ViewQuestions";
+import UserSidebar from "../../components/users/UserSidebar";
 
 export default function Questions() {
   const [questions, setQuestions] = useState([]);
@@ -134,7 +134,7 @@ export default function Questions() {
       <title>All Questions - 1staccess Home Care</title>
       <div id="main-wrapper">
         <MyHeader />
-        <Sidebar />
+        <UserSidebar />
         <div className="content-body">
           <div className="container">
             <div className="page-title">
