@@ -8,10 +8,13 @@ export default function AddUser() {
   const [loading, setLoading] = useState(false);
   const apiBase = import.meta.env.VITE_API_URL;
   const [errors, setErrors] = useState({});
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   const [formData, setFormData] = useState({
     name: "",
-    password: "",
-    confirm_password: "",
+    password: "Welcome@1",
+    confirm_password: "Welcome@1",
     email: "",
     privacy: "",
     role: "USER",
@@ -174,37 +177,63 @@ export default function AddUser() {
                             </small>
                           )}
                         </div>
-                        <div className="col-xxl-6 col-xl-6 col-lg-6 mb-16">
+                        <div className="col-xxl-6 col-xl-6 col-lg-6 mb-16 position-relative">
                           <label className="form-label">Password</label>
                           <input
                             name="password"
-                            type="password"
-                            className="form-control"
+                            type={showPassword ? "text" : "password"}
+                            className="form-control pe-5"
                             value={formData.password}
                             autoComplete="off"
                             onChange={handleOnChange}
                           />
+                          <span
+                            className="position-absolute top-50 end-0 translate-middle-x me-3"
+                            style={{ cursor: "pointer" }}
+                            onClick={() => setShowPassword(!showPassword)}
+                          >
+                            {showPassword ? (
+                              <i className="ri-eye-off-line"></i>
+                            ) : (
+                              <i className="ri-eye-line"></i>
+                            )}
+                          </span>
                           {errors.password && (
                             <small className="text-danger">
                               {errors.password[0]}
                             </small>
                           )}
                         </div>
-                        <div className="col-xxl-6 col-xl-6 col-lg-6 mb-16">
+
+                        <div className="col-xxl-6 col-xl-6 col-lg-6 mb-16 position-relative">
                           <label className="form-label">Confirm Password</label>
                           <input
                             name="confirm_password"
-                            type="password"
-                            className="form-control"
+                            type={showConfirmPassword ? "text" : "password"}
+                            className="form-control pe-5"
                             value={formData.confirm_password}
                             onChange={handleOnChange}
                           />
+                          <span
+                            className="position-absolute top-50 end-0 translate-middle-x me-3"
+                            style={{ cursor: "pointer" }}
+                            onClick={() =>
+                              setShowConfirmPassword(!showConfirmPassword)
+                            }
+                          >
+                            {showConfirmPassword ? (
+                              <i className="ri-eye-off-line"></i>
+                            ) : (
+                              <i className="ri-eye-line"></i>
+                            )}
+                          </span>
                           {errors.confirm_password && (
                             <small className="text-danger">
                               {errors.confirm_password[0]}
                             </small>
                           )}
                         </div>
+
                         <div className="col-xxl-6 col-xl-6 col-lg-6 mb-16">
                           <label className="form-label">Role</label>
                           <input
