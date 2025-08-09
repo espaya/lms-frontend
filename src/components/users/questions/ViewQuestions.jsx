@@ -347,11 +347,12 @@ export default function ViewQuestions({
               </ul>
 
               {/* Signature Pad */}
-              {submittedTopics?.[topic] !== true && (
+              {!submittedTopics[topic] && user?.id && (
                 <>
                   <div className="mt-20">
                     <div>
                       <strong>Signature:</strong>
+                      <p className="text-muted small">Please sign below</p>
                     </div>
                     <div className="mt-20">
                       <SignatureCanvas
@@ -360,30 +361,53 @@ export default function ViewQuestions({
                           width: 500,
                           height: 150,
                           className: "signature-canvas border",
+                          style: { backgroundColor: "#f8f9fa" },
                         }}
                         ref={sigPadRef}
                         onEnd={() => {
-                          if (sigPadRef.current) {
-                            const trimmed = trimCanvas(
-                              sigPadRef.current.getCanvas()
-                            );
-                            setSignature(trimmed.toDataURL("image/png"));
+                          if (
+                            sigPadRef.current &&
+                            !sigPadRef.current.isEmpty()
+                          ) {
+                            const sigData = sigPadRef.current
+                              .getTrimmedCanvas()
+                              .toDataURL("image/png");
+                            setSignature(sigData);
                           }
                         }}
+                        minWidth={2}
+                        maxWidth={4}
+                        velocityFilterWeight={0.7}
                       />
                     </div>
-                    <button
-                      type="button"
-                      className="btn btn-secondary mt-2"
-                      onClick={clearSignature}
-                    >
-                      Clear Signature
-                    </button>
+                    <div className="d-flex gap-2 mt-2">
+                      <button
+                        type="button"
+                        className="btn btn-secondary"
+                        onClick={clearSignature}
+                      >
+                        Clear Signature
+                      </button>
+                      {signature && (
+                        <div className="ms-2">
+                          <img
+                            src={signature}
+                            alt="Signature preview"
+                            style={{
+                              maxHeight: "40px",
+                              border: "1px solid #ddd",
+                              background: "white",
+                              padding: "2px",
+                            }}
+                          />
+                        </div>
+                      )}
+                    </div>
                   </div>
                   {errors.signature && (
-                    <small className="text-danger mt-10">
+                    <div className="alert alert-danger mt-2">
                       {errors.signature[0]}
-                    </small>
+                    </div>
                   )}
                 </>
               )}
