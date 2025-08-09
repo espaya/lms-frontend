@@ -207,16 +207,14 @@ export default function AddUser() {
                         </div>
                         <div className="col-xxl-6 col-xl-6 col-lg-6 mb-16">
                           <label className="form-label">Role</label>
-                          <select
-                            onChange={handleOnChange}
+                          <input
                             name="role"
+                            type="text"
                             className="form-control"
-                          >
-                            <option value="" disabled>
-                              Select a role
-                            </option>
-                            <option value="USER">User</option>
-                          </select>
+                            value="ROLE"
+                            readOnly
+                            onChange={handleOnChange}
+                          />
                           {errors.role && (
                             <small className="text-danger">
                               {errors.role[0]}
