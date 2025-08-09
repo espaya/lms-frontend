@@ -4,7 +4,7 @@ import UserSidebar from "../../components/users/UserSidebar";
 export default function () {
   return (
     <>
-      <title>Edunet - Personal LMS HTML Dashboard</title>
+      <title>Dashboard - 1staccess Home Care</title>
 
       <div id="main-wrapper">
         <UserHeader />
