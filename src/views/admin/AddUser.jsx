@@ -14,7 +14,7 @@ export default function AddUser() {
     confirm_password: "",
     email: "",
     privacy: "",
-    role: "",
+    role: "USER",
   });
 
   const handleOnChange = (e) => {
@@ -211,7 +211,7 @@ export default function AddUser() {
                             name="role"
                             type="text"
                             className="form-control"
-                            value="ROLE"
+                            value={formData.role}
                             readOnly
                             onChange={handleOnChange}
                           />
