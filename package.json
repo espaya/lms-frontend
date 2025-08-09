@@ -12,6 +12,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@types/signature_pad": "^2.3.6",
     "axios": "^1.10.0",
     "js-cookie": "^3.0.5",
     "lucide-react": "^0.518.0",
@@ -20,8 +21,11 @@
     "react-dom": "^19.1.0",
     "react-helmet": "^6.1.0",
     "react-router-dom": "^7.6.2",
+    "react-signature-canvas": "^1.1.0-alpha.2",
+    "signature_pad": "^5.0.10",
     "sweetalert2": "^11.6.13",
-    "swiper": "^11.2.8"
+    "swiper": "^11.2.8",
+    "trim-canvas": "^0.1.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",

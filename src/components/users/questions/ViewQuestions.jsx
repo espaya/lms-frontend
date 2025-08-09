@@ -1,8 +1,10 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useRef } from "react";
 import Swal from "sweetalert2";
 import AttemptSummary from "./AttemptSummary";
 import Cookies from "js-cookie";
 import { AuthContext } from "../../../auth/AuthContext";
+import SignatureCanvas from "react-signature-canvas";
+import trimCanvas from "trim-canvas";
 
 export default function ViewQuestions({
   topic,
@@ -19,6 +21,14 @@ export default function ViewQuestions({
   const [loading, setLoading] = useState(false);
   const [submittedAnswers, setSubmittedAnswers] = useState({});
   const { user } = useContext(AuthContext);
+  const [signature, setSignature] = useState(null);
+  const [agreed, setAgreed] = useState(false);
+  const sigPadRef = useRef(null);
+
+  const clearSignature = () => {
+    sigPadRef.current.clear();
+    setSignature("");
+  };
 
   // Fetch submitted answers from DB if topic is already submitted
   const fetchSubmittedAnswers = async (topicId) => {
@@ -55,10 +65,20 @@ export default function ViewQuestions({
   };
 
   useEffect(() => {
-    // if (submittedTopics[String(topic)]) {
     fetchSubmittedAnswers(topic);
-    // }
   }, [submittedTopics, topic]);
+
+  // Add this function to explicitly capture signature
+  const captureSignature = () => {
+    if (sigPadRef.current && !sigPadRef.current.isEmpty()) {
+      const trimmed = trimCanvas(sigPadRef.current.getCanvas());
+      const sigData = trimmed.toDataURL("image/png");
+      setSignature(sigData);
+      return sigData;
+    }
+    Swal.fire({ title: "Error", text: "Please signature is required" });
+    return null;
+  };
 
   const handleSubmitAnswers = async (e, topicId) => {
     e.preventDefault();
@@ -90,11 +110,35 @@ export default function ViewQuestions({
       },
     }));
 
+    // ✅ Check if score is less than 80%
+    const scorePercentage = (correct / totalQuestions) * 100;
+    if (scorePercentage < 80) {
+      Swal.fire({
+        icon: "warning",
+        title: "Retake Required",
+        text: `Your score is ${scorePercentage.toFixed(
+          2
+        )}%. You need at least 80% to submit. Please retake the quiz.`,
+      });
+      setLoading(false);
+      return; // stop submission
+    }
+
+    // Explicitly capture signature before submission
+    const currentSignature = captureSignature();
+    if (!currentSignature) {
+      setErrors({ signature: ["Please provide a valid signature"] });
+      return;
+    }
+
+    // Prepare payload with signature
     const payload = {
       topic_id: topicId,
       score: correct,
       total: totalQuestions,
       time: timeTaken,
+      signature: currentSignature, // Make sure this is properly set
+      declaration: agreed,
       answers: Object.entries(answers).map(([questionId, answerIndex]) => ({
         question_id: questionId,
         answer_index: answerIndex,
@@ -199,55 +243,62 @@ export default function ViewQuestions({
                             </span>
                           )}
                           <div>
-                            {options.map((opt, i) => {
-                              const isUserChoice = i === user_answer;
-                              const isRightAnswer = i === correct_index;
+                            {Array.isArray(options) && options.length > 0 ? (
+                              options.map((opt, i) => {
+                                const isUserChoice = i === user_answer;
+                                const isRightAnswer = i === correct_index;
 
-                              let optionStyle = {};
-                              if (isUserChoice && is_correct) {
-                                optionStyle = {
-                                  color: "green",
-                                  fontWeight: "bold",
-                                };
-                              } else if (isUserChoice && !is_correct) {
-                                optionStyle = {
-                                  color: "red",
-                                  fontWeight: "bold",
-                                };
-                              } else if (isRightAnswer) {
-                                optionStyle = { color: "blue" };
-                              }
+                                let optionStyle = {};
+                                if (isUserChoice && is_correct === true) {
+                                  optionStyle = {
+                                    color: "green",
+                                    fontWeight: "bold",
+                                  };
+                                } else if (
+                                  isUserChoice &&
+                                  is_correct === false
+                                ) {
+                                  optionStyle = {
+                                    color: "red",
+                                    fontWeight: "bold",
+                                  };
+                                } else if (isRightAnswer) {
+                                  optionStyle = { color: "blue" };
+                                }
 
-                              return (
-                                <div key={i} className="form-check">
-                                  <input
-                                    type="radio"
-                                    name={`question-${id}`}
-                                    value={i}
-                                    className="form-check-input"
-                                    checked={isUserChoice}
-                                    disabled
-                                    readOnly
-                                  />
-                                  <label
-                                    className="form-check-label"
-                                    style={optionStyle}
-                                  >
-                                    {opt}
-                                  </label>
-                                  {isRightAnswer && (
-                                    <span
-                                      style={{
-                                        marginLeft: "10px",
-                                        color: "blue",
-                                      }}
+                                return (
+                                  <div key={i} className="form-check">
+                                    <input
+                                      type="radio"
+                                      name={`question-${id ?? "unknown"}`}
+                                      value={i}
+                                      className="form-check-input"
+                                      checked={isUserChoice}
+                                      disabled
+                                      readOnly
+                                    />
+                                    <label
+                                      className="form-check-label"
+                                      style={optionStyle}
                                     >
-                                      (Correct Answer)
-                                    </span>
-                                  )}
-                                </div>
-                              );
-                            })}
+                                      {opt}
+                                    </label>
+                                    {isRightAnswer && (
+                                      <span
+                                        style={{
+                                          marginLeft: "10px",
+                                          color: "blue",
+                                        }}
+                                      >
+                                        (Correct Answer)
+                                      </span>
+                                    )}
+                                  </div>
+                                );
+                              })
+                            ) : (
+                              <p>No options available</p>
+                            )}
                           </div>
                         </li>
                       );
@@ -295,8 +346,74 @@ export default function ViewQuestions({
                     })}
               </ul>
 
-              {/* Show button only if not submitted */}
-              {!submittedTopics[topic] && (
+              {/* Signature Pad */}
+              {submittedTopics?.[topic] !== true && (
+                <>
+                  <div className="mt-20">
+                    <div>
+                      <strong>Signature:</strong>
+                    </div>
+                    <div className="mt-20">
+                      <SignatureCanvas
+                        penColor="black"
+                        canvasProps={{
+                          width: 500,
+                          height: 150,
+                          className: "signature-canvas border",
+                        }}
+                        ref={sigPadRef}
+                        onEnd={() => {
+                          if (sigPadRef.current) {
+                            const trimmed = trimCanvas(
+                              sigPadRef.current.getCanvas()
+                            );
+                            setSignature(trimmed.toDataURL("image/png"));
+                          }
+                        }}
+                      />
+                    </div>
+                    <button
+                      type="button"
+                      className="btn btn-secondary mt-2"
+                      onClick={clearSignature}
+                    >
+                      Clear Signature
+                    </button>
+                  </div>
+                  {errors.signature && (
+                    <small className="text-danger mt-10">
+                      {errors.signature[0]}
+                    </small>
+                  )}
+                </>
+              )}
+
+              {/* Declaration */}
+              {submittedTopics?.[topic] !== true && (
+                <>
+                  <div className="form-check mt-4">
+                    <input
+                      type="checkbox"
+                      id="declaration"
+                      className="form-check-input"
+                      checked={agreed}
+                      onChange={(e) => setAgreed(e.target.checked)}
+                    />
+                    <label htmlFor="declaration" className="form-check-label">
+                      I declare that I have completed this quiz honestly and
+                      without assistance.
+                    </label>
+                  </div>
+                  {errors.declaration && (
+                    <small className="text-danger mt-10">
+                      {errors.declaration[0]}
+                    </small>
+                  )}
+                </>
+              )}
+
+              {/* Submit button */}
+              {submittedTopics?.[topic] !== true && (
                 <button type="submit" className="btn btn-primary mt-20">
                   {loading ? "Processing..." : "Submit Answers"}
                 </button>
