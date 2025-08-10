@@ -65,7 +65,7 @@ export default function AllQuestionsTopic({
           // Optionally refresh the data after successful deletion
           fetchQuestionsForTopic(topic.id);
           // reload window
-          setTimeout(() => window.location.reload(), 3500);
+          setTimeout(() => window.location.reload(), 3000);
         }
       } catch (err) {
         Swal.fire({
