@@ -4,6 +4,7 @@ import Sidebar from "../../../components/Sidebar";
 import Nav from "./Nav";
 import Cookies from "js-cookie";
 import { useParams } from "react-router-dom";
+import Pagination from "../../../components/Pagination";
 
 export default function Quizzes() {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -12,6 +13,7 @@ export default function Quizzes() {
   const [quizzes, setQuizzes] = useState([]);
   const apiBase = import.meta.env.VITE_API_URL;
   const { username } = useParams();
+  const [loading, setLoading] = useState(false);
 
   const toggleDropdown = () => setShowDropdown((prev) => !prev);
 
@@ -30,6 +32,8 @@ export default function Quizzes() {
   //   Get quiz reports for this user
   useEffect(() => {
     const Quizzes = async () => {
+      setErrors({});
+      setLoading(true);
       try {
         await fetch(`${apiBase}/sanctum/csrf-cookie`, {
           credentials: "include",
@@ -54,8 +58,6 @@ export default function Quizzes() {
 
         const data = await response.json();
 
-        console.log(data);
-
         if (!response.ok) {
           if (data.message) {
             setErrors({ general: data.message });
@@ -63,7 +65,11 @@ export default function Quizzes() {
         } else {
           setQuizzes(data);
         }
-      } catch (err) {}
+      } catch (err) {
+        setErrors({ general: err.message });
+      } finally {
+        setLoading(false);
+      }
     };
     Quizzes();
   }, [apiBase, username]);
@@ -96,85 +102,108 @@ export default function Quizzes() {
 
           <div className="row">
             <Nav username={username} />
-            <div className="col-md-9">
-              <div className="card">
-                <div className="card-body">
-                  {quizzes.answers && quizzes.answers.length > 0 ? (
-                    quizzes.answers.map((quiz, index) => (
-                      <div key={index}>
-                        <div className="verify-content d-flex align-items-center justify-content-between">
-                          <div className="d-flex align-items-center">
-                            <span className="me-16 icon-circle bg-primary text-white">
-                              <i className="ri-file-warning-line"></i>
-                            </span>
-                            <div className="primary-number">
-                              <p className="mb-0">
-                                <strong>
-                                  {quiz.topic?.name || "No Topic"}
-                                </strong>
-                              </p>
-                              <small style={{fontSize: "14px"}} className="text-success">
-                                Score: {quiz.score} / {quiz.total} (
-                                {((quiz.score / quiz.total) * 100).toFixed(2)}%)
-                                |{" "}
-                                {new Date(quiz.created_at).toLocaleDateString(
-                                  "en-US",
-                                  {
-                                    month: "short",
-                                    day: "numeric",
-                                    year: "numeric",
-                                  }
-                                )}{" "}
-                                | {quiz.signature ? "Signed" : "Not Signed"}
-                              </small>
+            {loading ? (
+              <div className="text-center my-5">
+                <div className="spinner-border" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+              </div>
+            ) : (
+              <div className="col-md-9">
+                <div className="card">
+                  <div className="card-body">
+                    {quizzes.answers && quizzes.answers.length > 0 ? (
+                      quizzes.answers.map((quiz, index) => (
+                        <div key={index}>
+                          <div className="verify-content d-flex align-items-center justify-content-between">
+                            <div className="d-flex align-items-center">
+                              <span className="me-16 icon-circle bg-primary text-white">
+                                <i className="ri-file-warning-line"></i>
+                              </span>
+                              <div className="primary-number">
+                                <p className="mb-0">
+                                  <strong>
+                                    {quiz.topic?.name || "No Topic"}
+                                  </strong>
+                                </p>
+                                <small
+                                  style={{
+                                    fontSize: "14px",
+                                    fontWeight: "bold",
+                                  }}
+                                  className="text-success"
+                                >
+                                  Score: {quiz.score} / {quiz.total} (
+                                  {((quiz.score / quiz.total) * 100).toFixed(2)}
+                                  %) |{" "}
+                                  {new Date(quiz.created_at).toLocaleDateString(
+                                    "en-US",
+                                    {
+                                      month: "short",
+                                      day: "numeric",
+                                      year: "numeric",
+                                    }
+                                  )}{" "}
+                                  | {quiz.signature ? "Signed" : "Not Signed"}
+                                </small>
+                              </div>
+                            </div>
+
+                            {/* Export Icon Button */}
+                            <div
+                              className="position-relative"
+                              ref={dropdownRef}
+                            >
+                              <button
+                                className="btn btn-primary"
+                                onClick={toggleDropdown}
+                              >
+                                <i className="ri-download-2-line" />
+                              </button>
+
+                              {showDropdown && (
+                                <ul
+                                  className="dropdown-menu show"
+                                  style={{
+                                    position: "absolute",
+                                    top: "100%",
+                                    right: 0,
+                                    minWidth: "120px",
+                                  }}
+                                >
+                                  <li>
+                                    <a className="dropdown-item" href="#">
+                                      <i className="ri-file-pdf-fill text-danger me-2" />{" "}
+                                      PDF
+                                    </a>
+                                  </li>
+                                  <li>
+                                    <a className="dropdown-item" href="#">
+                                      <i className="ri-file-excel-fill text-success me-2" />{" "}
+                                      Excel
+                                    </a>
+                                  </li>
+                                </ul>
+                              )}
                             </div>
                           </div>
 
-                          {/* Export Icon Button */}
-                          <div className="position-relative" ref={dropdownRef}>
-                            <button
-                              className="btn btn-primary"
-                              onClick={toggleDropdown}
-                            >
-                              <i className="ri-download-2-line" />
-                            </button>
-
-                            {showDropdown && (
-                              <ul
-                                className="dropdown-menu show"
-                                style={{
-                                  position: "absolute",
-                                  top: "100%",
-                                  right: 0,
-                                  minWidth: "120px",
-                                }}
-                              >
-                                <li>
-                                  <a className="dropdown-item" href="#">
-                                    <i className="ri-file-pdf-fill text-danger me-2" />
-                                    PDF
-                                  </a>
-                                </li>
-                                <li>
-                                  <a className="dropdown-item" href="#">
-                                    <i className="ri-file-excel-fill text-success me-2" />
-                                    Excel
-                                  </a>
-                                </li>
-                              </ul>
-                            )}
-                          </div>
+                          <hr className="dropdown-divider my-16" />
                         </div>
+                      ))
+                    ) : (
+                      <p>No quizzes found for this user..</p>
+                    )}
 
-                        <hr className="dropdown-divider my-16" />
-                      </div>
-                    ))
-                  ) : (
-                    <p>No quizzes found for this user..</p>
-                  )}
+                    <Pagination
+                      currentPage={quizzes.meta?.current_page || 1}
+                      lastPage={quizzes.meta?.last_page || 1}
+                      onPageChange={(page) => fetchQuizzes(page)}
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>
