@@ -33,12 +33,11 @@ export default function AttemptSummary({ apiBase, topic, setErrors }) {
               "Content-Type": "application/json",
             },
             credentials: "include",
+            cache: "no-store",
           }
         );
 
         const data = await response.json();
-
-        setSummary(data);
 
         if (!response.ok) {
           if (data.message === "Unauthenticated.") {
@@ -53,16 +52,17 @@ export default function AttemptSummary({ apiBase, topic, setErrors }) {
         setError(null);
       } catch (err) {
         console.error("Failed to fetch attempt summary:", err);
-        setError(err.message);
-        if (setErrors) {
-          setErrors((prev) => ({ ...prev, summary: err.message }));
-        }
-        // Clear summary on error
+        // setError(err.message);
+        // if (setErrors) {
+        //   setErrors((prev) => ({ ...prev, summary: err.message }));
+        // }
         setSummary(null);
       }
     };
 
     fetchSummary();
+
+    setInterval(() => fetchSummary(), 2000);
   }, [apiBase, topic, setErrors]);
 
   if (error) {
