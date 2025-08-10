@@ -302,8 +302,35 @@ export default function QuestionManager() {
         <div className="content-body">
           <div className="container">
             <div className="page-title">
-              <h3>Add Questions</h3>
-              <p className="mb-2">Add multiple choice questions here</p>
+              <div className="row align-items-center justify-content-between">
+                <div className="col-md-6">
+                  <div className="page-title-content">
+                    <h3>Add Questions</h3>
+                    <p className="mb-2">Add multiple choice questions here</p>
+                  </div>
+                </div>
+                <div className="col-auto">
+                  <div className="breadcrumbs">
+                    <a href="#">Home </a>
+                    <span>
+                      <i className="ri-arrow-right-s-line" />
+                    </span>
+                    <a href="#">Manage Questions</a>
+                    <span>
+                      <i className="ri-arrow-right-s-line" />
+                    </span>
+                    <a href="#">Add Questions</a>
+                  </div>
+                  <div className="d-flex justify-content-between align-items-center">
+                    <a
+                      href="/admin/dashboard/all-questions"
+                      className="btn btn-primary mt-10"
+                    >
+                      All Question
+                    </a>
+                  </div>
+                </div>
+              </div>
             </div>
 
             {errors.general && (

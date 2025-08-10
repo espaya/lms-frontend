@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import MyHeader from "../../components/MyHeader";
 import Sidebar from "../../components/Sidebar";
+import AllQuestionsTopic from "../../components/admin/AllQuestionsTopic";
 
 export default function AllQuestions() {
   const [questions, setQuestions] = useState([]);
@@ -194,62 +195,13 @@ export default function AllQuestions() {
                             subject.topics.map((topic) => (
                               <React.Fragment key={`${subject.id}-${topic.id}`}>
                                 {/* Main topic row */}
-                                <div className="rtable-row">
-                                  <div className="rtable-cell topic-cell">
-                                    <div className="rtable-cell--content title-content">
-                                      <h5>{subject.name}</h5>
-                                    </div>
-                                  </div>
-                                  <div className="rtable-cell id-cell">
-                                    <div className="rtable-cell--heading">
-                                      Topic
-                                    </div>
-                                    <div className="rtable-cell--content date-content">
-                                      {topic.name}
-                                    </div>
-                                  </div>
-                                  <div className="rtable-cell rtable-cell--foot status-cell">
-                                    <div className="rtable-cell--heading">
-                                      Created At
-                                    </div>
-                                    <div className="rtable-cell--content purchase-content">
-                                      {new Date(
-                                        topic.created_at
-                                      ).toLocaleDateString()}
-                                    </div>
-                                  </div>
-                                  <div className="rtable-cell rtable-cell--foot receipt-cell">
-                                    <div className="rtable-cell--heading">
-                                      Actions
-                                    </div>
-                                    <div className="rtable-cell--content pdf-content">
-                                      <a
-                                        href="#"
-                                        className="icon-link"
-                                        title="View"
-                                        onClick={(e) => {
-                                          e.preventDefault();
-                                          fetchQuestionsForTopic(topic.id);
-                                        }}
-                                      >
-                                        <i
-                                          style={{ fontSize: "18px" }}
-                                          className="ri-eye-line"
-                                        />
-                                      </a>
-                                      <a
-                                        href="#"
-                                        className="icon-link"
-                                        title="Delete"
-                                      >
-                                        <i
-                                          style={{ fontSize: "18px" }}
-                                          className="ri-delete-bin-line"
-                                        ></i>
-                                      </a>
-                                    </div>
-                                  </div>
-                                </div>
+                                <AllQuestionsTopic
+                                  topic={topic}
+                                  fetchQuestionsForTopic={
+                                    fetchQuestionsForTopic
+                                  }
+                                  subject={subject}
+                                />
 
                                 {/* Expanded questions row */}
                                 {visibleQuestions[topic.id] && (
