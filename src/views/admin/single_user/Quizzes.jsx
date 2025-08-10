@@ -170,7 +170,7 @@ export default function Quizzes() {
                       </div>
                     ))
                   ) : (
-                    <p>No quizzes found for this user.</p>
+                    <p>No quizzes found for this user..</p>
                   )}
                 </div>
               </div>

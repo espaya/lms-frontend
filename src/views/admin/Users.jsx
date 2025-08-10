@@ -167,7 +167,7 @@ export default function Users() {
                               <div className="rtable-cell receipt-cell">
                                 <div className="rtable-cell--content">
                                   <Link
-                                  style={{fontSize: "12px"}}
+                                    style={{ fontSize: "12px" }}
                                     to={`${PATHS.SINGLE_USER.replace(
                                       ":username",
                                       user.name

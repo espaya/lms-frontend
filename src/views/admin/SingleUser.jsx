@@ -3,6 +3,7 @@ import MyHeader from "../../components/MyHeader";
 import Sidebar from "../../components/Sidebar";
 import Cookies from "js-cookie";
 import { useParams } from "react-router-dom";
+import Nav from "./single_user/Nav";
 
 export default function SingleUser() {
   const [userProfile, setUserProfile] = useState([]);
@@ -62,7 +63,7 @@ export default function SingleUser() {
         sizes="16x16"
         href="assets/images/favicon.png"
       />
-      <title>Edunet - Personal LMS HTML Dashboard</title>
+      <title>Single User - 1staccess Home Care</title>
 
       <div id="main-wrapper">
         <MyHeader />
@@ -94,45 +95,7 @@ export default function SingleUser() {
               </div>
             </div>
             <div className="row">
-              <div className="col-md-3">
-                <ul className="settings-menu">
-                  <li className="active">
-                    <a href="/settings-profile.html">
-                      <i className="ri-arrow-right-s-line" />
-                      Profile
-                    </a>
-                  </li>
-                  <li className="">
-                    <a href="/settings-application.html">
-                      <i className="ri-arrow-right-s-line" />
-                      Application
-                    </a>
-                  </li>
-                  <li className="">
-                    <a href="/settings-security.html">
-                      <i className="ri-arrow-right-s-line" />
-                      Security
-                    </a>
-                  </li>
-                  <li className="">
-                    <a href="/settings-activity.html">
-                      <i className="ri-arrow-right-s-line" />
-                      Activity
-                    </a>
-                  </li>
-                  <li className="">
-                    <a href="/settings-payment-method.html">
-                      <i className="ri-arrow-right-s-line" />
-                      Payment Method
-                    </a>
-                  </li>
-                  <li className="">
-                    <a href="/settings-api.html">
-                      <i className="ri-arrow-right-s-line" /> API
-                    </a>
-                  </li>
-                </ul>
-              </div>
+              <Nav username={userProfile.user?.name} />
               <div className="col-md-9">
                 <div className="row">
                   <div className="col-xxl-6 col-xl-6 col-lg-6">
