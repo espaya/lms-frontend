@@ -192,7 +192,9 @@ export default function Quizzes() {
                         </div>
                       ))
                     ) : (
-                      <p>No quizzes found for this user..</p>
+                      <div className="alert alert-info mx-auto">
+                        No quizzes found for this user..
+                      </div>
                     )}
 
                     <Pagination
