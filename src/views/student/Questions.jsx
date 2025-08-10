@@ -181,6 +181,7 @@ export default function Questions() {
                             <div className="rtable-cell id-cell column-heading text-dark">
                               <strong>Topic</strong>
                             </div>
+
                             <div className="rtable-cell date-cell column-heading text-dark">
                               <strong>Created At</strong>
                             </div>
@@ -252,6 +253,8 @@ export default function Questions() {
                                     gradesByTopic={gradesByTopic}
                                     setGradesByTopic={setGradesByTopic}
                                     studentAnswers={studentAnswers} // ✅ pass this in
+                                    fileName={topic.fileName}
+
                                   />
                                 )}
                               </React.Fragment>

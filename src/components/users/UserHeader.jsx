@@ -194,7 +194,8 @@ export default function UserHeader() {
                           </div>
                         </div>
                       </div>
-                      {/* <a
+                      
+                      <a
                         className="dropdown-item ps-20 pe-20 pt-10 pb-10 d-flex align-items-center border-top  undefined"
                         href={PATHS.USER_PROFILE}
                       >
@@ -203,7 +204,8 @@ export default function UserHeader() {
                         </span>
                         Profile
                       </a>
-                      <a
+
+                      {/* <a
                         className="dropdown-item ps-20 pe-20 pt-10 pb-10 d-flex align-items-center border-top  undefined"
                         href="#"
                       >
@@ -212,6 +214,7 @@ export default function UserHeader() {
                         </span>
                         Settings
                       </a> */}
+
                       <a
                         className="dropdown-item ps-20 pe-20 pt-10 pb-10 d-flex align-items-center border-top  text-danger"
                         href="#"

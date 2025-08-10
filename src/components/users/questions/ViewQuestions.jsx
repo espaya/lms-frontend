@@ -13,6 +13,7 @@ export default function ViewQuestions({
   gradesByTopic,
   setGradesByTopic,
   studentAnswers,
+  fileName,
 }) {
   const questions = questionsByTopic[topic] || [];
   const apiBase = import.meta.env.VITE_API_URL;
@@ -207,6 +208,15 @@ export default function ViewQuestions({
             </ul>
           </div>
         ))}
+      <p className="text-info mx-auto">
+        <a
+          href={`/viewer?file=${encodeURIComponent(fileName)}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Click here to read the handout before taking this quiz
+        </a>
+      </p>
 
       <div className="rtable-row bg-light">
         <div className="rtable-cell" style={{ padding: "20px" }} colSpan={4}>

@@ -16,6 +16,7 @@ import AddUser from "./views/admin/AddUser";
 import SingleUser from "./views/admin/SingleUser";
 import MyProfile from "./views/student/MyProfile";
 import Quizzes from "./views/admin/single_user/Quizzes";
+import ViewerPage from "./components/users/questions/ViewerPage";
 
 // Centralized route configuration with metadata
 export const ROUTE_CONFIG = {
@@ -121,6 +122,14 @@ export const ROUTE_CONFIG = {
     path: "/user/dashboard/profile",
     element: <MyProfile />,
     name: "User Dashboard",
+    isProtected: true,
+    roles: ["USER"],
+  },
+
+  VIEWER_PAGE: {
+    path: "/viewer",
+    element: <ViewerPage />,
+    name: "Question Viewer",
     isProtected: true,
     roles: ["USER"],
   },
