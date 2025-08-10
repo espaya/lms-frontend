@@ -18,6 +18,7 @@ export default function MyProfile() {
   const apiBase = import.meta.env.VITE_API_URL;
   const { username } = useParams();
   const [loading, setLoading] = useState(false);
+  const [buttonLoading, setButtonLoading] = useState(false);
   const { user } = useContext(AuthContext);
 
   const handleOnChange = (e) => {
@@ -79,7 +80,7 @@ export default function MyProfile() {
   const handleFormSubmission = async (e) => {
     e.preventDefault();
     setErrors({});
-    setLoading(true);
+    setButtonLoading(true);
 
     try {
       await fetch(`${apiBase}/sanctum/csrf-cookie`, {
@@ -132,7 +133,7 @@ export default function MyProfile() {
       setErrors({ general: err.message });
       setTimeout(() => setErrors({ general: "" }), 3500);
     } finally {
-      setLoading(false);
+      setButtonLoading(false);
     }
   };
 
@@ -310,7 +311,7 @@ export default function MyProfile() {
                                 type="submit"
                                 className="btn btn-primary mr-2"
                               >
-                                {loading ? "Updating user..." : "Update User"}
+                                {buttonLoading ? "Updating user..." : "Update User"}
                               </button>
                             </div>
                           </form>
