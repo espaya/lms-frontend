@@ -13,10 +13,13 @@ export default function ViewerPage() {
         left: 0,
         width: "100vw",
         height: "100vh",
+        backgroundColor: "#fff", // ensures background is solid
+        zIndex: 9999, // make sure it sits above everything
         margin: 0,
-        padding: 0
+        padding: 0,
+        overflow: "hidden", // prevent scrolling
       }}
-      onContextMenu={(e) => e.preventDefault()} // disable right click on container
+      onContextMenu={(e) => e.preventDefault()} // disable right click
     >
       <iframe
         src={`${apiBase.replace(/\/$/, "")}/view-question-file/${file}`}
