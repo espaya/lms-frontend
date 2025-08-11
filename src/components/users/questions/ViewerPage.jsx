@@ -19,7 +19,7 @@ export default function ViewerPage() {
       onContextMenu={(e) => e.preventDefault()} // disable right click on container
     >
       <iframe
-        src={`${apiBase.replace(/\/$/, "")}/storage/questions/${file}`}
+        src={`${apiBase.replace(/\/$/, "")}/view-question-file/${file}`}
         style={{ width: "100%", height: "100%", border: "none" }}
         title="PDF Viewer"
       />
