@@ -1,8 +1,53 @@
+import { useEffect, useState } from "react";
 import ReportButton from "../../components/admin/ReportButton";
 import MyHeader from "../../components/MyHeader";
 import Sidebar from "../../components/Sidebar";
+import Cookies from "js-cookie";
 
 export default function Reports() {
+  const [reports, setReports] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
+  const apiBase = import.meta.env.VITE_API_URL;
+
+  useEffect(() => {
+    const fetchReports = async () => {
+      setLoading(true);
+      setErrors({});
+
+      try {
+        await fetch(`${apiBase}/sanctum/csrf-cookie`, {
+          credentials: "include",
+        });
+
+        const csrfToken = Cookies.get("XSRF-TOKEN");
+        const authToken = localStorage.getItem("auth_token");
+
+        const response = await fetch(`${apiBase}/api/`, {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+            "X-XSRF-TOKEN": decodeURIComponent(csrfToken),
+          },
+        });
+
+        const data = response.json();
+
+        if (!response.ok) {
+          if (data.message) {
+            setErrors({ general: data.message });
+          }
+        } else {
+          setReports(data);
+        }
+      } catch (err) {
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchReports();
+  }, []);
 
   return (
     <>
@@ -44,7 +89,7 @@ export default function Reports() {
                         <h5 className="mb-5">USD 1257</h5>
                         <p className="mb-0">June 9, 2021 09:55 PM </p>
                       </div>
-                      <ReportButton/>
+                      <ReportButton />
                     </div>
                   </div>
                 </div>

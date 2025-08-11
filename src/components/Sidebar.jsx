@@ -1,8 +1,9 @@
 import { PATHS } from "../router";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function Sidebar() {
   const location = useLocation();
+  const navigate = useNavigate();
 
   // helper to check if a path matches the current URL
   const isActive = (path) => location.pathname === path;
@@ -10,14 +11,21 @@ export default function Sidebar() {
   return (
     <div className="sidebar">
       <div className="brand-logo text-center">
-        <a className="mini-logo" href="#">
+        <a
+          className="mini-logo"
+          onClick={() => navigate(PATHS.ADMIN_DASHBOARD)}
+          style={{ cursor: "pointer" }}
+        >
           <img src="/assets/images/favicon.png" alt="" width={30} />
         </a>
       </div>
       <div className="menu">
         <ul>
           <li className={isActive(PATHS.ADMIN_DASHBOARD) ? "active" : ""}>
-            <a href={PATHS.ADMIN_DASHBOARD}>
+            <a
+              onClick={() => navigate(PATHS.ADMIN_DASHBOARD)}
+              style={{ cursor: "pointer" }}
+            >
               <span>
                 <i className="ri-grid-fill" />
               </span>
@@ -48,13 +56,21 @@ export default function Sidebar() {
               style={{ color: "black" }}
             >
               <li className={isActive(PATHS.ALL_QUESTIONS) ? "active" : ""}>
-                <a className="dropdown-item" href={PATHS.ALL_QUESTIONS}>
+                <a
+                  className="dropdown-item"
+                  onClick={() => navigate(PATHS.ALL_QUESTIONS)}
+                  style={{ cursor: "pointer" }}
+                >
                   All Questions
                 </a>
               </li>
 
               <li className={isActive(PATHS.QUESTION_MANAGER) ? "active" : ""}>
-                <a className="dropdown-item" href={PATHS.QUESTION_MANAGER}>
+                <a
+                  className="dropdown-item"
+                  onClick={() => navigate(PATHS.QUESTION_MANAGER)}
+                  style={{ cursor: "pointer" }}
+                >
                   Upload New
                 </a>
               </li>
@@ -84,22 +100,34 @@ export default function Sidebar() {
               style={{ color: "black" }}
             >
               <li className={isActive(PATHS.ADMIN_USERS) ? "active" : ""}>
-                <a className="dropdown-item" href={PATHS.ADMIN_USERS}>
+                <a
+                  className="dropdown-item"
+                  onClick={() => navigate(PATHS.ADMIN_USERS)}
+                  style={{ cursor: "pointer" }}
+                >
                   All Users
                 </a>
               </li>
 
               <li className={isActive(PATHS.ADD_USERS) ? "active" : ""}>
-                <a className="dropdown-item" href={PATHS.ADD_USERS}>
+                <a
+                  className="dropdown-item"
+                  onClick={() => navigate(PATHS.ADD_USERS)}
+                  style={{ cursor: "pointer" }}
+                >
                   Add New
                 </a>
               </li>
             </ul>
           </li>
-          <li className={isActive(PATHS.REPORTS)? "active" : ""}>
-            <a href={PATHS.REPORTS} className="active">
+
+          <li className={isActive(PATHS.REPORTS) ? "active" : ""}>
+            <a
+              onClick={() => navigate(PATHS.REPORTS)}
+              style={{ cursor: "pointer" }}
+            >
               <span>
-               <i className="ri-flag-2-fill" />
+                <i className="ri-flag-2-fill" />
               </span>
               <span className="nav-text">Reports</span>
             </a>
