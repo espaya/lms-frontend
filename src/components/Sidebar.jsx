@@ -96,6 +96,14 @@ export default function Sidebar() {
               </li>
             </ul>
           </li>
+          <li className={isActive(PATHS.REPORTS)? "active" : ""}>
+            <a href={PATHS.REPORTS} className="active">
+              <span>
+               <i className="ri-flag-2-fill" />
+              </span>
+              <span className="nav-text">Reports</span>
+            </a>
+          </li>
         </ul>
       </div>
     </div>

@@ -17,6 +17,7 @@ import SingleUser from "./views/admin/SingleUser";
 import MyProfile from "./views/student/MyProfile";
 import Quizzes from "./views/admin/single_user/Quizzes";
 import ViewerPage from "./components/users/questions/ViewerPage";
+import Reports from "./views/admin/Reports";
 
 // Centralized route configuration with metadata
 export const ROUTE_CONFIG = {
@@ -50,6 +51,14 @@ export const ROUTE_CONFIG = {
     path: "/admin/dashboard/question-manager",
     element: <QuestionManager />,
     name: "Question Manager",
+    isProtected: true,
+    roles: ["ADMIN"], // ✅ restrict to ADMIN only
+  },
+
+  REPORTS: {
+    path: "/admin/dashboard/reports",
+    element: <Reports />,
+    name: "Reports",
     isProtected: true,
     roles: ["ADMIN"], // ✅ restrict to ADMIN only
   },

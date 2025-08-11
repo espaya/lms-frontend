@@ -23,12 +23,9 @@ export const AuthProvider = ({ children }) => {
         credentials: "include",
       });
 
-      // const csrfToken = document.cookie
-      //   .split("; ")
-      //   .find((row) => row.startsWith("XSRF-TOKEN="))
-      //   ?.split("=")[1];
-
       const csrfToken = Cookies.get("XSRF-TOKEN");
+
+      // hash the password before sending to the server
 
       const response = await fetch(`${apiBase}/api/login`, {
         method: "POST",
