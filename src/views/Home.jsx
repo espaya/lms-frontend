@@ -2,7 +2,7 @@ import { Eye, EyeOff } from "lucide-react";
 import { useContext, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../auth/AuthContext";
-import ReCAPTCHA from "react-google-recaptcha"; // ✅ Correct import
+import ReCAPTCHA from "react-google-recaptcha";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -17,7 +17,9 @@ export default function Home() {
   });
 
   const [showPassword, setShowPassword] = useState(false);
-  const captchaRef = useRef(null); // ✅ For invisible reCAPTCHA reset
+  const captchaRef = useRef(null);
+
+  const isLocalhost = window.location.hostname === "localhost";
 
   const handleOnChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -38,13 +40,17 @@ export default function Home() {
     e.preventDefault();
     setErrors({});
 
-    if (!formData.captcha_token) {
+    // ✅ Skip captcha validation in localhost
+    if (!isLocalhost && !formData.captcha_token) {
       setErrors({ general: "Please complete the captcha" });
       return;
     }
 
     try {
-      const userData = await login(formData);
+      const userData = await login({
+        ...formData,
+        captcha_token: isLocalhost ? "bypass_local" : formData.captcha_token, // send bypass token for local
+      });
 
       if (userData?.role) {
         setFormData({
@@ -54,7 +60,9 @@ export default function Home() {
           captcha_token: "",
         });
 
-        captchaRef.current?.reset(); // ✅ Reset captcha after submit
+        if (!isLocalhost) {
+          captchaRef.current?.reset();
+        }
 
         setTimeout(() => {
           setSuccessMsg("");
@@ -169,13 +177,15 @@ export default function Home() {
                     </div>
 
                     {/* ✅ Google reCAPTCHA */}
-                    <div className="my-3">
-                      <ReCAPTCHA
-                        sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
-                        onChange={handleCaptchaChange}
-                        ref={captchaRef}
-                      />
-                    </div>
+                    {!isLocalhost && (
+                      <div className="my-3">
+                        <ReCAPTCHA
+                          sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
+                          onChange={handleCaptchaChange}
+                          ref={captchaRef}
+                        />
+                      </div>
+                    )}
 
                     <div className="mt-16 d-grid gap-2">
                       <button
