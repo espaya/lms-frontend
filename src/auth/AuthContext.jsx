@@ -118,8 +118,9 @@ export const AuthProvider = ({ children }) => {
         credentials: "include",
       });
       setSuccessMsg("Logged out successfully!"); // Set logout success message
+      setTimeout(() => setSuccessMsg(""), 3500);
     } catch (error) {
-      console.error("Logout error:", error);
+      setErrors({ general: error.message });
     } finally {
       setUser(null);
       localStorage.removeItem("auth_token");
