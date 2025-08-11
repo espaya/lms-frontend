@@ -311,7 +311,7 @@ export default function MyProfile() {
                                 type="submit"
                                 className="btn btn-primary mr-2"
                               >
-                                {buttonLoading ? "Updating user..." : "Update User"}
+                                {buttonLoading ? "Updating profile..." : "Update Profile"}
                               </button>
                             </div>
                           </form>
