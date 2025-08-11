@@ -1,21 +1,23 @@
 import { Eye, EyeOff } from "lucide-react";
-import { useContext, useState } from "react";
-import Cookies from "js-cookie";
+import { useContext, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../auth/AuthContext";
+import ReCAPTCHA from "react-google-recaptcha"; // ✅ Correct import
 
 export default function Home() {
   const navigate = useNavigate();
-  const { login, loading, successMsg, errors, setErrors, setSuccessMsg, user } =
+  const { login, loading, successMsg, errors, setErrors, setSuccessMsg } =
     useContext(AuthContext);
 
   const [formData, setFormData] = useState({
     email: "",
     password: "",
     remember: false,
+    captcha_token: "",
   });
 
   const [showPassword, setShowPassword] = useState(false);
+  const captchaRef = useRef(null); // ✅ For invisible reCAPTCHA reset
 
   const handleOnChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -25,19 +27,35 @@ export default function Home() {
     }));
   };
 
+  const handleCaptchaChange = (token) => {
+    setFormData((prev) => ({
+      ...prev,
+      captcha_token: token || "",
+    }));
+  };
+
   const handleOnSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
-    // setLoading(true); // Add loading state if not already present
+
+    if (!formData.captcha_token) {
+      setErrors({ general: "Please complete the captcha" });
+      return;
+    }
 
     try {
       const userData = await login(formData);
 
-      // Double-check userData exists and has role
       if (userData?.role) {
-        setFormData({ email: "", password: "", remember: false });
+        setFormData({
+          email: "",
+          password: "",
+          remember: false,
+          captcha_token: "",
+        });
 
-        // Use setTimeout to ensure React's state updates are complete
+        captchaRef.current?.reset(); // ✅ Reset captcha after submit
+
         setTimeout(() => {
           setSuccessMsg("");
           navigate(
@@ -148,6 +166,15 @@ export default function Home() {
                       <div className="col-6 text-end">
                         <a href="#">Forgot Password?</a>
                       </div>
+                    </div>
+
+                    {/* ✅ Google reCAPTCHA */}
+                    <div className="my-3">
+                      <ReCAPTCHA
+                        sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
+                        onChange={handleCaptchaChange}
+                        ref={captchaRef}
+                      />
                     </div>
 
                     <div className="mt-16 d-grid gap-2">
