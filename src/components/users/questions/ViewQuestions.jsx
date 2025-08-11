@@ -210,7 +210,8 @@ export default function ViewQuestions({
         ))}
       <p className="text-info mx-auto">
         <a
-          href={`/viewer?file=${encodeURIComponent(fileName)}`}
+          // href={`/viewer?file=${encodeURIComponent(fileName)}`}
+          href={`${apiBase}/storage/questions/${fileName}`}
           target="_blank"
           rel="noopener noreferrer"
         >
