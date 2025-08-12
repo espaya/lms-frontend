@@ -6,6 +6,7 @@ import Cookies from "js-cookie";
 import ExportReport from "./admin/ExportReport";
 
 export default function PreviewReport() {
+  // fixing things here
   const reportRef = useRef(null);
   const { id } = useParams(); // Destructure id directly
   const [previewReport, setPreviewReport] = useState([]);
