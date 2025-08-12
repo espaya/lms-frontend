@@ -1,8 +1,10 @@
+
 import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
 import * as XLSX from "xlsx";
 
 export default function ExportReport({ reportRef }) {
+  //  const reportRef = useRef(null);
   // export to pdf
   const exportToPDF = async () => {
     try {
