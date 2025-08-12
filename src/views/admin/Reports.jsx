@@ -1,57 +1,87 @@
-import { useEffect, useState } from "react";
-import ReportButton from "../../components/admin/ReportButton";
+import React, { useEffect, useState } from "react";
 import MyHeader from "../../components/MyHeader";
 import Sidebar from "../../components/Sidebar";
 import Cookies from "js-cookie";
+import Pagination from "../../components/Pagination";
+import { PATHS } from "../../router";
+import { useNavigate } from "react-router-dom";
 
 export default function Reports() {
   const [reports, setReports] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [pagination, setPagination] = useState({
+    current_page: 1,
+    last_page: 1,
+    total: 0,
+    per_page: 10,
+  });
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
   const apiBase = import.meta.env.VITE_API_URL;
+  const reportRef = useRef(null);
 
-  useEffect(() => {
-    const fetchReports = async () => {
-      setLoading(true);
-      setErrors({});
+  const navigate = useNavigate();
 
-      try {
-        await fetch(`${apiBase}/sanctum/csrf-cookie`, {
+  const fetchReports = async (page = 1) => {
+    setLoading(true);
+
+    try {
+      await fetch(`${apiBase}/sanctum/csrf-cookie`, {
+        credentials: "include",
+      });
+
+      const csrfToken = Cookies.get("XSRF-TOKEN");
+      const authToken = localStorage.getItem("auth_token");
+
+      const response = await fetch(
+        `${apiBase}/api/admin/dashboard/get-subjects?page=${page}`,
+        {
           credentials: "include",
-        });
-
-        const csrfToken = Cookies.get("XSRF-TOKEN");
-        const authToken = localStorage.getItem("auth_token");
-
-        const response = await fetch(`${apiBase}/api/`, {
           method: "GET",
-          credentials: "include",
           headers: {
             Authorization: `Bearer ${authToken}`,
             "X-XSRF-TOKEN": decodeURIComponent(csrfToken),
+            Accept: "application/json",
+            "Content-Type": "application/json",
           },
-        });
-
-        const data = response.json();
-
-        if (!response.ok) {
-          if (data.message) {
-            setErrors({ general: data.message });
-          }
-        } else {
-          setReports(data);
         }
-      } catch (err) {
-      } finally {
-        setLoading(false);
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        if (data.message) {
+          setErrors({ general: data.message });
+        } else {
+          setErrors({ general: "An error occurred" });
+        }
+      } else {
+        setReports(data.data);
+        setPagination({
+          current_page: data.pagination.current_page,
+          last_page: data.pagination.last_page,
+          total: data.pagination.total,
+          per_page: data.pagination.per_page,
+        });
+        setErrors(null);
       }
-    };
+    } catch (err) {
+      setErrors({ general: err.message || "Failed to fetch reports" });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchReports();
-  }, []);
+  }, [apiBase]);
+
+  const handlePageChange = (page) => {
+    fetchReports(page);
+  };
 
   return (
     <>
-      <title>Reports - 1staccess Home Care</title>
+      <title>Reports - 1staccess Home Care </title>
 
       <div id="main-wrapper">
         <MyHeader />
@@ -63,7 +93,7 @@ export default function Reports() {
                 <div className="col-md-6">
                   <div className="page-title-content">
                     <h3>Reports</h3>
-                    <p className="mb-2">Download reports for quizzes</p>
+                    <p className="mb-2">Generate monthly reports for quizzes</p>
                   </div>
                 </div>
                 <div className="col-auto">
@@ -78,19 +108,78 @@ export default function Reports() {
               </div>
             </div>
             <div className="row">
-              <div className="col-xl-10 col-lg-10 mx-auto">
+              <div className="col-xl-8 col-lg-8 mx-auto">
                 <div className="card transparent">
                   <div className="card-body">
-                    <div className="bg-white py-12 px-12 rounded d-flex mb-20 justify-content-between align-items-center align-items-center shadow-sm">
-                      <div className="payout-icon bg-success-lighten text-success">
-                        <i className="ri-flag-2-fill" />
+                    {loading ? (
+                      <div className="text-center my-5">
+                        <div className="spinner-border" role="status">
+                          <span className="visually-hidden">Loading...</span>
+                        </div>
                       </div>
-                      <div className="flex-grow-1">
-                        <h5 className="mb-5">USD 1257</h5>
-                        <p className="mb-0">June 9, 2021 09:55 PM </p>
-                      </div>
-                      <ReportButton />
-                    </div>
+                    ) : (
+                      <>
+                        {reports.map(
+                          (report) =>
+                            report.topics &&
+                            report.topics.length > 0 &&
+                            report.topics.map((topic) => (
+                              <div
+                                key={topic.id}
+                                className="bg-white py-12 px-12 rounded d-flex mb-20 justify-content-between align-items-center shadow-sm"
+                              >
+                                <div className="payout-icon bg-success-lighten text-success">
+                                  <i className="ri-file-text-line" />
+                                </div>
+                                <div className="flex-grow-1">
+                                  <h5 className="mb-5">{topic.name}</h5>
+                                  <p className="mb-0">
+                                    {new Date(
+                                      topic.created_at
+                                    ).toLocaleDateString("en-US", {
+                                      year: "numeric",
+                                      month: "long",
+                                      day: "numeric",
+                                      hour: "2-digit",
+                                      minute: "2-digit",
+                                    })}
+                                  </p>
+                                  <small className="text-muted">
+                                    <a
+                                      href={`${apiBase}/viewer?file=${encodeURIComponent(
+                                        topic.fileName
+                                      )}`}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                    >
+                                      File: {topic.fileName}
+                                    </a>
+                                  </small>
+                                </div>
+                                <a
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    navigate(
+                                      `/admin/dashboard/reports/${topic.id}`
+                                    );
+                                  }}
+                                  className="btn btn-primary"
+                                  href="#"
+                                >
+                                  Preview
+                                </a>
+                              </div>
+                            ))
+                        )}
+                        <Pagination
+                          currentPage={pagination.current_page}
+                          lastPage={pagination.last_page}
+                          total={pagination.total}
+                          perPage={pagination.per_page}
+                          onPageChange={handlePageChange}
+                        />
+                      </>
+                    )}
                   </div>
                 </div>
               </div>

@@ -18,6 +18,7 @@ import MyProfile from "./views/student/MyProfile";
 import Quizzes from "./views/admin/single_user/Quizzes";
 import ViewerPage from "./components/users/questions/ViewerPage";
 import Reports from "./views/admin/Reports";
+import PreviewReport from "./components/PreviewReport";
 
 // Centralized route configuration with metadata
 export const ROUTE_CONFIG = {
@@ -59,6 +60,14 @@ export const ROUTE_CONFIG = {
     path: "/admin/dashboard/reports",
     element: <Reports />,
     name: "Reports",
+    isProtected: true,
+    roles: ["ADMIN"], // ✅ restrict to ADMIN only
+  },
+
+  PREVIEW_REPORT: {
+    path: "/admin/dashboard/reports/:id",
+    element: <PreviewReport />,
+    name: "Preview Report",
     isProtected: true,
     roles: ["ADMIN"], // ✅ restrict to ADMIN only
   },
