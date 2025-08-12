@@ -114,7 +114,11 @@ export default function Reports() {
                   <div className="card-body">
                     {loading ? (
                       <div className="text-center my-5">
-                        <div className="spinner-border" role="status">
+                        <div
+                          className="spinner-border"
+                          role="status"
+                          ref={reportRef}
+                        >
                           <span className="visually-hidden">Loading...</span>
                         </div>
                       </div>
