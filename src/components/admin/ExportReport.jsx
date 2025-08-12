@@ -4,6 +4,7 @@ import html2canvas from "html2canvas";
 import * as XLSX from "xlsx";
 
 export default function ExportReport({ reportRef }) {
+  // export to pdf
   const exportToPDF = async () => {
     try {
       const element = reportRef?.current;
@@ -148,6 +149,7 @@ export default function ExportReport({ reportRef }) {
     }
   };
 
+  // export to excel 
   const exportToExcel = () => {
     try {
       const element = reportRef?.current;
