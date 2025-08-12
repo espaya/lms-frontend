@@ -84,7 +84,9 @@ export default function PreviewReport() {
                 <div className="col-md-6">
                   <div className="page-title-content">
                     <h3>Report Preview</h3>
-                    <p className="mb-2">Manage all monthly reports on qizzes here</p>
+                    <p className="mb-2">
+                      Manage all monthly reports on qizzes here
+                    </p>
                   </div>
                 </div>
                 <div className="col-auto">
@@ -121,6 +123,7 @@ export default function PreviewReport() {
                 <div className="col-12">
                   <div className="card transparent">
                     <div id="report" className="card-body" ref={reportRef}>
+                      {/* Visible report table (your current rtable layout) */}
                       <div className="rtable rtable--5cols rtable--collapse">
                         <div className="rtable-row rtable-row--head bg-transparent">
                           <div className="rtable-cell topic-cell column-heading text-dark">
@@ -197,7 +200,6 @@ export default function PreviewReport() {
                                     <img
                                       src={`${apiBase}/view-answer-signature/${report.signature}`}
                                       alt="Signature"
-                                      //   width="80"
                                       className="img-thumbnail"
                                       onError={(e) => {
                                         e.target.onerror = null;
@@ -230,6 +232,54 @@ export default function PreviewReport() {
                           ))
                         )}
                       </div>
+
+                      {/* Hidden HTML table for Excel export */}
+                      <table style={{ display: "none" }}>
+                        <thead>
+                          <tr>
+                            <th>Name</th>
+                            <th>Topic</th>
+                            <th>Grade</th>
+                            <th>Signature</th>
+                            <th>Date</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {reports.map((report) => (
+                            <tr
+                              key={`excel-${report.user_id}-${report.topic_id}`}
+                            >
+                              <td>{report.user?.name || "User"}</td>
+                              <td>{report.topic?.name || "Untitled"}</td>
+                              <td>
+                                {report.total > 0
+                                  ? Math.round(
+                                      (report.score / report.total) * 100
+                                    )
+                                  : 0}
+                                %
+                              </td>
+                              <td>
+                                {report.signature
+                                  ? `${apiBase}/view-answer-signature/${report.signature}`
+                                  : "Not signed"}
+                              </td>
+                              <td>
+                                {new Date(report.created_at).toLocaleDateString(
+                                  "en-US",
+                                  {
+                                    month: "short",
+                                    day: "numeric",
+                                    year: "numeric",
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                  }
+                                )}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
                     </div>
                   </div>
                 </div>
