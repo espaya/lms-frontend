@@ -1,4 +1,3 @@
-import { useRef } from "react";
 import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
 import * as XLSX from "xlsx";
@@ -149,7 +148,7 @@ export default function ExportReport({ reportRef }) {
     }
   };
 
-  // export to excel 
+  // export to excel
   const exportToExcel = () => {
     try {
       const element = reportRef?.current;
