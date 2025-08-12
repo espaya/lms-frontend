@@ -5,6 +5,7 @@ import Cookies from "js-cookie";
 import Pagination from "../../components/Pagination";
 import { PATHS } from "../../router";
 import { useNavigate } from "react-router-dom";
+import { useRef } from "react";
 
 export default function Reports() {
   const [reports, setReports] = useState([]);
