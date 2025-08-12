@@ -194,7 +194,7 @@ export default function ExportReport({ reportRef }) {
           <button
             className="dropdown-item"
             onClick={exportToPDF}
-            disabled={!reportRef?.current}
+            // disabled={!reportRef?.current}
           >
             <i className="ri-file-pdf-line me-2 text-danger"></i> PDF
           </button>
@@ -203,7 +203,7 @@ export default function ExportReport({ reportRef }) {
           <button
             className="dropdown-item"
             onClick={exportToExcel}
-            disabled={!reportRef?.current}
+            // disabled={!reportRef?.current}
           >
             <i className="ri-file-excel-line me-2 text-success"></i> Excel
           </button>
