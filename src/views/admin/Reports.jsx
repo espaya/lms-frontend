@@ -108,6 +108,9 @@ export default function Reports() {
                 </div>
               </div>
             </div>
+            {errors?.general && (
+              <div className="alert alert-danger">{errors?.general}</div>
+            )}
             <div className="row">
               <div className="col-xl-8 col-lg-8 mx-auto">
                 <div className="card transparent">

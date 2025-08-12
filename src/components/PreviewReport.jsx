@@ -84,7 +84,7 @@ export default function PreviewReport() {
                 <div className="col-md-6">
                   <div className="page-title-content">
                     <h3>Report Preview</h3>
-                    <p className="mb-2">Welcome to Edunet My Card page</p>
+                    <p className="mb-2">Manage all monthly reports on qizzes here</p>
                   </div>
                 </div>
                 <div className="col-auto">
