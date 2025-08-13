@@ -13,6 +13,7 @@ export default function PreviewReport() {
   const [loading, setLoading] = useState(false);
   const apiBase = import.meta.env.VITE_API_URL;
   const [errors, setErrors] = useState({});
+  const [getSig, setGetSig] = useState([]);
 
   useEffect(() => {
     const getReports = async () => {
@@ -198,6 +199,7 @@ export default function PreviewReport() {
                                 <div className="rtable-cell--content access-link-content">
                                   {report.signature ? (
                                     <img
+                                      id="signature"
                                       src={`${apiBase}/view-answer-signature/${report.signature}`}
                                       alt="Signature"
                                       className="img-thumbnail"

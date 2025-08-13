@@ -1,154 +1,104 @@
-
-import { jsPDF } from "jspdf";
+// import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
 import * as XLSX from "xlsx";
 
 export default function ExportReport({ reportRef }) {
-  //  const reportRef = useRef(null);
-  // export to pdf
-  const exportToPDF = async () => {
+  async function exportToPDF() {
     try {
-      const element = reportRef?.current;
+      const element = document.getElementById("report");
       if (!element) {
         console.error("Report element not found");
         return;
       }
 
-      // First clone and adjust the element for better print quality
-      const clonedElement = element.cloneNode(true);
-      clonedElement.style.width = `${element.offsetWidth}px`;
-      // Increased font sizes throughout
-      clonedElement.style.fontSize = "24px"; // Increased base font size (from 20px)
-      clonedElement.querySelectorAll("*").forEach((el) => {
-        const computedStyle = window.getComputedStyle(el);
-        // Increase all font sizes proportionally
-        if (computedStyle.fontSize) {
-          const currentSize = parseFloat(computedStyle.fontSize);
-          el.style.fontSize = `${currentSize * 1.5}px`; // Increase by 50%
-        }
-      });
-      document.body.appendChild(clonedElement);
+      const cloned = element.cloneNode(true);
+      cloned.style.position = "absolute";
+      cloned.style.left = "-9999px";
+      cloned.style.top = "0";
+      cloned.style.width = element.offsetWidth + "px";
+      document.body.appendChild(cloned);
 
-      const canvas = await html2canvas(clonedElement, {
+      const images = cloned.querySelectorAll("img");
+
+      const convertToBase64 = (img) =>
+        fetch(img.src, { mode: "cors" })
+          .then((response) => {
+            if (!response.ok) throw new Error("Failed to fetch image");
+            return response.blob();
+          })
+          .then(
+            (blob) =>
+              new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onloadend = () => resolve(reader.result);
+                reader.onerror = reject;
+                reader.readAsDataURL(blob);
+              })
+          )
+          .catch(() => img.src);
+
+      await Promise.all(
+        Array.from(images).map(async (img) => {
+          const base64 = await convertToBase64(img);
+          img.src = base64;
+        })
+      );
+
+      await new Promise((r) => setTimeout(r, 100));
+
+      const canvas = await html2canvas(cloned, {
         scale: 2,
         useCORS: true,
-        logging: true,
         allowTaint: true,
+        backgroundColor: "#fff",
       });
-      document.body.removeChild(clonedElement);
 
-      // Create a temporary iframe for printing
+      document.body.removeChild(cloned);
+
       const iframe = document.createElement("iframe");
       iframe.style.position = "absolute";
       iframe.style.left = "-9999px";
       document.body.appendChild(iframe);
 
-      // Convert canvas to image and insert into iframe
       const imgData = canvas.toDataURL("image/png");
-      const img = new Image();
-      img.src = imgData;
 
-      iframe.contentDocument?.open();
-      iframe.contentDocument?.write(`
-      <!DOCTYPE html>
+      iframe.contentDocument.open();
+      iframe.contentDocument.write(`
       <html>
         <head>
+          <title>Print Preview</title>
           <style>
-            body { 
-              margin: 0; 
-              padding: 0;
-              font-family: Arial, sans-serif;
-              font-size: 24px; /* Increased default size (from 20px) */
+            body, html {
+              margin: 0; padding: 0; text-align: center; background: white; font-size: 16px;
             }
-            .print-container {
-              width: 100%;
-              padding: 2.54cm;
-              box-sizing: border-box;
-              font-size: 1.5rem; /* Increased relative size (from 1.25rem) */
-            }
-            img { 
-              max-width: 100% !important; 
-              height: auto !important;
+            img {
+              max-width: 100%;
+              height: auto;
+              margin: 0 auto;
               display: block;
-            }
-            @media print {
-              @page { 
-                size: A4;
-                margin: 2.54cm;
-              }
-              body { 
-                margin: 0; 
-                padding: 0;
-                font-size: 24pt; /* Larger for print (from 20pt) */
-              }
-              .print-container {
-                padding: 0;
-              }
-              * {
-                font-size: inherit; /* Inherit larger size */
-              }
             }
           </style>
         </head>
         <body>
-          <div class="print-container">
-            <img src="${imgData}" />
-          </div>
+          <img src="${imgData}" />
           <script>
-            // Ensure proper scaling on print
             window.onload = function() {
-              const img = document.querySelector('img');
-              img.style.width = 'calc(100% - 5.08cm)';
-              img.style.height = 'auto';
-              img.style.margin = '0 auto';
+              window.focus();
+              window.print();
             };
           </script>
         </body>
       </html>
     `);
-      iframe.contentDocument?.close();
+      iframe.contentDocument.close();
 
-      // Wait for image to load
-      await new Promise((resolve) => {
-        img.onload = resolve;
-        if (img.complete) resolve();
-      });
-
-      // Trigger print dialog
-      iframe.contentWindow?.focus();
-      iframe.contentWindow?.print();
-
-      // Clean up after printing
       setTimeout(() => {
         document.body.removeChild(iframe);
-      }, 1000);
+      }, 3000);
     } catch (error) {
-      console.error("PDF export failed:", error);
-      // Fallback to direct PDF download with better scaling
-      const pdf = new jsPDF({
-        orientation: "portrait",
-        unit: "mm",
-        format: "a4",
-      });
-
-      // Calculate dimensions with readable scaling
-      const margin = 25.4;
-      const pageWidth = pdf.internal.pageSize.getWidth() - margin * 2;
-      const scaleFactor = pageWidth / canvas.width;
-      const scaledHeight = canvas.height * scaleFactor;
-
-      pdf.addImage({
-        imageData: canvas,
-        format: "PNG",
-        x: margin,
-        y: margin,
-        width: pageWidth,
-        height: scaledHeight,
-      });
-
-      pdf.save("report.pdf");
+      console.error("Error exporting PDF:", error);
     }
-  };
+  }
 
   // export to excel
   const exportToExcel = () => {
