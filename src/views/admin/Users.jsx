@@ -167,15 +167,25 @@ export default function Users() {
                               <div className="rtable-cell receipt-cell">
                                 <div className="rtable-cell--content">
                                   <Link
-                                    style={{ fontSize: "12px" }}
+                                    style={{ fontSize: "16px" }} // a bit bigger for icons, adjust if needed
                                     to={`${PATHS.SINGLE_USER.replace(
                                       ":username",
                                       user.name
                                     )}`}
                                     className="btn btn-sm btn-primary"
+                                    title="View User"
                                   >
-                                    <i className="ri-eye-line" /> View
+                                    <i className="ri-eye-line" />
                                   </Link>
+
+                                  <a
+                                    style={{ fontSize: "16px" }}
+                                    href="#"
+                                    className="btn btn-sm btn-danger"
+                                    title="Delete User"
+                                  >
+                                    <i class="ri-delete-bin-line"></i>
+                                  </a>
                                 </div>
                               </div>
                             </div>

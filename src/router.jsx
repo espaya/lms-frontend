@@ -111,6 +111,7 @@ export const ROUTE_CONFIG = {
     roles: ["ADMIN"], // ✅ restrict to ADMIN only
   },
 
+
   ADD_USERS: {
     path: "/admin/dashboard/users/add",
     element: <AddUser />,
