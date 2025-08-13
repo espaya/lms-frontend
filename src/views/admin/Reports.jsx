@@ -154,9 +154,10 @@ export default function Reports() {
                                   </p>
                                   <small className="text-muted">
                                     <a
-                                      href={`${apiBase}/viewer?file=${encodeURIComponent(
-                                        topic.fileName
-                                      )}`}
+                                      href={`${apiBase}/view-question-file/${topic.fileName}`}
+                                      // href={`/viewer?file=${encodeURIComponent(
+                                      //   topic.fileName
+                                      // )}`}
                                       target="_blank"
                                       rel="noopener noreferrer"
                                     >
