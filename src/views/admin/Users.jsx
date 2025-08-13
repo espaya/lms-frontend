@@ -167,7 +167,10 @@ export default function Users() {
                               <div className="rtable-cell receipt-cell">
                                 <div className="rtable-cell--content">
                                   <Link
-                                    style={{ fontSize: "16px" }} // a bit bigger for icons, adjust if needed
+                                    style={{
+                                      fontSize: "16px",
+                                      marginRight: "8px",
+                                    }} // add marginRight for spacing
                                     to={`${PATHS.SINGLE_USER.replace(
                                       ":username",
                                       user.name
@@ -184,7 +187,7 @@ export default function Users() {
                                     className="btn btn-sm btn-danger"
                                     title="Delete User"
                                   >
-                                    <i class="ri-delete-bin-line"></i>
+                                    <i className="ri-delete-bin-line"></i>
                                   </a>
                                 </div>
                               </div>
