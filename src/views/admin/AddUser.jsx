@@ -67,8 +67,8 @@ export default function AddUser() {
         // clear form fields
         setFormData({
           name: "",
-          password: "",
-          confirm_password: "",
+          password: "Welcome@1",
+          confirm_password: "Welcome@1",
           email: "",
           privacy: "",
           role: "",
