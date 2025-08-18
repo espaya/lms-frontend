@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import Swal from "sweetalert2";
 import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
+import { PATHS } from "../../router";
 
 export default function AllQuestionsTopic({
   topic,
@@ -9,6 +11,7 @@ export default function AllQuestionsTopic({
 }) {
   const apiBase = import.meta.env.VITE_API_URL;
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleDelete = async () => {
     // Show confirmation dialog first
@@ -111,6 +114,19 @@ export default function AllQuestionsTopic({
             >
               <i style={{ fontSize: "18px" }} className="ri-eye-line" />
             </a>
+
+            <a
+              onClick={(e) => {
+                e.preventDefault();
+                navigate(`/admin/dashboard/all-questions/${topic.id}`);
+              }}
+              href="#"
+              className="icon-link"
+              title="Edit"
+            >
+              <i style={{ fontSize: "18px" }} className="ri-edit-line" />
+            </a>
+
             <a
               href="#"
               onClick={(e) => {

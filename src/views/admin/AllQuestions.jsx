@@ -3,8 +3,12 @@ import Cookies from "js-cookie";
 import MyHeader from "../../components/MyHeader";
 import Sidebar from "../../components/Sidebar";
 import AllQuestionsTopic from "../../components/admin/AllQuestionsTopic";
+import Pagination from "../../components/Pagination";
+import { useNavigate } from "react-router-dom";
+import { PATHS } from "../../router";
 
 export default function AllQuestions() {
+  const navigate = useNavigate();
   const [questions, setQuestions] = useState([]);
   const [pagination, setPagination] = useState({
     currentPage: 1,
@@ -149,7 +153,10 @@ export default function AllQuestions() {
                   </div>
                   <div className="d-flex justify-content-between align-items-center">
                     <a
-                      href="/admin/dashboard/question-manager"
+                      href="#"
+                      onClick={() => {
+                        navigate(PATHS.QUESTION_MANAGER);
+                      }}
                       className="btn btn-primary mt-10"
                     >
                       Add New Question
@@ -254,67 +261,11 @@ export default function AllQuestions() {
 
                         {/* Pagination Component */}
                         <div className="d-flex justify-content-center mt-20">
-                          <nav aria-label="Page navigation">
-                            <ul className="pagination">
-                              <li
-                                className={`page-item ${
-                                  pagination.currentPage === 1 ? "disabled" : ""
-                                }`}
-                              >
-                                <button
-                                  className="page-link"
-                                  onClick={() =>
-                                    handlePageChange(pagination.currentPage - 1)
-                                  }
-                                  disabled={pagination.currentPage === 1}
-                                >
-                                  Previous
-                                </button>
-                              </li>
-
-                              {Array.from(
-                                { length: pagination.lastPage },
-                                (_, i) => i + 1
-                              ).map((number) => (
-                                <li
-                                  key={number}
-                                  className={`page-item ${
-                                    pagination.currentPage === number
-                                      ? "active"
-                                      : ""
-                                  }`}
-                                >
-                                  <button
-                                    className="page-link"
-                                    onClick={() => handlePageChange(number)}
-                                  >
-                                    {number}
-                                  </button>
-                                </li>
-                              ))}
-
-                              <li
-                                className={`page-item ${
-                                  pagination.currentPage === pagination.lastPage
-                                    ? "disabled"
-                                    : ""
-                                }`}
-                              >
-                                <button
-                                  className="page-link"
-                                  onClick={() =>
-                                    handlePageChange(pagination.currentPage + 1)
-                                  }
-                                  disabled={
-                                    pagination.currentPage ===
-                                    pagination.lastPage
-                                  }
-                                >
-                                  Next
-                                </button>
-                              </li>
-                            </ul>
-                          </nav>
+                          <Pagination
+                            currentPage={pagination.currentPage}
+                            lastPage={pagination.lastPage}
+                            onPageChange={handlePageChange}
+                          />
                         </div>
                       </>
                     )}

@@ -19,6 +19,7 @@ import Quizzes from "./views/admin/single_user/Quizzes";
 import ViewerPage from "./components/users/questions/ViewerPage";
 import Reports from "./views/admin/Reports";
 import PreviewReport from "./components/PreviewReport";
+import EditQuestion from "./views/admin/EditQuestion";
 
 // Centralized route configuration with metadata
 export const ROUTE_CONFIG = {
@@ -111,7 +112,6 @@ export const ROUTE_CONFIG = {
     roles: ["ADMIN"], // ✅ restrict to ADMIN only
   },
 
-
   ADD_USERS: {
     path: "/admin/dashboard/users/add",
     element: <AddUser />,
@@ -124,6 +124,14 @@ export const ROUTE_CONFIG = {
     path: "/admin/dashboard/all-questions",
     element: <AllQuestions />,
     name: "All Question",
+    isProtected: true,
+    roles: ["ADMIN"], // ✅ restrict to ADMIN only
+  },
+
+  EDIT_QUESTION: {
+    path: "/admin/dashboard/all-questions/:id",
+    element: <EditQuestion />,
+    name: "Edit Question",
     isProtected: true,
     roles: ["ADMIN"], // ✅ restrict to ADMIN only
   },
