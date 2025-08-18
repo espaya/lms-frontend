@@ -1,4 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
+import { PATHS } from "../../router";
 
 export default function UserSidebar() {
   const location = useLocation();
@@ -31,15 +32,27 @@ export default function UserSidebar() {
             </a>
           </li>
 
-          <li className={isActive("/user/dashboard/questions") ? "active" : ""}>
+          <li className={isActive(PATHS.USER_QUESTION) ? "active" : ""}>
             <a
-              onClick={() => navigate("/user/dashboard/questions")}
+              onClick={() => navigate(PATHS.USER_QUESTION)}
               style={{ cursor: "pointer" }}
             >
               <span>
                 <i className="ri-book-fill" />
               </span>
               <span className="nav-text">Questions</span>
+            </a>
+          </li>
+
+          <li className={isActive(PATHS.USER_FORMS) ? "active" : ""}>
+            <a
+              onClick={() => navigate(PATHS.USER_FORMS)}
+              style={{ cursor: "pointer" }}
+            >
+              <span>
+                <i className="ri-file-list-3-fill" />
+              </span>
+              <span className="nav-text">Forms</span>
             </a>
           </li>
         </ul>

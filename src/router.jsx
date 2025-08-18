@@ -20,6 +20,7 @@ import ViewerPage from "./components/users/questions/ViewerPage";
 import Reports from "./views/admin/Reports";
 import PreviewReport from "./components/PreviewReport";
 import EditQuestion from "./views/admin/EditQuestion";
+import FormsIndex from "./views/student/forms/FormsIndex";
 
 // Centralized route configuration with metadata
 export const ROUTE_CONFIG = {
@@ -165,6 +166,14 @@ export const ROUTE_CONFIG = {
     path: "/user/dashboard/questions",
     element: <Questions />,
     name: "User Dashboard",
+    isProtected: true,
+    roles: ["USER"],
+  },
+
+  USER_FORMS: {
+    path: "/user/dashboard/forms",
+    element: <FormsIndex />,
+    name: "Forms",
     isProtected: true,
     roles: ["USER"],
   },
