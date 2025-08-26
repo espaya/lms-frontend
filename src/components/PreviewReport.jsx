@@ -196,8 +196,8 @@ export default function PreviewReport() {
                                   {report.signature ? (
                                     <img
                                       id="signature"
-                                      // src={`${apiBase}/view-answer-signature/${report.signature}`}
-                                      src={`${apiBase}/storage/signature/${report.signature}`}
+                                      src={`${apiBase}/view-answer-signature/${report.signature}`}
+                                      // src={`${apiBase}/storage/signature/${report.signature}`}
                                       alt="Signature"
                                       className="img-thumbnail"
                                       onError={(e) => {
