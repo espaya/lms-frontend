@@ -14,7 +14,9 @@
   "dependencies": {
     "@types/signature_pad": "^4.0.0",
     "axios": "^1.10.0",
+    "dom-to-image-more": "^3.7.1",
     "html2canvas": "^1.4.1",
+    "html2pdf.js": "^0.11.2",
     "jquery": "^3.7.1",
     "js-cookie": "^3.0.5",
     "jspdf": "^3.0.1",

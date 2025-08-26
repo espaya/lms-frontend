@@ -13,7 +13,9 @@ export default function PreviewReport() {
   const [loading, setLoading] = useState(false);
   const apiBase = import.meta.env.VITE_API_URL;
   const [errors, setErrors] = useState({});
-  const [getSig, setGetSig] = useState([]);
+
+  const csrfToken = Cookies.get("XSRF-TOKEN");
+  const authToken = localStorage.getItem("auth_token");
 
   useEffect(() => {
     const getReports = async () => {
@@ -21,14 +23,6 @@ export default function PreviewReport() {
       setErrors({});
 
       try {
-        // First get CSRF token
-        await fetch(`${apiBase}/sanctum/csrf-cookie`, {
-          credentials: "include",
-        });
-
-        const csrfToken = Cookies.get("XSRF-TOKEN");
-        const authToken = localStorage.getItem("auth_token");
-
         const response = await fetch(
           `${apiBase}/api/get-report-by-topic/${id}`,
           {
@@ -99,7 +93,9 @@ export default function PreviewReport() {
                     <a href="#">Report Preview</a>
                   </div>
 
-                  {reports.length > 0 && <ExportReport reportRef={reportRef} />}
+                  {reports.length > 0 && (
+                    <ExportReport reportRef={reportRef} reports={reports} />
+                  )}
                 </div>
               </div>
             </div>
@@ -200,7 +196,8 @@ export default function PreviewReport() {
                                   {report.signature ? (
                                     <img
                                       id="signature"
-                                      src={`${apiBase}/view-answer-signature/${report.signature}`}
+                                      // src={`${apiBase}/view-answer-signature/${report.signature}`}
+                                      src={`${apiBase}/storage/signature/${report.signature}`}
                                       alt="Signature"
                                       className="img-thumbnail"
                                       onError={(e) => {
@@ -263,7 +260,7 @@ export default function PreviewReport() {
                               </td>
                               <td>
                                 {report.signature
-                                  ? `${apiBase}/view-answer-signature/${report.signature}`
+                                  ? `${apiBase}/storage/signature/${report.signature}`
                                   : "Not signed"}
                               </td>
                               <td>

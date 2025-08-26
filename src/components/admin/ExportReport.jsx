@@ -1,106 +1,65 @@
-// import { jsPDF } from "jspdf";
-import html2canvas from "html2canvas";
+import html2pdf from "html2pdf.js";
 import * as XLSX from "xlsx";
+import domtoimage from "dom-to-image-more";
+import Cookies from "js-cookie";
 
-export default function ExportReport({ reportRef }) {
+export default function ExportReport({ reportRef, reports }) {
+  const csrfToken = Cookies.get("XSRF-TOKEN");
+  const authToken = localStorage.getItem("auth_token");
+  const apiBase = import.meta.env.VITE_API_URL;
+  
+
+
   async function exportToPDF() {
     try {
-      const element = document.getElementById("report");
-      if (!element) {
-        console.error("Report element not found");
-        return;
-      }
+      // Extract all rows from reports (instead of screenshot)
+      const data = reports.map((report) => ({
+        name: report.user?.name || "User",
+        email: report.user?.email || "",
+        topic: report.topic?.name || "Untitled",
+        grade:
+          report.total > 0
+            ? Math.round((report.score / report.total) * 100) + '%'
+            : 0 + '%',
+        signature: report.signature
+          ? `${apiBase}/storage/signature/${report.signature}`
+          : null,
+        date: new Date(report.created_at).toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+      }));
 
-      const cloned = element.cloneNode(true);
-      cloned.style.position = "absolute";
-      cloned.style.left = "-9999px";
-      cloned.style.top = "0";
-      cloned.style.width = element.offsetWidth + "px";
-      document.body.appendChild(cloned);
-
-      const images = cloned.querySelectorAll("img");
-
-      const convertToBase64 = (img) =>
-        fetch(img.src, { mode: "cors" })
-          .then((response) => {
-            if (!response.ok) throw new Error("Failed to fetch image");
-            return response.blob();
-          })
-          .then(
-            (blob) =>
-              new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onloadend = () => resolve(reader.result);
-                reader.onerror = reject;
-                reader.readAsDataURL(blob);
-              })
-          )
-          .catch(() => img.src);
-
-      await Promise.all(
-        Array.from(images).map(async (img) => {
-          const base64 = await convertToBase64(img);
-          img.src = base64;
-        })
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/export-pdf`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
+          },
+          body: JSON.stringify({ reports: data }),
+        }
       );
 
-      await new Promise((r) => setTimeout(r, 100));
+      if (!response.ok) throw new Error("Failed to export PDF");
 
-      const canvas = await html2canvas(cloned, {
-        scale: 2,
-        useCORS: true,
-        allowTaint: true,
-        backgroundColor: "#fff",
-      });
-
-      document.body.removeChild(cloned);
-
-      const iframe = document.createElement("iframe");
-      iframe.style.position = "absolute";
-      iframe.style.left = "-9999px";
-      document.body.appendChild(iframe);
-
-      const imgData = canvas.toDataURL("image/png");
-
-      iframe.contentDocument.open();
-      iframe.contentDocument.write(`
-      <html>
-        <head>
-          <title>Print Preview</title>
-          <style>
-            body, html {
-              margin: 0; padding: 0; text-align: center; background: white; font-size: 16px;
-            }
-            img {
-              max-width: 100%;
-              height: auto;
-              margin: 0 auto;
-              display: block;
-            }
-          </style>
-        </head>
-        <body>
-          <img src="${imgData}" />
-          <script>
-            window.onload = function() {
-              window.focus();
-              window.print();
-            };
-          </script>
-        </body>
-      </html>
-    `);
-      iframe.contentDocument.close();
-
-      setTimeout(() => {
-        document.body.removeChild(iframe);
-      }, 3000);
+      // Download blob
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "report.pdf";
+      a.click();
+      window.URL.revokeObjectURL(url);
     } catch (error) {
-      console.error("Error exporting PDF:", error);
+      console.error("PDF export failed:", error);
     }
   }
 
-  // export to excel
   const exportToExcel = () => {
     try {
       const element = reportRef?.current;
@@ -141,20 +100,12 @@ export default function ExportReport({ reportRef }) {
       </button>
       <ul className="dropdown-menu" aria-labelledby="exportDropdown">
         <li>
-          <button
-            className="dropdown-item"
-            onClick={exportToPDF}
-            // disabled={!reportRef?.current}
-          >
+          <button className="dropdown-item" onClick={exportToPDF}>
             <i className="ri-file-pdf-line me-2 text-danger"></i> PDF
           </button>
         </li>
         <li>
-          <button
-            className="dropdown-item"
-            onClick={exportToExcel}
-            // disabled={!reportRef?.current}
-          >
+          <button className="dropdown-item" onClick={exportToExcel}>
             <i className="ri-file-excel-line me-2 text-success"></i> Excel
           </button>
         </li>
