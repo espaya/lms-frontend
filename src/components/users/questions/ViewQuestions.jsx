@@ -5,6 +5,8 @@ import Cookies from "js-cookie";
 import { AuthContext } from "../../../auth/AuthContext";
 import SignatureCanvas from "react-signature-canvas";
 import trimCanvas from "trim-canvas";
+import fetchSubmittedAnswers from "../../../controller/user/FetchSubmittedAnswers";
+import isAnswered from "../../../controller/user/IsAnswered";
 
 export default function ViewQuestions({
   topic,
@@ -25,48 +27,23 @@ export default function ViewQuestions({
   const [signature, setSignature] = useState(null);
   const [agreed, setAgreed] = useState(false);
   const sigPadRef = useRef(null);
+  const csrfToken = Cookies.get("XSRF-TOKEN");
+  const [answered, setAnswered] = useState({});
 
   const clearSignature = () => {
     sigPadRef.current.clear();
     setSignature("");
   };
 
-  // Fetch submitted answers from DB if topic is already submitted
-  const fetchSubmittedAnswers = async (topicId) => {
-    try {
-      await fetch(`${apiBase}/sanctum/csrf-cookie`, {
-        credentials: "include",
-      });
-
-      const csrfToken = Cookies.get("XSRF-TOKEN");
-
-      const res = await fetch(`${apiBase}/api/answers/all/${topicId}`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
-          Accept: "application/json",
-          "X-XSRF-TOKEN": decodeURIComponent(csrfToken),
-        },
-        credentials: "include",
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        setErrors({ general: data.message || "Failed to fetch answers" });
-      } else {
-        setSubmittedAnswers((prev) => ({
-          ...prev,
-          [topicId]: data.answers,
-        }));
-      }
-    } catch (err) {
-      setErrors({ general: err.message || err });
-    }
-  };
-
   useEffect(() => {
-    fetchSubmittedAnswers(topic);
+    // get sumitted answers
+    fetchSubmittedAnswers(
+      topic,
+      setSubmittedAnswers,
+      setErrors,
+      apiBase,
+      csrfToken
+    );
   }, [submittedTopics, topic]);
 
   // Add this function to explicitly capture signature
@@ -149,12 +126,6 @@ export default function ViewQuestions({
     };
 
     try {
-      await fetch(`${apiBase}/sanctum/csrf-cookie`, {
-        credentials: "include",
-      });
-
-      const csrfToken = Cookies.get("XSRF-TOKEN");
-
       const res = await fetch(`${apiBase}/api/answers`, {
         method: "POST",
         headers: {
@@ -176,16 +147,19 @@ export default function ViewQuestions({
           setErrors({ general: data.message });
         }
         throw new Error(data.message || "Failed to submit answers");
+      } else {
+        setSubmittedTopics((prev) => ({ ...prev, [topicId]: true }));
+        setSubmittedAnswers((prev) => ({
+          ...prev,
+          [topicId]: payload.answers,
+        }));
+
+        Swal.fire({
+          icon: "success",
+          title: "Success",
+          text: data.message || "Answers submitted successfully!",
+        });
       }
-
-      setSubmittedTopics((prev) => ({ ...prev, [topicId]: true }));
-      setSubmittedAnswers((prev) => ({ ...prev, [topicId]: payload.answers }));
-
-      Swal.fire({
-        icon: "success",
-        title: "Success",
-        text: data.message || "Answers submitted successfully!",
-      });
     } catch (err) {
       setErrors({ general: err.message });
       Swal.fire({
@@ -197,6 +171,10 @@ export default function ViewQuestions({
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    isAnswered(apiBase, setErrors, setAnswered, csrfToken, topic);
+  }, [topic, apiBase, csrfToken]);
 
   return (
     <>
@@ -357,9 +335,10 @@ export default function ViewQuestions({
                     })}
               </ul>
 
-              {/* Signature Pad */}
-              {!submittedTopics[topic] && user?.id && (
+              {/* Signature Pad + Declaration + Submit button only if NOT answered */}
+              {answered === false && (
                 <>
+                  {/* Signature Pad */}
                   <div className="mt-20">
                     <div>
                       <strong>Signature:</strong>
@@ -420,12 +399,8 @@ export default function ViewQuestions({
                       {errors.signature[0]}
                     </div>
                   )}
-                </>
-              )}
 
-              {/* Declaration */}
-              {submittedTopics?.[topic] !== true && (
-                <>
+                  {/* Declaration */}
                   <div className="form-check mt-4">
                     <input
                       type="checkbox"
@@ -444,14 +419,12 @@ export default function ViewQuestions({
                       {errors.declaration[0]}
                     </small>
                   )}
-                </>
-              )}
 
-              {/* Submit button */}
-              {submittedTopics?.[topic] !== true && (
-                <button type="submit" className="btn btn-primary mt-20">
-                  {loading ? "Processing..." : "Submit Answers"}
-                </button>
+                  {/* Submit button */}
+                  <button type="submit" className="btn btn-primary mt-20">
+                    {loading ? "Processing..." : "Submit Answers"}
+                  </button>
+                </>
               )}
 
               <AttemptSummary

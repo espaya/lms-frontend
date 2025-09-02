@@ -19,17 +19,12 @@ export default function Questions() {
   const [questionsByTopic, setQuestionsByTopic] = useState({});
   const [studentAnswers, setStudentAnswers] = useState({});
   const [gradesByTopic, setGradesByTopic] = useState({});
+  const csrfToken = Cookies.get("XSRF-TOKEN");
+  const authToken = localStorage.getItem("auth_token");
 
   const fetchQuestions = async (page = 1) => {
     setLoading(true);
     try {
-      await fetch(`${apiBase}/sanctum/csrf-cookie`, {
-        credentials: "include",
-      });
-
-      const csrfToken = Cookies.get("XSRF-TOKEN");
-      const authToken = localStorage.getItem("auth_token");
-
       const response = await fetch(
         `${apiBase}/api/admin/dashboard/get-subjects?page=${page}`,
         {
@@ -47,7 +42,7 @@ export default function Questions() {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || "Failed to fetch questions");
+        setErrors({ general: data.message || "Failed to fetch questions" });
       }
 
       setQuestions(data.data);
@@ -83,9 +78,6 @@ export default function Questions() {
     }
 
     try {
-      const csrfToken = Cookies.get("XSRF-TOKEN");
-      const authToken = localStorage.getItem("auth_token");
-
       const response = await fetch(
         `${apiBase}/api/topics/${topicId}/questions`,
         {
@@ -102,7 +94,7 @@ export default function Questions() {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || "Failed to fetch questions");
+        setErrors({ general: data.message || "Failed to fetch questions" });
       }
 
       setQuestionsByTopic((prev) => ({
@@ -254,7 +246,6 @@ export default function Questions() {
                                     setGradesByTopic={setGradesByTopic}
                                     studentAnswers={studentAnswers} // ✅ pass this in
                                     fileName={topic.fileName}
-
                                   />
                                 )}
                               </React.Fragment>
