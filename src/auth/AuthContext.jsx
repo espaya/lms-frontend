@@ -33,7 +33,7 @@ export const AuthProvider = ({ children }) => {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
-          "X-XSRF-TOKEN": csrfToken ? decodeURIComponent(csrfToken) : "",
+          "X-XSRF-TOKEN": decodeURIComponent(csrfToken),
         },
         body: JSON.stringify(credentials),
       });
@@ -79,6 +79,7 @@ export const AuthProvider = ({ children }) => {
           Authorization: `Bearer ${token}`,
           Accept: "application/json",
           "Content-Type": "application/json",
+          "X-XSRF-TOKEN": decodeURIComponent(Cookies.get("XSRF-TOKEN")),
         },
         // Remove credentials: "include" for pure token auth
       });
