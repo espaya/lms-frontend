@@ -1,5 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { PATHS } from "../../router";
+import { Link } from "react-router-dom";
 
 export default function UserSidebar() {
   const location = useLocation();
