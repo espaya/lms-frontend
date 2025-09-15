@@ -23,7 +23,6 @@ import EditQuestion from "./views/admin/EditQuestion";
 import FormsIndex from "./views/student/forms/FormsIndex";
 import MainApplication from "./views/student/forms/MainApplication";
 import Attendance from "./views/student/forms/Attendance";
-import AttendanceForms from "./views/student/forms/attendance/AttendanceForm";
 import Confidentiality from "./views/student/forms/Confidentiality";
 import Criminal from "./views/student/forms/Criminal";
 import Disclaimer from "./views/student/forms/Disclaimer";
@@ -32,6 +31,19 @@ import EmployeeConduct from "./views/student/forms/EmployeeConduct";
 import DressCode from "./views/student/forms/DressCode";
 import EmployeeOrientation from "./views/student/forms/EmployeeOrientation";
 import EmployeeAgreement from "./views/student/forms/EmployeeAgreement";
+import EmployeeReferenceCheck from "./views/student/forms/EmployeeReferenceCheck";
+import Verification from "./views/student/forms/Verification";
+import UniversalPrecautions from "./views/student/forms/UniversalPrecautions";
+import Disclosure from "./views/student/forms/Disclosure";
+import Smoking from "./views/student/forms/Smoking";
+import SexualHarassment from "./views/student/forms/SexualHarassment";
+import Reporting from "./views/student/forms/Reporting";
+import PolicyProcedure from "./views/student/forms/PolicyProcedure";
+import NonCompete from "./views/student/forms/NonCompete";
+import InfectionControl from "./views/student/forms/InfectionControl";
+import HHA from "./views/student/forms/HHA";
+import HealthSafety from "./views/student/forms/HealthSafety";
+import CellularUse from "./views/student/forms/CellularUse";
 
 // Centralized route configuration with metadata
 export const ROUTE_CONFIG = {
@@ -274,7 +286,7 @@ export const ROUTE_CONFIG = {
 
   USER_EMPLOYEE_REFERENCE_CHECK_FORM: {
     path: "/user/dashboard/forms/employee-reference-check-forms",
-    element: <MainApplication />,
+    element: <EmployeeReferenceCheck />,
     name: "Employee Reference Check",
     isProtected: true,
     roles: ["USER"],
@@ -282,7 +294,7 @@ export const ROUTE_CONFIG = {
 
   USER_EMPLOYEE_CELLULAR_USE_FORM: {
     path: "/user/dashboard/forms/employee-safety-cellular-phone-use-forms",
-    element: <MainApplication />,
+    element: <CellularUse />,
     name: "Employee Cellular Use",
     isProtected: true,
     roles: ["USER"],
@@ -290,23 +302,17 @@ export const ROUTE_CONFIG = {
 
   USER_EMPLOYEE_HEALTH_SAFETY_FORM: {
     path: "/user/dashboard/forms/employee-health-safety-agreement-forms",
-    element: <MainApplication />,
+    element: <HealthSafety />,
     name: "Employee Health and Safety",
     isProtected: true,
     roles: ["USER"],
   },
 
-  USER_HHA_CNA_FORM: {
-    path: "/user/dashboard/forms/hha-cna-forms",
-    element: <MainApplication />,
-    name: "HHA CNA",
-    isProtected: true,
-    roles: ["USER"],
-  },
+
 
   USER_HHA_FORM: {
     path: "/user/dashboard/forms/hha-forms",
-    element: <MainApplication />,
+    element: <HHA />,
     name: "HHA",
     isProtected: true,
     roles: ["USER"],
@@ -314,7 +320,7 @@ export const ROUTE_CONFIG = {
 
   USER_INFECTION_CONTROL_FORM: {
     path: "/user/dashboard/forms/infection-control-agreement-forms",
-    element: <MainApplication />,
+    element: <InfectionControl />,
     name: "Infection Control",
     isProtected: true,
     roles: ["USER"],
@@ -322,7 +328,7 @@ export const ROUTE_CONFIG = {
 
   USER_NON_COMPETE_FORM: {
     path: "/user/dashboard/forms/non-compete-agreement-forms",
-    element: <MainApplication />,
+    element: <NonCompete />,
     name: "None Compete",
     isProtected: true,
     roles: ["USER"],
@@ -330,7 +336,7 @@ export const ROUTE_CONFIG = {
 
   USER_POLICIES_PROCEDURES_FORM: {
     path: "/user/dashboard/forms/policies-and-procedures-orientation-acknowledgement-forms",
-    element: <MainApplication />,
+    element: <PolicyProcedure />,
     name: "None Compete",
     isProtected: true,
     roles: ["USER"],
@@ -338,7 +344,7 @@ export const ROUTE_CONFIG = {
 
   USER_REPORTING_FORM: {
     path: "/user/dashboard/forms/reporting-abuse-neglect-exploitation-forms",
-    element: <MainApplication />,
+    element: <Reporting />,
     name: "Reporting",
     isProtected: true,
     roles: ["USER"],
@@ -346,7 +352,7 @@ export const ROUTE_CONFIG = {
 
   USER_SEXUAL_HARASSMENT_FORM: {
     path: "/user/dashboard/forms/sexual-harassment-forms",
-    element: <MainApplication />,
+    element: <SexualHarassment />,
     name: "Sexual Harassment",
     isProtected: true,
     roles: ["USER"],
@@ -354,7 +360,7 @@ export const ROUTE_CONFIG = {
 
   USER_SMOKING_FORM: {
     path: "/user/dashboard/forms/employee-notification-of-policy-smoking-in-the-workplace-forms",
-    element: <MainApplication />,
+    element: <Smoking />,
     name: "Smoking in The Workplace",
     isProtected: true,
     roles: ["USER"],
@@ -362,7 +368,7 @@ export const ROUTE_CONFIG = {
 
   USER_DISCLOSURE_FORM: {
     path: "/user/dashboard/forms/sworn-disclosure-statement-forms",
-    element: <MainApplication />,
+    element: <Disclosure />,
     name: "Sworn Disclosure",
     isProtected: true,
     roles: ["USER"],
@@ -370,7 +376,7 @@ export const ROUTE_CONFIG = {
 
   USER_UNIVERSAL_PRECAUTIONS_FORM: {
     path: "/user/dashboard/forms/universal-precautions-training-document-forms",
-    element: <MainApplication />,
+    element: <UniversalPrecautions />,
     name: "Universal Precautions",
     isProtected: true,
     roles: ["USER"],
@@ -378,7 +384,7 @@ export const ROUTE_CONFIG = {
 
   USER_VERIFICATION_FORM: {
     path: "/user/dashboard/forms/verification-of-professional-license-forms",
-    element: <MainApplication />,
+    element: <Verification />,
     name: "Verification",
     isProtected: true,
     roles: ["USER"],

@@ -1,15 +1,16 @@
+import { useState } from "react";
 import Cookies from "js-cookie";
 
-const FetchEmployeeAgreement = async (
-  setLoading,
-  setAgreement,
+const FetchEmployeeReference = async (
+  setReference,
   setErrors,
+  setLoading,
   apiBase
 ) => {
   setLoading(true);
   try {
     const response = await fetch(
-      `${apiBase}/api/user/employee-agreement-forms/get`,
+      `${apiBase}/api/user/employee-reference-check-forms/get`,
       {
         method: "GET",
         credentials: "include",
@@ -22,8 +23,9 @@ const FetchEmployeeAgreement = async (
     );
 
     const data = await response.json();
+
     if (!response.ok) setErrors({ general: data.message });
-    setAgreement(data);
+    setReference(data);
   } catch (err) {
     setErrors({ general: err.message });
   } finally {
@@ -31,4 +33,4 @@ const FetchEmployeeAgreement = async (
   }
 };
 
-export default FetchEmployeeAgreement;
+export default FetchEmployeeReference;

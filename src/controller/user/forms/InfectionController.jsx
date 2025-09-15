@@ -1,15 +1,15 @@
 import Cookies from "js-cookie";
 
-const FetchEmployeeAgreement = async (
+const FetchEmployeeInfection = async (
+  setInfection,
   setLoading,
-  setAgreement,
   setErrors,
   apiBase
 ) => {
   setLoading(true);
   try {
     const response = await fetch(
-      `${apiBase}/api/user/employee-agreement-forms/get`,
+      `${apiBase}/api/user/employee-infection-control-forms/get`,
       {
         method: "GET",
         credentials: "include",
@@ -23,7 +23,7 @@ const FetchEmployeeAgreement = async (
 
     const data = await response.json();
     if (!response.ok) setErrors({ general: data.message });
-    setAgreement(data);
+    setInfection(data);
   } catch (err) {
     setErrors({ general: err.message });
   } finally {
@@ -31,4 +31,4 @@ const FetchEmployeeAgreement = async (
   }
 };
 
-export default FetchEmployeeAgreement;
+export default FetchEmployeeInfection;

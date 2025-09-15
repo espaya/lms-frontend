@@ -71,11 +71,6 @@ export default function FormsIndex() {
         url: PATHS.USER_EMPLOYEE_HEALTH_SAFETY_FORM,
       },
 
-      hha_cna: {
-        name: "Home Health Aide & Certified Nursing Assistant",
-        url: PATHS.USER_HHA_CNA_FORM,
-      },
-
       hha: { name: "Home Health Aide", url: PATHS.USER_HHA_FORM },
 
       infection_control: {

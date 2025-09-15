@@ -6,29 +6,44 @@ import SignatureCanvas from "react-signature-canvas";
 import Cookies from "js-cookie";
 import { useState, useRef } from "react";
 
-export default function EmployeeAgreementForm() {
+export default function EmployeeAgreementForm({ fullname }) {
   const [currentStep, setCurrentStep] = useState(1);
   const sigCanvas = useRef(null);
   const signatureDataRef = useRef(""); // Use ref for signature data
+  const companySigCanvas = useRef(null);
+  const companyDataRef = useRef("");
+  const agencyRepCanvas = useRef(null);
+  const agencyRepDataRef = useRef("");
   const [errors, setErrors] = useState({});
   const [successMsg, setSuccessMsg] = useState("");
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
-    monday_hour: "",
-    tuesday_hour: "",
-    wednesday_hour: "",
-    thursday_hour: "",
-    friday_hour: "",
-    saturday_hour: "",
-    sunday_hour: "",
-    other_agreements: "",
+    company_contacted: "",
+    employer_name: "",
+    from_date: "",
+    to_date: "",
+    eligible_for_hire: "",
+    comments: "",
+    received_by: "",
+    name_of_company: "",
     time_off: "",
+    rep_title: "",
   });
   const apiBase = import.meta.env.VITE_API_URL;
 
   const clearSignature = () => {
     sigCanvas.current.clear();
     signatureDataRef.current = ""; // Clear the ref instead of state
+  };
+
+  const clearCompanySignature = () => {
+    companySigCanvas.current.clear();
+    companyDataRef.current = "";
+  };
+
+  const clearAgencyRepSignature = () => {
+    agencyRepCanvas.current.clear();
+    agencyRepDataRef.current = "";
   };
 
   const handleOnChange = (e) => {
@@ -60,19 +75,33 @@ export default function EmployeeAgreementForm() {
       return;
     }
 
+    if (formData.received_by === "Fax" && companySigCanvas.current.isEmpty()) {
+      setErrors({ company_signature: "Company signature if required" });
+    }
+
     // Get signature data only when submitting
     const signatureData = sigCanvas.current.toDataURL("image/png");
     signatureDataRef.current = signatureData;
 
+    const companySignatureData =
+      companySigCanvas.current.toDataUrl("image/png");
+    companyDataRef.current = companySignatureData;
+
+    const agencyRepSignatureData =
+      agencyRepCanvas.current.toDataURL("image/png");
+    agencyRepDataRef.current = agencyRepSignatureData;
+
     try {
       const response = await fetch(
-        `${apiBase}/api/user/employee-agreement-form`,
+        `${apiBase}/api/user/employee-reference-check-forms`,
         {
           method: "POST",
           credentials: "include",
           body: JSON.stringify({
             ...formData,
             signature: signatureDataRef.current, // Use the ref value
+            company_signature: companyDataRef.current,
+            rep_signature: agencyRepDataRef.current,
           }),
           headers: {
             "Content-Type": "application/json",
@@ -84,19 +113,15 @@ export default function EmployeeAgreementForm() {
       );
 
       const data = await response.json();
-
-      if (!response.ok) {
-        if (data.errors) {
-          setErrors(data.errors);
-        } else {
-          setErrors({ general: data.message });
-        }
-      } else {
-        setSuccessMsg(data.message);
-        setCurrentStep(6); // Success step
-        // Delay for 4sec then reload page
-        setTimeout(() => window.location.reload(), 4000);
+     if (!response.ok) {
+        setErrors(data.errors || { general: data.message });
+        return;
       }
+      setErrors({});
+      setSuccessMsg(data.message);
+      setCurrentStep(5); // Success step
+      // Delay for 4sec then reload page
+      setTimeout(() => window.location.reload(), 4000);
     } catch (err) {
       setErrors({ general: err.message });
     } finally {
@@ -106,17 +131,16 @@ export default function EmployeeAgreementForm() {
 
   // Progress steps
   const steps = [
-    "Preamble",
-    "Hours",
-    "The Agreement",
-    "Other Benefits",
+    "Reference Check",
+    "Information Recipient",
+    "Agency Representative",
     "Signature",
     "Success",
   ];
 
   return (
     <>
-      <title>Employee Agreement - 1staccess Home Care</title>
+      <title>Employee Reference Check - 1staccess Home Care</title>
 
       <div className="dashboard">
         <div id="main-wrapper">
@@ -129,7 +153,7 @@ export default function EmployeeAgreementForm() {
                 <div className="row align-items-center justify-content-between">
                   <div className="col-md-6">
                     <div className="page-title-content">
-                      <h3>Employee Agreement</h3>
+                      <h3>Employee Reference Check</h3>
                       <p className="mb-2">Fill all required (*) fields</p>
                     </div>
                   </div>
@@ -143,14 +167,13 @@ export default function EmployeeAgreementForm() {
                       <span>
                         <i className="ri-arrow-right-s-line"></i>
                       </span>
-                      <Link to={PATHS.USER_EMPLOYEE_AGREEMENT_FORM}>
-                        Employee Agreement
+                      <Link to={PATHS.USER_EMPLOYEE_REFERENCE_CHECK_FORM}>
+                        Employee Reference Check
                       </Link>
                     </div>
                   </div>
                 </div>
               </div>
-
               {/* Progress Bar */}
               <div className="row mb-4">
                 <div className="col-12">
@@ -175,7 +198,6 @@ export default function EmployeeAgreementForm() {
               {errors.general && (
                 <p className="alert alert-danger"> {errors.general} </p>
               )}
-
               <div className="row">
                 <div className="col-12">
                   <div className="card">
@@ -183,21 +205,127 @@ export default function EmployeeAgreementForm() {
                       <form onSubmit={handleFormSubmit}>
                         {currentStep === 1 && (
                           <div className="step-content">
-                            <h4 className="step-title">Preamble</h4>
+                            <h4 className="step-title">Reference Check</h4>
                             <div className="row">
                               <div className="col-md-12">
-                                <p>
-                                  1. The employee will carry out the duties and
-                                  responsibilities listed in the job
-                                  description/list of assigned tasks ,and signed
-                                  by employee and employer
-                                </p>
+                                <p>Employee Name: {fullname}</p>
                               </div>
-                              <div className="col-md-12">
-                                <p>
-                                  2. Following are the hours the employee will
-                                  work:
-                                </p>
+                              <div className="col-md-6 mt-20">
+                                <div className="form-group">
+                                  <label for="inputAddress" class="form-label">
+                                    Company Contacted
+                                  </label>
+                                  <div class="form-control-wrap">
+                                    <input
+                                      name="company_contacted"
+                                      value=""
+                                      type="text"
+                                      className="form-control"
+                                      autocomplete="off"
+                                      onChange={handleOnChange}
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="col-md-6 mt-20">
+                                <div className="form-group">
+                                  <label for="inputAddress" class="form-label">
+                                    Mr/Mrs
+                                  </label>
+                                  <div class="form-control-wrap">
+                                    <input
+                                      name="employer_name"
+                                      value=""
+                                      type="text"
+                                      className="form-control "
+                                      autocomplete="off"
+                                      onChange={handleOnChange}
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="col-md-12 mt-20">
+                                <div className="form-group">
+                                  <div className="form-control-wrap">
+                                    <p>
+                                      Is checking employment with our company.
+                                      It is our policy to ask for references
+                                      prior to employment. Please complete this
+                                      form for our records and sign below.
+                                      <br /> We would greatly appreciate your
+                                      assistance.
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="col-md-12 mt-20">
+                                <div className="form-group">
+                                  <h5>Please Verify Employment Dates</h5>
+                                </div>
+                              </div>
+                              <div className="col-md-4 mt-20">
+                                <div className="form-group">
+                                  <label for="inputCity" className="form-label">
+                                    From
+                                  </label>
+                                  <div className="form-control-wrap">
+                                    <input
+                                      name="from_date"
+                                      value=""
+                                      type="date"
+                                      className="form-control"
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="col-md-4 mt-20">
+                                <div className="form-group">
+                                  <label for="inputCity" className="form-label">
+                                    To
+                                  </label>
+                                  <div className="form-control-wrap">
+                                    <input
+                                      name="to_date"
+                                      value=""
+                                      type="date"
+                                      className="form-control"
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="col-md-4 mt-20">
+                                <div className="form-group">
+                                  <label
+                                    for="inputState"
+                                    className="form-label"
+                                  >
+                                    Eligible For Hire?
+                                  </label>
+                                  <div className="form-control-wrap">
+                                    <select
+                                      name="eligible_for_hire"
+                                      className="form-select"
+                                    >
+                                      <option value="">Choose...</option>
+                                      <option value="Yes">Yes</option>
+                                      <option value="No">No</option>
+                                    </select>
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="col-md-12 mt-20">
+                                <div className="form-group">
+                                  <label for="inputZip" className="form-label">
+                                    Comments
+                                  </label>
+                                  <div className="form-control-wrap">
+                                    <textarea
+                                      name="comments"
+                                      className="form-control"
+                                      aria-label="With textarea"
+                                    />
+                                  </div>
+                                </div>
                               </div>
                             </div>
                             <div className="step-actions mt-20">
@@ -213,162 +341,193 @@ export default function EmployeeAgreementForm() {
                         )}
                         {currentStep === 2 && (
                           <div className="step-content">
-                            <h4 className="step-title">HOURS</h4>
+                            <h4 className="step-title">
+                              Information Recipient
+                            </h4>
                             <div className="row">
-                              <div className="col-md-4 mt-20">
-                                <div class="form-group">
-                                  <label for="inputEmail4" class="form-label">
-                                    Monday
-                                  </label>
-                                  <div class="form-control-wrap">
-                                    <input
-                                      name="monday_hour"
-                                      value={formData.monday_hour}
-                                      type="number"
-                                      class="form-control"
-                                      autocomplete="off"
-                                      onChange={handleOnChange}
-                                    />
-                                    {errors.monday_hour && (
-                                      <small className="text-danger">
-                                        {errors.monday_hour[0]}
-                                      </small>
-                                    )}
-                                  </div>
-                                </div>
-                              </div>
-                              <div class="col-md-4 mt-20">
-                                <div class="form-group">
+                              <div className="col-md-6 mt-20">
+                                <div className="form-group">
                                   <label
-                                    for="inputPassword4"
-                                    class="form-label"
+                                    for="inputState"
+                                    className="form-label"
                                   >
-                                    Tuesday
+                                    Information Was Received By
                                   </label>
-                                  <div class="form-control-wrap">
-                                    <input
-                                      name="tuesday_hour"
-                                      value={formData.tuesday_hour}
-                                      type="number"
-                                      class="form-control"
-                                      autocomplete="off"
+                                  <div className="form-control-wrap">
+                                    <select
+                                      name="received_by"
+                                      className="form-select"
                                       onChange={handleOnChange}
-                                    />
-                                    {errors.tuesday_hour && (
-                                      <small className="text-danger">
-                                        {errors.tuesday_hour[0]}
-                                      </small>
-                                    )}
+                                    >
+                                      <option value="">Choose...</option>
+                                      <option value="Phone">Phone</option>
+                                      <option value="Mail">Mail</option>
+                                      <option value="Fax">Fax</option>
+                                    </select>
                                   </div>
                                 </div>
                               </div>
-                              <div class="col-md-4 mt-20">
-                                <div class="form-group">
-                                  <label for="inputAddress" class="form-label">
-                                    Wednesday
+                              <div className="col-md-6 mt-20">
+                                <div className="form-group">
+                                  <label for="inputZip" className="form-label">
+                                    Name of Company
                                   </label>
-                                  <div class="form-control-wrap">
+                                  <div className="form-control-wrap">
                                     <input
-                                      name="wednesday_hour"
-                                      value={formData.wednesday_hour}
-                                      type="number"
-                                      class="form-control"
+                                      name="name_of_company"
+                                      value=""
+                                      type="text"
+                                      className="form-control"
                                       autocomplete="off"
-                                      onChange={handleOnChange}
                                     />
-                                    {errors.wednesday_hour && (
-                                      <small className="text-danger">
-                                        {errors.wednesday_hour[0]}
-                                      </small>
-                                    )}
                                   </div>
                                 </div>
                               </div>
-                              <div class="col-md-3 mt-20">
-                                <div class="form-group">
-                                  <label for="inputAddress" class="form-label">
-                                    Thursday
+                              {formData.received_by === "Fax" && (
+                                <div className="col-md-12 mt-20">
+                                  <div className="form-group">
+                                    <label className="form-label">
+                                      Signature
+                                      <span className="text-danger">*</span>
+                                    </label>
+                                    <div className="flex-row">
+                                      <div className="wrapper">
+                                        <p className="text-muted small mb-2">
+                                          Sign in the box below using your mouse
+                                          or finger
+                                        </p>
+                                        <div
+                                          style={{
+                                            border: "1px solid #ddd",
+                                            borderRadius: "4px",
+                                          }}
+                                        >
+                                          <SignatureCanvas
+                                            ref={companySigCanvas}
+                                            canvasProps={{
+                                              className: "signature-canvas",
+                                              style: {
+                                                background: "#f8f9fa",
+                                                width: "100%",
+                                                height: "200px",
+                                              },
+                                            }}
+                                            penColor="black"
+                                            minWidth={2}
+                                            maxWidth={3}
+                                          />
+                                        </div>
+                                        {errors.signature && (
+                                          <small className="text-danger mt-2">
+                                            {errors.signature}
+                                          </small>
+                                        )}
+                                      </div>
+                                      <div className="clear-btn mt-2">
+                                        <button
+                                          disabled={loading}
+                                          type="button"
+                                          className="btn btn-sm btn-outline-secondary"
+                                          onClick={clearCompanySignature}
+                                        >
+                                          <span>Clear Signature</span>
+                                        </button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                            <div className="step-actions mt-20">
+                              <button
+                                type="button"
+                                className="btn btn-secondary me-2"
+                                onClick={prevStep}
+                              >
+                                Previous
+                              </button>
+                              <button
+                                type="button"
+                                className="btn btn-primary"
+                                onClick={nextStep}
+                              >
+                                Next
+                              </button>
+                            </div>
+                          </div>
+                        )}
+
+                        {currentStep === 3 && (
+                          <div className="step-content">
+                            <h4 className="step-title">
+                              Agency Representative
+                            </h4>
+                            <div className="row">
+                              <div className="col-md-12 mt-20">
+                                <div className="form-group">
+                                  <label className="form-label">
+                                    Signature
+                                    <span className="text-danger">*</span>
                                   </label>
-                                  <div class="form-control-wrap">
-                                    <input
-                                      name="thursday_hour"
-                                      value={formData.thursday_hour}
-                                      type="number"
-                                      class="form-control"
-                                      autocomplete="off"
-                                      onChange={handleOnChange}
-                                    />
-                                    {errors.thursday_hour && (
-                                      <small className="text-danger">
-                                        {errors.thursday_hour[0]}
-                                      </small>
-                                    )}
+                                  <div className="flex-row">
+                                    <div className="wrapper">
+                                      <p className="text-muted small mb-2">
+                                        Sign in the box below using your mouse
+                                        or finger
+                                      </p>
+                                      <div
+                                        style={{
+                                          border: "1px solid #ddd",
+                                          borderRadius: "4px",
+                                        }}
+                                      >
+                                        <SignatureCanvas
+                                          ref={agencyRepCanvas}
+                                          canvasProps={{
+                                            className: "signature-canvas",
+                                            style: {
+                                              background: "#f8f9fa",
+                                              width: "100%",
+                                              height: "200px",
+                                            },
+                                          }}
+                                          penColor="black"
+                                          minWidth={2}
+                                          maxWidth={3}
+                                        />
+                                      </div>
+                                      {errors.signature && (
+                                        <small className="text-danger mt-2">
+                                          {errors.signature}
+                                        </small>
+                                      )}
+                                    </div>
+                                    <div className="clear-btn mt-2">
+                                      <button
+                                        disabled={loading}
+                                        type="button"
+                                        className="btn btn-sm btn-outline-secondary"
+                                        onClick={clearAgencyRepSignature}
+                                      >
+                                        <span>Clear Signature</span>
+                                      </button>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
-                              <div class="col-md-3 mt-20">
-                                <div class="form-group">
-                                  <label for="inputAddress" class="form-label">
-                                    Friday
+                              <div className="col-md-12 mt-20">
+                                <div className="form-group">
+                                  <label for="inputZip" className="form-label">
+                                    Agency Representative's Title
                                   </label>
-                                  <div class="form-control-wrap">
+                                  <div className="form-control-wrap">
                                     <input
-                                      name="friday_hour"
-                                      value={formData.friday_hour}
-                                      type="number"
-                                      class="form-control"
+                                      name="rep_title"
+                                      value=""
+                                      type="text"
+                                      className="form-control"
                                       autocomplete="off"
-                                      onChange={handleOnChange}
                                     />
-                                    {errors.friday_hour && (
-                                      <small className="text-danger">
-                                        {errors.friday_hour[0]}
-                                      </small>
-                                    )}
-                                  </div>
-                                </div>
-                              </div>
-                              <div class="col-md-3 mt-20">
-                                <div class="form-group">
-                                  <label for="inputAddress" class="form-label">
-                                    Saturday
-                                  </label>
-                                  <div class="form-control-wrap">
-                                    <input
-                                      name="saturday_hour"
-                                      value={formData.saturday_hour}
-                                      type="number"
-                                      class="form-control"
-                                      autocomplete="off"
-                                      onChange={handleOnChange}
-                                    />
-                                    {errors.saturday_hour && (
-                                      <small className="text-danger">
-                                        {errors.saturday_hour[0]}
-                                      </small>
-                                    )}
-                                  </div>
-                                </div>
-                              </div>
-                              <div class="col-md-3 mt-20">
-                                <div class="form-group">
-                                  <label for="inputAddress" class="form-label">
-                                    Sunday
-                                  </label>
-                                  <div class="form-control-wrap">
-                                    <input
-                                      name="sunday_hour"
-                                      value={formData.sunday_hour}
-                                      type="number"
-                                      class="form-control"
-                                      autocomplete="off"
-                                      onChange={handleOnChange}
-                                    />
-                                    {errors.sunday_hour && (
-                                      <small className="text-danger">
-                                        {errors.sunday_hour[0]}
-                                      </small>
-                                    )}
                                   </div>
                                 </div>
                               </div>
@@ -391,166 +550,8 @@ export default function EmployeeAgreementForm() {
                             </div>
                           </div>
                         )}
-                        {currentStep === 3 && (
-                          <div className="step-content">
-                            <h4 className="step-title">The Agreement</h4>
-                            <div className="row">
-                              <div className="col-md-12">
-                                <div class="form-group">
-                                  <label for="inputEmail4" class="form-label">
-                                    3. The employee will have the following time
-                                    off:
-                                  </label>
-                                  <div class="form-control-wrap">
-                                    <input
-                                      name="time_off"
-                                      value={formData.time_off}
-                                      type="text"
-                                      class="form-control"
-                                      autocomplete="off"
-                                      onChange={handleOnChange}
-                                    />
-                                  </div>
-                                  {errors.time_off && (
-                                    <small className="text-danger">
-                                      {errors.time_off[0]}
-                                    </small>
-                                  )}
-                                </div>
-                              </div>
 
-                              <div className="col-md-12 mt-20">
-                                <div class="form-group">
-                                  <label for="inputEmail4" class="form-label">
-                                    4. The employer will pay the employee per
-                                    hour.
-                                  </label>
-                                  <div class="form-control-wrap">
-                                    <input
-                                      name="pay_per_hour"
-                                      value={formData.pay_per_hour}
-                                      type="number"
-                                      class="form-control"
-                                      autocomplete="off"
-                                      onChange={handleOnChange}
-                                    />
-                                  </div>
-                                  {errors.pay_per_hour && (
-                                    <small className="text-danger">
-                                      {errors.pay_per_hour[0]}
-                                    </small>
-                                  )}
-                                </div>
-                              </div>
-
-                              <div className="col-12 mt-20">
-                                <p>
-                                  5. When leaving the employee will give the
-                                  approximate time of return, and if possible,
-                                  leave a phone number where he/she can reach.
-                                  <br /> Also, when the employee will be late in
-                                  returning, he/she will call to let the
-                                  employer know.
-                                </p>
-                              </div>
-                              <div className="col-12">
-                                <p>
-                                  6. The employee is responsible for paying for
-                                  long-distance telephone calls made/received by
-                                  the employee.
-                                </p>
-                              </div>
-                              <div className="col-12">
-                                <p>
-                                  7. The employee will not be paid for scheduled
-                                  hours not worked unless the time not worked is
-                                  covered by a benefit as provided by the
-                                  employer.
-                                </p>
-                              </div>
-                              <div className="col-12">
-                                <p>
-                                  8. Both parties to this agreement will respect
-                                  each other’s individuality and treat each
-                                  other accordingly. Both will attempt to be
-                                  flexible and work at solving problems as they
-                                  arise.
-                                </p>
-                              </div>
-                              <div className="col-12">
-                                <p>
-                                  9. At least 2 weeks’ notice will be given by
-                                  the employee regarding termination of this
-                                  agreement.
-                                </p>
-                              </div>
-                            </div>
-                            <div className="step-actions mt-4">
-                              <button
-                                type="button"
-                                className="btn btn-secondary me-2"
-                                onClick={prevStep}
-                              >
-                                Previous
-                              </button>
-                              <button
-                                type="button"
-                                className="btn btn-primary"
-                                onClick={nextStep}
-                              >
-                                Next
-                              </button>
-                            </div>
-                          </div>
-                        )}
                         {currentStep === 4 && (
-                          <div className="step-content">
-                            <h4 className="step-title">
-                              Othe Agreement/Benefits
-                            </h4>
-                            <div className="row">
-                              <div className="col-md-12">
-                                <div class="form-group">
-                                  <label for="inputEmail4" class="form-label">
-                                    Other Agreements/Benefits
-                                  </label>
-                                  <div class="form-control-wrap">
-                                    <textarea
-                                      name="other_agreements"
-                                      value={formData.other_agreements}
-                                      type="number"
-                                      class="form-control"
-                                      autocomplete="off"
-                                      onChange={handleOnChange}
-                                    />
-                                  </div>
-                                  {errors.other_agreements && (
-                                    <small className="text-danger">
-                                      {errors.other_agreements[0]}
-                                    </small>
-                                  )}
-                                </div>
-                              </div>
-                            </div>
-                            <div className="step-actions  mt-20">
-                              <button
-                                type="button"
-                                className="btn btn-secondary me-2"
-                                onClick={prevStep}
-                              >
-                                Previous
-                              </button>
-                              <button
-                                type="button"
-                                className="btn btn-primary"
-                                onClick={nextStep}
-                              >
-                                Next
-                              </button>
-                            </div>
-                          </div>
-                        )}
-                        {currentStep === 5 && (
                           <div className="step-content">
                             <h4 className="step-title">Signature</h4>
                             <div className="row">
@@ -626,7 +627,8 @@ export default function EmployeeAgreementForm() {
                             </div>
                           </div>
                         )}
-                        {currentStep === 6 && (
+
+                        {currentStep === 5 && (
                           <div className="step-content text-center py-5">
                             <div className="success-icon mb-4">
                               <i

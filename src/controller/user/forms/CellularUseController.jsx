@@ -1,15 +1,15 @@
 import Cookies from "js-cookie";
 
-const FetchEmployeeAgreement = async (
+const FetchCellularUse = async (
+  setCellular,
   setLoading,
-  setAgreement,
   setErrors,
   apiBase
 ) => {
   setLoading(true);
   try {
     const response = await fetch(
-      `${apiBase}/api/user/employee-agreement-forms/get`,
+      `${apiBase}/api/user/employee-safety-cellular-phone-use/get`,
       {
         method: "GET",
         credentials: "include",
@@ -22,8 +22,8 @@ const FetchEmployeeAgreement = async (
     );
 
     const data = await response.json();
-    if (!response.ok) setErrors({ general: data.message });
-    setAgreement(data);
+    if (!response.ok) setErrors(data.errors || { general: data.message });
+    setCellular(data);
   } catch (err) {
     setErrors({ general: err.message });
   } finally {
@@ -31,4 +31,4 @@ const FetchEmployeeAgreement = async (
   }
 };
 
-export default FetchEmployeeAgreement;
+export default FetchCellularUse;

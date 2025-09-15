@@ -23,7 +23,7 @@ export default function EmployeeAgreement() {
       {agreeData ? (
         <EmployeeAgreementFilled agreement={agreeData} fullname={fullname} />
       ) : (
-        <EmployeeAgreementForm fullname={fullname} />
+        <EmployeeAgreementForm />
       )}
     </>
   );

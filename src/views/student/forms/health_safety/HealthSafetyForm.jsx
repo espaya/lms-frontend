@@ -6,9 +6,10 @@ import SignatureCanvas from "react-signature-canvas";
 import Cookies from "js-cookie";
 import { useState, useRef } from "react";
 
-export default function DrugTestingForms({ fullname }) {
+export default function HealthSafetyForm({ fullname }) {
   const [currentStep, setCurrentStep] = useState(1);
-  const sigCanvas = useRef({});
+  const sigCanvas = useRef(null);
+  const signatureDataRef = useRef(""); // Use ref for signature data
   const [errors, setErrors] = useState({});
   const [successMsg, setSuccessMsg] = useState("");
   const [loading, setLoading] = useState(false);
@@ -17,9 +18,13 @@ export default function DrugTestingForms({ fullname }) {
 
   const clearSignature = () => {
     sigCanvas.current.clear();
+    signatureDataRef.current = ""; // Clear the ref instead of state
+  };
+
+  const handleOnChange = (e) => {
     setFormData((prev) => ({
       ...prev,
-      signature: "",
+      [e.target.name]: e.target.value,
     }));
   };
 
@@ -45,19 +50,20 @@ export default function DrugTestingForms({ fullname }) {
       return;
     }
 
+    // Get signature data only when submitting
     const signatureData = sigCanvas.current.toDataURL("image/png");
-    setFormData((prev) => ({
-      ...prev,
-      signature: signatureData,
-    }));
+    signatureDataRef.current = signatureData;
 
     try {
       const response = await fetch(
-        `${apiBase}/api/user/drug-testing-policy-forms`,
+        `${apiBase}/api/user/employee-health-safety-forms`,
         {
           method: "POST",
           credentials: "include",
-          body: JSON.stringify({ ...formData, signature: signatureData }),
+          body: JSON.stringify({
+            ...formData,
+            signature: signatureDataRef.current, // Use the ref value
+          }),
           headers: {
             "Content-Type": "application/json",
             Accept: "application/json",
@@ -70,17 +76,14 @@ export default function DrugTestingForms({ fullname }) {
       const data = await response.json();
 
       if (!response.ok) {
-        if (data.errors) {
-          setErrors(data.errors);
-        } else {
-          setErrors({ general: data.message });
-        }
-      } else {
-        setSuccessMsg(data.message);
-        setCurrentStep(3); // Success step
-        //delay for 5sec then relaod page
-        setTimeout(() => window.location.reload(), 4000);
+        setErrors(data.errors || { general: data.message });
+        return;
       }
+      setErrors({});
+      setSuccessMsg(data.message);
+      setCurrentStep(3); // Success step
+      // Delay for 4sec then reload page
+      setTimeout(() => window.location.reload(), 4000);
     } catch (err) {
       setErrors({ general: err.message });
     } finally {
@@ -89,40 +92,38 @@ export default function DrugTestingForms({ fullname }) {
   };
 
   // Progress steps
-  const steps = ["Policy", "Signature", "Success"];
-
+  const steps = ["Agreement", "Signature", "Success"];
   return (
     <>
-      <title>Drug Testing Policy - 1staccess Home Care</title>
+      <title>Health & Safety Agreement - 1staccess Home Care</title>
 
-      <div class="dashboard">
+      <div className="dashboard">
         <div id="main-wrapper">
           <UserHeader />
-
           <UserSidebar />
 
-          <div class="content-body">
-            <div class="container">
-              <div class="page-title">
-                <div class="row align-items-center justify-content-between">
-                  <div class="col-md-6">
-                    <div class="page-title-content">
-                      <h3>Drug Testing Policy</h3>
-                      <p className="mb-2">Fill all required (*) fields</p>
+          <div className="content-body">
+            <div className="container">
+              <div className="page-title">
+                <div className="row align-items-center justify-content-between">
+                  <div className="col-md-6">
+                    <div className="page-title-content">
+                      <h3>Health & Safety Agreement</h3>
+                      <p className="mb-2">Fill all required(*) fields</p>
                     </div>
                   </div>
-                  <div class="col-auto">
-                    <div class="breadcrumbs">
+                  <div className="col-auto">
+                    <div className="breadcrumbs">
                       <Link to={PATHS.USER_DASHBOARD}>Home</Link>
                       <span>
-                        <i class="ri-arrow-right-s-line"></i>
+                        <i className="ri-arrow-right-s-line"></i>
                       </span>
                       <Link to={PATHS.USER_FORMS}>Forms</Link>
                       <span>
-                        <i class="ri-arrow-right-s-line"></i>
+                        <i className="ri-arrow-right-s-line"></i>
                       </span>
-                      <Link to={PATHS.USER_DRUG_TESTING_FORM}>
-                        Drug Testing Policy
+                      <Link to={PATHS.USER_EMPLOYEE_HEALTH_SAFETY_FORM}>
+                        Health & Safety Agreement
                       </Link>
                     </div>
                   </div>
@@ -154,60 +155,60 @@ export default function DrugTestingForms({ fullname }) {
                 <p className="alert alert-danger"> {errors.general} </p>
               )}
 
-              <div class="row">
-                <div class="col-12">
-                  <div class="card">
-                    <div class="card-body">
+              <div className="row">
+                <div className="col-12">
+                  <div className="card ">
+                    <div className="card-body">
                       <form onSubmit={handleFormSubmit}>
                         {currentStep === 1 && (
                           <div className="step-content">
-                            <h4 className="step-title">Drug Testing Policy</h4>
+                            <h4 className="step-title">Agreement</h4>
                             <div className="row">
-                              <div className="col-12">
+                              <div className="col-md-12">
                                 <p>
-                                  Employee Name: <u> {fullname} </u>
+                                  Employee Name: <u>{fullname}</u>
                                 </p>
-
                                 <p>
-                                  Agency employees may not possess, distribute
-                                  or use alcoholic beverages or controlled
-                                  substances. Including inhalants while on
-                                  premises of property controlled by the Agency
-                                  or while on the clients property in the course
-                                  of conducting company business or engaged in
-                                  any company sponsored activity.
+                                  I do understand the physical requirements of
+                                  my job and understand proper lifting and
+                                  moving techniques which I am expected to use
+                                  in moving and lifting objects and/or patients.
                                 </p>
-
                                 <p>
-                                  Patients or visitors may not possess,
-                                  distribute and/or use alcoholic beverages or
-                                  controlled substances, while on the premises
-                                  of property controlled by the Agency.
+                                  I have been informed and do fully understand
+                                  that any injury claimed by me while on the job
+                                  must be reported immediately to my Supervisor
+                                  and documented on an Accident/Incident Report
+                                  Form. I understand that unless an incident
+                                  report is completed immediately and signed by
+                                  me,the Agency may not consider a voluntary
+                                  payment of any medical bills or any other
+                                  benefits as a result of my injury. I further
+                                  understand that if the accident/injury is
+                                  proven to be a result of my failing to follow
+                                  policy/procedure, the Agency may not be
+                                  expected to cover medical payments.
                                 </p>
-
                                 <p>
-                                  Any employee who has knowledge of a person or
-                                  persons violating this policy must report it
-                                  to his/her Supervisor immediately.
+                                  I do fully understand that I am not encouraged
+                                  to lift or transfer any object or patient by
+                                  myself unless I know that I can safely lift or
+                                  transfer alone. If I believe there is no one
+                                  readily available to assist me in lifting or
+                                  moving patients or equipment while on duty, I
+                                  am to wait until I can obtain assistance
+                                  before moving or lifting.
                                 </p>
-
                                 <p>
-                                  Based on reasonable cause, the Agency may
-                                  conduct searches or inspection of an
-                                  employee’s personal belongings and may be
-                                  asked to take a drug test. Refusal to consent
-                                  may result in termination.
-                                </p>
-
-                                <p>
-                                  <strong>
-                                    *I HAVE READ AND UNDERSTAND THE ABOVE AND
-                                    WILL COMPLY WITH THIS AGREEMENT
-                                  </strong>
+                                  <em>
+                                    I have had the opportunity to review and
+                                    have all questions answered regarding Health
+                                    and Safety
+                                  </em>
                                 </p>
                               </div>
                             </div>
-                            <div className="step-actions mt-4">
+                            <div className="step-actions mt-20">
                               <button
                                 type="button"
                                 className="btn btn-primary"
@@ -218,8 +219,6 @@ export default function DrugTestingForms({ fullname }) {
                             </div>
                           </div>
                         )}
-
-                        {/* Step 4: Signature */}
                         {currentStep === 2 && (
                           <div className="step-content">
                             <h4 className="step-title">Signature</h4>
@@ -296,8 +295,6 @@ export default function DrugTestingForms({ fullname }) {
                             </div>
                           </div>
                         )}
-
-                        {/* Step 5: Success */}
                         {currentStep === 3 && (
                           <div className="step-content text-center py-5">
                             <div className="success-icon mb-4">
@@ -324,7 +321,7 @@ export default function DrugTestingForms({ fullname }) {
           </div>
         </div>
       </div>
-      <style jsx>{`
+      <style jsx="true">{`
         .progress-container {
           padding: 20px 0;
         }
