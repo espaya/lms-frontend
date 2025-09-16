@@ -23,7 +23,10 @@ const FetchEmployeeDressCode = async (
 
     const data = await response.json();
 
-    if (!response.ok) setErrors({ general: data.message });
+    if (!response.ok) {
+      setErrors({ general: data.message });
+      return;
+    }
     setDressCode(data);
   } catch (err) {
     setErrors({ general: err.message });

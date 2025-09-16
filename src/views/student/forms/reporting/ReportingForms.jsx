@@ -1,33 +1,30 @@
-import { useEffect, useState, useRef } from "react";
 import UserHeader from "../../../../components/users/UserHeader";
 import UserSidebar from "../../../../components/users/UserSidebar";
-import FetchAttendance from "../../../../controller/user/forms/AttendanceController";
-import SignatureCanvas from "react-signature-canvas";
-import Cookies from "js-cookie";
 import { Link } from "react-router-dom";
 import { PATHS } from "../../../../router";
+import SignatureCanvas from "react-signature-canvas";
+import Cookies from "js-cookie";
+import { useState, useRef } from "react";
 
-export default function AttendanceForms() {
-  const apiBase = import.meta.env.VITE_API_URL;
-  const [loading, setLoading] = useState(false);
+export default function ReportingForms({ fullname }) {
+  const [currentStep, setCurrentStep] = useState(1);
+  const sigCanvas = useRef(null);
+  const signatureDataRef = useRef(""); // Use ref for signature data
   const [errors, setErrors] = useState({});
   const [successMsg, setSuccessMsg] = useState("");
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({});
-  const [attendance, getAttendance] = useState([]);
-  const [currentStep, setCurrentStep] = useState(1);
-  const sigCanvas = useRef({});
-
-  useEffect(() => {
-    FetchAttendance(apiBase, setLoading, setErrors, getAttendance);
-  }, []);
-
-  const fullname = attendance?.profileData?.full_name;
+  const apiBase = import.meta.env.VITE_API_URL;
 
   const clearSignature = () => {
     sigCanvas.current.clear();
+    signatureDataRef.current = ""; // Clear the ref instead of state
+  };
+
+  const handleOnChange = (e) => {
     setFormData((prev) => ({
       ...prev,
-      signature: "",
+      [e.target.name]: e.target.value,
     }));
   };
 
@@ -53,24 +50,28 @@ export default function AttendanceForms() {
       return;
     }
 
+    // Get signature data only when submitting
     const signatureData = sigCanvas.current.toDataURL("image/png");
-    setFormData((prev) => ({
-      ...prev,
-      signature: signatureData,
-    }));
+    signatureDataRef.current = signatureData;
 
     try {
-      const response = await fetch(`${apiBase}/api/user/attendance-forms`, {
-        method: "POST",
-        credentials: "include",
-        body: JSON.stringify({ ...formData, signature: signatureData }),
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          "X-XSRF-TOKEN": decodeURIComponent(Cookies.get("XSRF-TOKEN") || ""),
-          Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
-        },
-      });
+      const response = await fetch(
+        `${apiBase}/api/user/reporting-abuse-neglect-exploitation-forms`,
+        {
+          method: "POST",
+          credentials: "include",
+          body: JSON.stringify({
+            ...formData,
+            signature: signatureDataRef.current, // Use the ref value
+          }),
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-XSRF-TOKEN": decodeURIComponent(Cookies.get("XSRF-TOKEN") || ""),
+            Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
+          },
+        }
+      );
 
       const data = await response.json();
 
@@ -78,8 +79,11 @@ export default function AttendanceForms() {
         setErrors(data.errors || { general: data.message });
         return;
       }
+      setErrors({});
       setSuccessMsg(data.message);
       setCurrentStep(5); // Success step
+      // Delay for 4sec then reload page
+      setTimeout(() => window.location.reload(), 4000);
     } catch (err) {
       setErrors({ general: err.message });
     } finally {
@@ -89,47 +93,43 @@ export default function AttendanceForms() {
 
   // Progress steps
   const steps = [
-    "Policy Overview",
-    "Attendance Policy",
-    "Absenteeism Policy",
+    "Reporting",
+    "Reporting",
+    "Declaration",
     "Signature",
     "Success",
   ];
-
   return (
     <>
-      <title>
-        Employee Notification of Policy: Attendance, Tardiness, Absenteeism and
-        Leave - 1staccess Home Care
-      </title>
+      <title>Reporting: Abuse/neglect/Exploitation - 1staccess Home Care</title>
 
-      <div className="dashboard">
+      <div class="dashboard">
         <div id="main-wrapper">
           <UserHeader />
           <UserSidebar />
 
-          <div className="content-body">
-            <div className="container">
-              <div className="page-title">
-                <div className="row align-items-center justify-content-between">
-                  <div className="col-md-6">
-                    <div className="page-title-content">
-                      <h3>Attendance, Tardiness, Absenteeism and Leave</h3>
-                      <p className="mb-2">Fill all required (*) fields</p>
+          <div class="content-body">
+            <div class="container">
+              <div class="page-title">
+                <div class="row align-items-center justify-content-between">
+                  <div class="col-md-6">
+                    <div class="page-title-content">
+                      <h3>Reporting: Abuse/neglect/Exploitation</h3>
+                      <p class="mb-2">Fill all required(*) fields</p>
                     </div>
                   </div>
-                  <div className="col-auto">
-                    <div className="breadcrumbs">
-                      <Link to={{ pathname: PATHS.USER_DASHBOARD }}>Home</Link>
+                  <div class="col-auto">
+                    <div class="breadcrumbs">
+                      <Link to={PATHS.USER_DASHBOARD}>Home</Link>
                       <span>
-                        <i className="ri-arrow-right-s-line"></i>
+                        <i class="ri-arrow-right-s-line"></i>
                       </span>
-                      <Link to={{ pathname: PATHS.USER_FORMS }}>Forms</Link>
+                      <Link to={PATHS.USER_FORMS}>Forms</Link>
                       <span>
-                        <i className="ri-arrow-right-s-line"></i>
+                        <i class="ri-arrow-right-s-line"></i>
                       </span>
-                      <Link to={PATHS.USER_ATTENDANCE_FORM}>
-                        Attendance, Tardiness, Absenteeism and Leave
+                      <Link to={PATHS.USER_POLICIES_PROCEDURES_FORM}>
+                        Reporting: Abuse/neglect/Exploitation
                       </Link>
                     </div>
                   </div>
@@ -161,38 +161,58 @@ export default function AttendanceForms() {
                 <p className="alert alert-danger"> {errors.general} </p>
               )}
 
-              {successMsg && currentStep === 4 && (
-                <p className="alert alert-success"> {successMsg} </p>
-              )}
-
-              <div className="row">
-                <div className="col-12">
-                  <div className="card">
-                    <div className="card-body">
+              <div class="row">
+                <div class="col-12">
+                  <div class="card">
+                    <div class="card-body">
                       <form onSubmit={handleFormSubmit}>
-                        {/* Step 1: Policy Overview */}
                         {currentStep === 1 && (
                           <div className="step-content">
-                            <h4 className="step-title">Policy Overview</h4>
+                            <h4 className="step-title">
+                              Reporting: Abuse/neglect/Exploitation
+                            </h4>
                             <div className="row">
-                              <div className="col-12">
+                              <div className="col-md-12">
                                 <p>
-                                  Employee Name: <u> {fullname} </u>
+                                  Employee Name: <u>{fullname}</u>
                                 </p>
-                                <br />
+
                                 <p>
-                                  Exempt employees are owners, officers,
-                                  management and supervisors. All full time
-                                  employees are required to put in a full day's
-                                  work and a full 40 hour work week. All
-                                  employees regardless of classification, are
-                                  required to arrive on time and appropriately
-                                  complete their designated hours and tasks as
-                                  assigned.
+                                  As an employee of 1st Access Home Care, you
+                                  will be in receipt of confidential
+                                  information. This information shall include
+                                  but not limited to, procedures manuals,
+                                  in-house policies, patient lists, patient’s
+                                  medical records, financial information and
+                                  billing records, certifications and
+                                  applications, actual and prospective markets
+                                  and patient’s business plans, client's
+                                  information, and any other confidential
+                                  information gathered, revealed, acquired or
+                                  generated by or for 1st Access Home Care. As
+                                  an employee, you shall protect and hold in
+                                  confidence all confidential information unless
+                                  with the consent of the Administrator. I
+                                  acknowledge and understand the competitive
+                                  sensitivity of the confidential information
+                                  and the potential for significant material
+                                  harm that could result to1st Access Home Care
+                                  in the event that confidential information is
+                                  disseminated to others, in particular
+                                  competitors. Therefore I agree that the
+                                  appropriate remedy would be an immediate
+                                  injunction against the violating employee to
+                                  further prohibite the use and continued
+                                  dissemination of the confidential information.
+                                  Each employee agrees to pay 1st Access Home
+                                  Care in any action to enforce this
+                                  confidentiality agreement or cost of
+                                  litigation, including attorney’s fees and
+                                  other damages found by the trier fact.
                                 </p>
                               </div>
                             </div>
-                            <div className="step-actions mt-4">
+                            <div className="step-actions mt-20">
                               <button
                                 type="button"
                                 className="btn btn-primary"
@@ -203,142 +223,43 @@ export default function AttendanceForms() {
                             </div>
                           </div>
                         )}
-
-                        {/* Step 2: Attendance Policy */}
                         {currentStep === 2 && (
                           <div className="step-content">
-                            <h4 className="step-title">Attendance Policy</h4>
+                            <h4 className="step-title">AGREEMENT</h4>
                             <div className="row">
                               <div className="col-12">
-                                <h5>ATTENDANCE:</h5>
-                                <ul>
-                                  <li>
-                                    1. The employee must notify the Supervisor
-                                    in all events of tardiness. If the office is
-                                    closed, call the answering service to have
-                                    on-call Supervisor paged and relay
-                                    information to him or her. Only 3 tardiness
-                                    in a calendar month will be accepted unless
-                                    very extenuating circumstances are present
-                                    and approved by the Supervisor. More than 3
-                                    tardiness within a given month may result in
-                                    counselling with Supervisor and every effort
-                                    made to avoid further tardiness. A copy of
-                                    counselling will be placed in the personnel
-                                    file. Two consecutive months of written
-                                    warnings for excessive tardiness may result
-                                    in dismissal or termination
-                                  </li>
-                                  <li>
-                                    2. No show/no call situations are not
-                                    tolerated and may result in termination.
-                                  </li>
-                                  <li>
-                                    3. Perfect attendance throughout the year
-                                    may be rewarded at year - end at the
-                                    discretion of supervisor and/or
-                                    administrator.
-                                  </li>
-                                </ul>
-                              </div>
-                            </div>
-                            <div className="step-actions mt-4">
-                              <button
-                                type="button"
-                                className="btn btn-secondary me-2"
-                                onClick={prevStep}
-                              >
-                                Previous
-                              </button>
-                              <button
-                                type="button"
-                                className="btn btn-primary"
-                                onClick={nextStep}
-                              >
-                                Next
-                              </button>
-                            </div>
-                          </div>
-                        )}
-
-                        {/* Step 3: Absenteeism Policy */}
-                        {currentStep === 3 && (
-                          <div className="step-content">
-                            <h4 className="step-title">Absenteeism Policy</h4>
-                            <div className="row">
-                              <div className="col-12">
-                                <h5>ABSENTEEISM:</h5>
-                                <ul>
-                                  <li>
-                                    1. Employees are required to inform the
-                                    Supervisor as soon as possible when
-                                    absenteeism is known, to allow the Agency
-                                    time to cover assignments. The employee is
-                                    not excused from work until the Supervisor
-                                    approves the absence or verified he/she is
-                                    aware.
-                                  </li>
-                                  <li>
-                                    2. Illness and or injury that requires a
-                                    physician's treatment and that may take more
-                                    than a day for recovery will need to be
-                                    called in and discussed with the Supervisor.
-                                    When the office is closed, request the
-                                    answering service to contact the person on
-                                    call with the information and give your
-                                    phone number for follow-up.
-                                  </li>
-                                  <li>
-                                    3. If an employee needs to be absent for
-                                    reasons other than illness, he/she must
-                                    submit a Leave Request Form at least 14 days
-                                    prior to time requested.
-                                  </li>
-                                  <li>
-                                    4. More than 3 consecutive days of
-                                    absenteeism requires a physician's note for
-                                    illness or injury sustained. Medically
-                                    verified illness may be excused. Failure to
-                                    provide proper notice will result in
-                                    counselling and a written warning will be
-                                    placed in the personnel file.
-                                  </li>
-                                  <li>
-                                    5. Excessive absenteeism without just cause
-                                    or physician's excuse is reason for
-                                    dismissal.
-                                  </li>
-                                  <li>
-                                    6.{" "}
-                                    <strong>
-                                      No shows / no calls are not tolerated.
-                                    </strong>{" "}
-                                    The need to follow policy and procedure is a
-                                    courtesy to other employees. Disciplinary
-                                    action may be supervised in an effort to
-                                    avoid any further complications.
-                                  </li>
-                                  <li>
-                                    7. Notice to your Supervisor in writing for
-                                    consideration on a requested leave of
-                                    absence must be submitted at least 14 days
-                                    to leave, unless there is a cause of
-                                    emergency or illness.
-                                  </li>
-                                </ul>
-                                <br />
                                 <p>
-                                  <strong>I</strong> acknowledge that I have
-                                  been oriented to the Agency's policy regarding{" "}
-                                  <strong>ATTENDANCE</strong> and{" "}
-                                  <strong>ABSENTEEISM,</strong> and I agree to
-                                  follow all guidelines, both written and
-                                  verbal. I understand that, if the guidelines,
-                                  policies and procedures are not followed, that
-                                  I may be immediately terminated. I also had
-                                  the opportunity to ask questions regarding
-                                  this policy and I know where it's located for
-                                  future reference.
+                                  As consideration for employment and for the
+                                  release of this confidential information, the
+                                  employee agrees not to compete against 1st
+                                  Access Home Care or to utilize any of the
+                                  confidential information for a period of two
+                                  (2) years from the date of their terminated
+                                  employment with 1st Access Home Care. This
+                                  Non-Compete Agreement shall be limited to
+                                  Richmond County and contiguous counties. This
+                                  Non-Compete Agreement is not intended to
+                                  prohibit from working as a nurse, therapist or
+                                  other position in the health service
+                                  industries but is intended to prohibit
+                                  employee from working with a competitor of 1st
+                                  Access Home Care in the home health industry
+                                  and utilizing any of the confidential
+                                  information of 1st Access Home Care or
+                                  contacting any of 1st Access Home Care
+                                  patients. Employees agree and warrant that
+                                  they will not contact, engage, discuss,
+                                  negotiate or contract with any patient or
+                                  their family member for the purposes of
+                                  developing or promoting home health care
+                                  services of said patient. All parties
+                                  acknowledge that this confidential information
+                                  is of a proprietary nature to 1st Access Home
+                                  Care and if the confidential information is
+                                  revealed to the general public or to a
+                                  competitor, the revelation would destroy or
+                                  impair the expected success of 1st Access Home
+                                  Care.
                                 </p>
                               </div>
                             </div>
@@ -360,8 +281,53 @@ export default function AttendanceForms() {
                             </div>
                           </div>
                         )}
-
-                        {/* Step 4: Signature */}
+                        {currentStep === 3 && (
+                          <div className="step-content">
+                            <h4 className="step-title">AGREEMENT</h4>
+                            <div className="row">
+                              <div className="col-12">
+                                <p>
+                                  <strong>
+                                    *ANY CONTROVERSY OR CLAIM ARISING OUT OF OR
+                                    RELATING TO THIS AGREEMENT SHALL BE
+                                    SUBMITTED TO ARBITRATION BEFORE ONE(1)
+                                    ARBITRATOR IN RICHMOND, VIRGINIA IN
+                                    ACCORDANCE WITH THE COMMERCIAL ARBITRATION
+                                    RULES OF THE AMERICAN ARBITRATION
+                                    ASSOCIATION JUDGEMENT UPON THE AWARD
+                                    RENDERED BY THE ARBITRATOR MAY BE ENTERED BY
+                                    ANY COURT HAVING JURISDICTION THEREOF.
+                                    ARBITRATION SHALL BE THE EXCLUSIVE, FINAL
+                                    AND BINDING METHOD OF RESOLUTION OF ANY
+                                    CLAIM OR CONTROVERSY BETWEEN 1st Access Home
+                                    Care AND EMPLOYEE ARISING FROM THIS
+                                    AGREEMENT
+                                  </strong>
+                                </p>
+                                <p>
+                                  I HAVE READ AND UNDERSTAND THE ABOVE AND WILL
+                                  COMPLY WITH THIS AGREEMENT.
+                                </p>
+                              </div>
+                            </div>
+                            <div className="step-actions mt-4">
+                              <button
+                                type="button"
+                                className="btn btn-secondary me-2"
+                                onClick={prevStep}
+                              >
+                                Previous
+                              </button>
+                              <button
+                                type="button"
+                                className="btn btn-primary"
+                                onClick={nextStep}
+                              >
+                                Next
+                              </button>
+                            </div>
+                          </div>
+                        )}
                         {currentStep === 4 && (
                           <div className="step-content">
                             <h4 className="step-title">Signature</h4>
@@ -439,7 +405,6 @@ export default function AttendanceForms() {
                           </div>
                         )}
 
-                        {/* Step 5: Success */}
                         {currentStep === 5 && (
                           <div className="step-content text-center py-5">
                             <div className="success-icon mb-4">
@@ -466,8 +431,7 @@ export default function AttendanceForms() {
           </div>
         </div>
       </div>
-
-      <style jsx>{`
+      <style jsx="true">{`
         .progress-container {
           padding: 20px 0;
         }

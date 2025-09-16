@@ -183,22 +183,20 @@ export default function ApplicationForms() {
       const data = await response.json();
 
       if (!response.ok) {
-        if (data.errors) {
-          setErrors(data.errors);
+        setErrors(data.errors || { general: data.message });
 
-          Swal.fire({
-            icon: "error",
-            title: "An error occurred",
-            text: "There are errors in the form. Fill all required fields",
-            showCloseButton: true,
-          });
-        } else {
-          setErrors({ general: data.message });
-        }
-      } else {
-        setSuccessMsg(data.message);
-        setCurrentStep(7); // Success step
+        Swal.fire({
+          icon: "error",
+          title: "An error occurred",
+          text: "There are errors in the form. Fill all required fields",
+          showCloseButton: true,
+        });
+
+        return;
       }
+
+      setSuccessMsg(data.message);
+      setCurrentStep(7); // Success step
     } catch (err) {
       setErrors({ general: err.message });
     } finally {
@@ -279,7 +277,6 @@ export default function ApplicationForms() {
                 <p className="alert alert-danger">{errors.general}</p>
               )}
 
-             
               {successMsg && (
                 <p className="alert alert-success"> {successMsg} </p>
               )}
@@ -3149,7 +3146,7 @@ export default function ApplicationForms() {
                               ></i>
                             </div>
                             <h3 className="text-success">
-                              { successMsg && <p> { successMsg } </p> }
+                              {successMsg && <p> {successMsg} </p>}
                             </h3>
                             <p className="mb-4">
                               Thank you for submitting your application. We will

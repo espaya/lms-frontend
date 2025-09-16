@@ -22,7 +22,10 @@ const FetchCellularUse = async (
     );
 
     const data = await response.json();
-    if (!response.ok) setErrors(data.errors || { general: data.message });
+    if (!response.ok) {
+      setErrors(data.errors || { general: data.message });
+      return;
+    }
     setCellular(data);
   } catch (err) {
     setErrors({ general: err.message });

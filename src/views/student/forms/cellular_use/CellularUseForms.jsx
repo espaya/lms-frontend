@@ -77,7 +77,10 @@ export default function CellularUseForms({ fullname }) {
       );
 
       const data = await response.json();
-      if (!response.ok) setErrors(data.errors || { general: data.message });
+      if (!response.ok) {
+        setErrors(data.errors || { general: data.message });
+        return;
+      }
       setSuccessMsg(data.message);
       setCurrentStep(3); // Success step
       // Delay for 4sec then reload page

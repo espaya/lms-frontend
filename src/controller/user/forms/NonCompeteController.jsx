@@ -1,15 +1,15 @@
 import Cookies from "js-cookie";
 
-const FetchConfidentiality = async (
-  setLoading,
+const FetchEmployeeNonCompete = async (
+  setNonCompete,
   setErrors,
-  apiBase,
-  setConfidentiality
+  setLoading,
+  apiBase
 ) => {
   setLoading(true);
   try {
     const response = await fetch(
-      `${apiBase}/api/user/confidentiality-forms/get`,
+      `${apiBase}/api/user/non-compete-agreement-forms/get`,
       {
         method: "GET",
         credentials: "include",
@@ -22,11 +22,12 @@ const FetchConfidentiality = async (
     );
 
     const data = await response.json();
+
     if (!response.ok) {
       setErrors({ general: data.message });
       return;
     }
-    setConfidentiality(data);
+    setNonCompete(data);
   } catch (err) {
     setErrors({ general: err.message });
   } finally {
@@ -34,4 +35,4 @@ const FetchConfidentiality = async (
   }
 };
 
-export default FetchConfidentiality;
+export default FetchEmployeeNonCompete;

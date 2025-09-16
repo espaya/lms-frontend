@@ -24,7 +24,10 @@ const FetchEmployeeReference = async (
 
     const data = await response.json();
 
-    if (!response.ok) setErrors({ general: data.message });
+    if (!response.ok) {
+      setErrors({ general: data.message });
+      return;
+    }
     setReference(data);
   } catch (err) {
     setErrors({ general: err.message });

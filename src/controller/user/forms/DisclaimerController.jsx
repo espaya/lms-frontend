@@ -19,7 +19,10 @@ const FetchDisclaimer = async (
     });
 
     const data = await response.json();
-    if (!response.ok) setErrors({ general: data.message });
+    if (!response.ok) {
+      setErrors({ general: data.message });
+      return;
+    }
     setDisclaimer(data);
   } catch (err) {
     setErrors({ general: err.message });

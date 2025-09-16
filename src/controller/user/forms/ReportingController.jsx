@@ -1,15 +1,15 @@
 import Cookies from "js-cookie";
 
-const FetchConfidentiality = async (
+const FetchEmployeeReporting = async (
+  setReporting,
   setLoading,
-  setErrors,
-  apiBase,
-  setConfidentiality
+  setError,
+  apiBase
 ) => {
   setLoading(true);
   try {
     const response = await fetch(
-      `${apiBase}/api/user/confidentiality-forms/get`,
+      `${apiBase}/api/user/reporting-abuse-neglect-exploitation-forms/get`,
       {
         method: "GET",
         credentials: "include",
@@ -22,16 +22,17 @@ const FetchConfidentiality = async (
     );
 
     const data = await response.json();
+
     if (!response.ok) {
-      setErrors({ general: data.message });
+      setError({ general: data.message });
       return;
     }
-    setConfidentiality(data);
+    setReporting(data);
   } catch (err) {
-    setErrors({ general: err.message });
+    setError(err.message);
   } finally {
     setLoading(false);
   }
 };
 
-export default FetchConfidentiality;
+export default FetchEmployeeReporting;

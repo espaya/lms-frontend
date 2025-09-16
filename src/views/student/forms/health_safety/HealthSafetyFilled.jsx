@@ -6,8 +6,6 @@ import { PATHS } from "../../../../router";
 export default function HealthSafetyFilled({ data, fullname }) {
   const apiBase = import.meta.env.VITE_API_URL;
 
-  console.log(data);
-
   const printContent = () => {
     var printArea = document.getElementById("printArea");
     var printContents = printArea.innerHTML;

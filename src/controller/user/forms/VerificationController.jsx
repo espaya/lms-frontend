@@ -20,8 +20,10 @@ const FetchEmployeeVerification = async (
 
     const data = await response.json();
 
-    if (!response.ok) setErrors({ general: data.message });
-
+    if (!response.ok) {
+      setErrors({ general: data.message });
+      return;
+    }
     setVerification(data);
   } catch (err) {
     setErrors({ general: err.message });

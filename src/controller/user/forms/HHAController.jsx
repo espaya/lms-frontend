@@ -13,7 +13,10 @@ const FetchEmployeeHHA = async (setHHA, setLoading, apiBase, setErrors) => {
       },
     });
     const data = await response.json();
-    if (!response.ok) setErrors({ general: data.message });
+    if (!response.ok) {
+      setErrors({ general: data.message });
+      return;
+    }
     setHHA(data);
   } catch (err) {
     setErrors({ general: err.message });

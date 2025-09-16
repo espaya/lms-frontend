@@ -22,7 +22,10 @@ const FetchEmployeeInfection = async (
     );
 
     const data = await response.json();
-    if (!response.ok) setErrors({ general: data.message });
+    if (!response.ok) {
+      setErrors({ general: data.message });
+      return;
+    }
     setInfection(data);
   } catch (err) {
     setErrors({ general: err.message });

@@ -72,7 +72,10 @@ export default function HHAForm({ fullname }) {
 
       const data = await response.json();
 
-      if (!response.ok) setErrors(data.errors || { general: data.message });
+      if (!response.ok) {
+        setErrors(data.errors || { general: data.message });
+        return;
+      }
       setSuccessMsg(data.message);
       setCurrentStep(9); // Success step
       // Delay for 4sec then reload page
@@ -161,7 +164,6 @@ export default function HHAForm({ fullname }) {
                   <div className="card">
                     <div className="card-body">
                       <form onSubmit={handleFormSubmit}>
-                        
                         {currentStep === 1 && (
                           <div className="step-content">
                             <h4 className="step-title">
@@ -709,7 +711,6 @@ export default function HHAForm({ fullname }) {
                             </p>
                           </div>
                         )}
-
                       </form>
                     </div>
                   </div>

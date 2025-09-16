@@ -1,33 +1,30 @@
-import { useEffect, useState, useRef } from "react";
 import UserHeader from "../../../../components/users/UserHeader";
 import UserSidebar from "../../../../components/users/UserSidebar";
-import FetchAttendance from "../../../../controller/user/forms/AttendanceController";
-import SignatureCanvas from "react-signature-canvas";
-import Cookies from "js-cookie";
 import { Link } from "react-router-dom";
 import { PATHS } from "../../../../router";
+import SignatureCanvas from "react-signature-canvas";
+import Cookies from "js-cookie";
+import { useState, useRef } from "react";
 
-export default function AttendanceForms() {
-  const apiBase = import.meta.env.VITE_API_URL;
-  const [loading, setLoading] = useState(false);
+export default function SexualHarassmentForms({ fullname }) {
+  const [currentStep, setCurrentStep] = useState(1);
+  const sigCanvas = useRef(null);
+  const signatureDataRef = useRef(""); // Use ref for signature data
   const [errors, setErrors] = useState({});
   const [successMsg, setSuccessMsg] = useState("");
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({});
-  const [attendance, getAttendance] = useState([]);
-  const [currentStep, setCurrentStep] = useState(1);
-  const sigCanvas = useRef({});
-
-  useEffect(() => {
-    FetchAttendance(apiBase, setLoading, setErrors, getAttendance);
-  }, []);
-
-  const fullname = attendance?.profileData?.full_name;
+  const apiBase = import.meta.env.VITE_API_URL;
 
   const clearSignature = () => {
     sigCanvas.current.clear();
+    signatureDataRef.current = ""; // Clear the ref instead of state
+  };
+
+  const handleOnChange = (e) => {
     setFormData((prev) => ({
       ...prev,
-      signature: "",
+      [e.target.name]: e.target.value,
     }));
   };
 
@@ -53,24 +50,28 @@ export default function AttendanceForms() {
       return;
     }
 
+    // Get signature data only when submitting
     const signatureData = sigCanvas.current.toDataURL("image/png");
-    setFormData((prev) => ({
-      ...prev,
-      signature: signatureData,
-    }));
+    signatureDataRef.current = signatureData;
 
     try {
-      const response = await fetch(`${apiBase}/api/user/attendance-forms`, {
-        method: "POST",
-        credentials: "include",
-        body: JSON.stringify({ ...formData, signature: signatureData }),
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          "X-XSRF-TOKEN": decodeURIComponent(Cookies.get("XSRF-TOKEN") || ""),
-          Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
-        },
-      });
+      const response = await fetch(
+        `${apiBase}/api/user/sexual-harassment-forms`,
+        {
+          method: "POST",
+          credentials: "include",
+          body: JSON.stringify({
+            ...formData,
+            signature: signatureDataRef.current, // Use the ref value
+          }),
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-XSRF-TOKEN": decodeURIComponent(Cookies.get("XSRF-TOKEN") || ""),
+            Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
+          },
+        }
+      );
 
       const data = await response.json();
 
@@ -78,8 +79,11 @@ export default function AttendanceForms() {
         setErrors(data.errors || { general: data.message });
         return;
       }
+      setErrors({});
       setSuccessMsg(data.message);
       setCurrentStep(5); // Success step
+      // Delay for 4sec then reload page
+      setTimeout(() => window.location.reload(), 4000);
     } catch (err) {
       setErrors({ general: err.message });
     } finally {
@@ -89,19 +93,15 @@ export default function AttendanceForms() {
 
   // Progress steps
   const steps = [
-    "Policy Overview",
-    "Attendance Policy",
-    "Absenteeism Policy",
+    "Definition",
+    "Sexual Harassment",
+    "Sexual Harassmen",
     "Signature",
     "Success",
   ];
-
   return (
     <>
-      <title>
-        Employee Notification of Policy: Attendance, Tardiness, Absenteeism and
-        Leave - 1staccess Home Care
-      </title>
+      <title>Sexual Harassment - 1staccess Home Care</title>
 
       <div className="dashboard">
         <div id="main-wrapper">
@@ -114,22 +114,22 @@ export default function AttendanceForms() {
                 <div className="row align-items-center justify-content-between">
                   <div className="col-md-6">
                     <div className="page-title-content">
-                      <h3>Attendance, Tardiness, Absenteeism and Leave</h3>
-                      <p className="mb-2">Fill all required (*) fields</p>
+                      <h3>Sexual Harassment</h3>
+                      <p className="mb-2">Fill all required(*) fields</p>
                     </div>
                   </div>
                   <div className="col-auto">
                     <div className="breadcrumbs">
-                      <Link to={{ pathname: PATHS.USER_DASHBOARD }}>Home</Link>
+                      <Link to={PATHS.USER_DASHBOARD}>Home</Link>
                       <span>
                         <i className="ri-arrow-right-s-line"></i>
                       </span>
-                      <Link to={{ pathname: PATHS.USER_FORMS }}>Forms</Link>
+                      <Link to={PATHS.USER_FORMS}>Forms</Link>
                       <span>
                         <i className="ri-arrow-right-s-line"></i>
                       </span>
-                      <Link to={PATHS.USER_ATTENDANCE_FORM}>
-                        Attendance, Tardiness, Absenteeism and Leave
+                      <Link to={PATHS.USER_REPORTING_FORM}>
+                        Sexual Harassment
                       </Link>
                     </div>
                   </div>
@@ -161,38 +161,46 @@ export default function AttendanceForms() {
                 <p className="alert alert-danger"> {errors.general} </p>
               )}
 
-              {successMsg && currentStep === 4 && (
-                <p className="alert alert-success"> {successMsg} </p>
-              )}
-
               <div className="row">
                 <div className="col-12">
                   <div className="card">
                     <div className="card-body">
                       <form onSubmit={handleFormSubmit}>
-                        {/* Step 1: Policy Overview */}
                         {currentStep === 1 && (
                           <div className="step-content">
-                            <h4 className="step-title">Policy Overview</h4>
+                            <h4 className="step-title">DEFINITION</h4>
                             <div className="row">
-                              <div className="col-12">
+                              <div className="col-md-12">
                                 <p>
-                                  Employee Name: <u> {fullname} </u>
+                                  Employee Name: <u>{fullname}</u>
                                 </p>
-                                <br />
+
                                 <p>
-                                  Exempt employees are owners, officers,
-                                  management and supervisors. All full time
-                                  employees are required to put in a full day's
-                                  work and a full 40 hour work week. All
-                                  employees regardless of classification, are
-                                  required to arrive on time and appropriately
-                                  complete their designated hours and tasks as
-                                  assigned.
+                                  1st Access Home Care does not tolerate
+                                  <strong>Sexual Harassment,</strong> as it is a
+                                  form of gender-based discrimination.
+                                </p>
+                                <p>
+                                  <strong>Definition:</strong>
+                                  <br />
+                                  Under Title VII of the Civil Rights Act of
+                                  1964, any type of discrimination based on an
+                                  individual’s gender (male / female) is
+                                  illegal. Sexual harassment is considered to be
+                                  a form of gender discrimination. According to
+                                  the Equal Employment Opportunity Commission
+                                  sexual harassment is “unwelcome sexual
+                                  advances, request for sexual favors, and other
+                                  verbal or physical conduct of a sexual nature
+                                  when submission to the conduct enters into
+                                  employment decisions and/or the conduct
+                                  unreasonably interferes with an individual’s
+                                  work performance or creates an intimidating,
+                                  hostile, or offensive working environment.”
                                 </p>
                               </div>
                             </div>
-                            <div className="step-actions mt-4">
+                            <div className="step-actions mt-20">
                               <button
                                 type="button"
                                 className="btn btn-primary"
@@ -203,142 +211,24 @@ export default function AttendanceForms() {
                             </div>
                           </div>
                         )}
-
-                        {/* Step 2: Attendance Policy */}
                         {currentStep === 2 && (
                           <div className="step-content">
-                            <h4 className="step-title">Attendance Policy</h4>
+                            <h4 className="step-title">SEXUAL HARASSMENT</h4>
                             <div className="row">
                               <div className="col-12">
-                                <h5>ATTENDANCE:</h5>
-                                <ul>
-                                  <li>
-                                    1. The employee must notify the Supervisor
-                                    in all events of tardiness. If the office is
-                                    closed, call the answering service to have
-                                    on-call Supervisor paged and relay
-                                    information to him or her. Only 3 tardiness
-                                    in a calendar month will be accepted unless
-                                    very extenuating circumstances are present
-                                    and approved by the Supervisor. More than 3
-                                    tardiness within a given month may result in
-                                    counselling with Supervisor and every effort
-                                    made to avoid further tardiness. A copy of
-                                    counselling will be placed in the personnel
-                                    file. Two consecutive months of written
-                                    warnings for excessive tardiness may result
-                                    in dismissal or termination
-                                  </li>
-                                  <li>
-                                    2. No show/no call situations are not
-                                    tolerated and may result in termination.
-                                  </li>
-                                  <li>
-                                    3. Perfect attendance throughout the year
-                                    may be rewarded at year - end at the
-                                    discretion of supervisor and/or
-                                    administrator.
-                                  </li>
-                                </ul>
-                              </div>
-                            </div>
-                            <div className="step-actions mt-4">
-                              <button
-                                type="button"
-                                className="btn btn-secondary me-2"
-                                onClick={prevStep}
-                              >
-                                Previous
-                              </button>
-                              <button
-                                type="button"
-                                className="btn btn-primary"
-                                onClick={nextStep}
-                              >
-                                Next
-                              </button>
-                            </div>
-                          </div>
-                        )}
-
-                        {/* Step 3: Absenteeism Policy */}
-                        {currentStep === 3 && (
-                          <div className="step-content">
-                            <h4 className="step-title">Absenteeism Policy</h4>
-                            <div className="row">
-                              <div className="col-12">
-                                <h5>ABSENTEEISM:</h5>
-                                <ul>
-                                  <li>
-                                    1. Employees are required to inform the
-                                    Supervisor as soon as possible when
-                                    absenteeism is known, to allow the Agency
-                                    time to cover assignments. The employee is
-                                    not excused from work until the Supervisor
-                                    approves the absence or verified he/she is
-                                    aware.
-                                  </li>
-                                  <li>
-                                    2. Illness and or injury that requires a
-                                    physician's treatment and that may take more
-                                    than a day for recovery will need to be
-                                    called in and discussed with the Supervisor.
-                                    When the office is closed, request the
-                                    answering service to contact the person on
-                                    call with the information and give your
-                                    phone number for follow-up.
-                                  </li>
-                                  <li>
-                                    3. If an employee needs to be absent for
-                                    reasons other than illness, he/she must
-                                    submit a Leave Request Form at least 14 days
-                                    prior to time requested.
-                                  </li>
-                                  <li>
-                                    4. More than 3 consecutive days of
-                                    absenteeism requires a physician's note for
-                                    illness or injury sustained. Medically
-                                    verified illness may be excused. Failure to
-                                    provide proper notice will result in
-                                    counselling and a written warning will be
-                                    placed in the personnel file.
-                                  </li>
-                                  <li>
-                                    5. Excessive absenteeism without just cause
-                                    or physician's excuse is reason for
-                                    dismissal.
-                                  </li>
-                                  <li>
-                                    6.{" "}
-                                    <strong>
-                                      No shows / no calls are not tolerated.
-                                    </strong>{" "}
-                                    The need to follow policy and procedure is a
-                                    courtesy to other employees. Disciplinary
-                                    action may be supervised in an effort to
-                                    avoid any further complications.
-                                  </li>
-                                  <li>
-                                    7. Notice to your Supervisor in writing for
-                                    consideration on a requested leave of
-                                    absence must be submitted at least 14 days
-                                    to leave, unless there is a cause of
-                                    emergency or illness.
-                                  </li>
-                                </ul>
-                                <br />
                                 <p>
-                                  <strong>I</strong> acknowledge that I have
-                                  been oriented to the Agency's policy regarding{" "}
-                                  <strong>ATTENDANCE</strong> and{" "}
-                                  <strong>ABSENTEEISM,</strong> and I agree to
-                                  follow all guidelines, both written and
-                                  verbal. I understand that, if the guidelines,
-                                  policies and procedures are not followed, that
-                                  I may be immediately terminated. I also had
-                                  the opportunity to ask questions regarding
-                                  this policy and I know where it's located for
-                                  future reference.
+                                  The Agency will not tolerate any form of
+                                  sexual harassment from any of its employees.
+                                  The Agency encourages that any behavior which
+                                  could be construed as sexual harassment be
+                                  reported immediately to the Supervisor and/or
+                                  Administrator. There is no need to fear
+                                  retaliation. Both females and males can be
+                                  sexually harassed when exposed to unwelcome
+                                  sexual advances or to a pattern of verbal
+                                  abuse, threatening, crude, impolite, or
+                                  unprofessional conduct.
+                                  <br />
                                 </p>
                               </div>
                             </div>
@@ -360,8 +250,54 @@ export default function AttendanceForms() {
                             </div>
                           </div>
                         )}
-
-                        {/* Step 4: Signature */}
+                        {currentStep === 3 && (
+                          <div className="step-content">
+                            <h4 className="step-title">SEXUAL HARASSMENT</h4>
+                            <div className="row">
+                              <div className="col-12">
+                                <p>
+                                  ● Quid pro quo sexual harassment is also
+                                  against company policy.
+                                  <br />
+                                  ● The Agency encourages and urges an employee
+                                  to come forward and discuss any sexual
+                                  harassment that may have occured with an
+                                  Administrator.
+                                  <br />
+                                  ● Every complaint will be taken seriously and
+                                  investigated immediately. Investigations will
+                                  be documented.
+                                  <br />
+                                  ● Any employee involved in a sexual harassment
+                                  complaint will have a full opportunity to give
+                                  a full account of their recollection of the
+                                  incident or incidents.
+                                  <br />
+                                  ● The incident(s) will be investigated
+                                  thoroughly and appropriate action will be
+                                  taken.
+                                  <br />
+                                </p>
+                              </div>
+                            </div>
+                            <div className="step-actions mt-4">
+                              <button
+                                type="button"
+                                className="btn btn-secondary me-2"
+                                onClick={prevStep}
+                              >
+                                Previous
+                              </button>
+                              <button
+                                type="button"
+                                className="btn btn-primary"
+                                onClick={nextStep}
+                              >
+                                Next
+                              </button>
+                            </div>
+                          </div>
+                        )}
                         {currentStep === 4 && (
                           <div className="step-content">
                             <h4 className="step-title">Signature</h4>
@@ -439,7 +375,6 @@ export default function AttendanceForms() {
                           </div>
                         )}
 
-                        {/* Step 5: Success */}
                         {currentStep === 5 && (
                           <div className="step-content text-center py-5">
                             <div className="success-icon mb-4">
@@ -466,8 +401,7 @@ export default function AttendanceForms() {
           </div>
         </div>
       </div>
-
-      <style jsx>{`
+      <style jsx="true">{`
         .progress-container {
           padding: 20px 0;
         }

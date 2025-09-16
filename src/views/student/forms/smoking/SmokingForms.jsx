@@ -6,24 +6,19 @@ import SignatureCanvas from "react-signature-canvas";
 import Cookies from "js-cookie";
 import { useState, useRef } from "react";
 
-export default function EmployeeOrientationForms({
-  fullname,
-  empApp,
-  empOrientation,
-}) {
+export default function SmokingForms({ fullname }) {
   const [currentStep, setCurrentStep] = useState(1);
-  const sigCanvas = useRef({});
+  const sigCanvas = useRef(null);
+  const signatureDataRef = useRef(""); // Use ref for signature data
   const [errors, setErrors] = useState({});
   const [successMsg, setSuccessMsg] = useState("");
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({ dateOfOrientation: "" });
+  const [formData, setFormData] = useState({});
   const apiBase = import.meta.env.VITE_API_URL;
+
   const clearSignature = () => {
     sigCanvas.current.clear();
-    setFormData((prev) => ({
-      ...prev,
-      signature: "",
-    }));
+    signatureDataRef.current = ""; // Clear the ref instead of state
   };
 
   const handleOnChange = (e) => {
@@ -55,19 +50,20 @@ export default function EmployeeOrientationForms({
       return;
     }
 
+    // Get signature data only when submitting
     const signatureData = sigCanvas.current.toDataURL("image/png");
-    setFormData((prev) => ({
-      ...prev,
-      signature: signatureData,
-    }));
+    signatureDataRef.current = signatureData;
 
     try {
       const response = await fetch(
-        `${apiBase}/api/user/employee-orientation-form`,
+        `${apiBase}/api/user/smoking-in-the-workplace-forms`,
         {
           method: "POST",
           credentials: "include",
-          body: JSON.stringify({ ...formData, signature: signatureData }),
+          body: JSON.stringify({
+            ...formData,
+            signature: signatureDataRef.current, // Use the ref value
+          }),
           headers: {
             "Content-Type": "application/json",
             Accept: "application/json",
@@ -83,11 +79,10 @@ export default function EmployeeOrientationForms({
         setErrors(data.errors || { general: data.message });
         return;
       }
-
-      setFormData({ dateOfOrientation: "" });
+      setErrors({});
       setSuccessMsg(data.message);
-      setCurrentStep(5); // Success step
-      //delay for 5sec then relaod page
+      setCurrentStep(3); // Success step
+      // Delay for 4sec then reload page
       setTimeout(() => window.location.reload(), 4000);
     } catch (err) {
       setErrors({ general: err.message });
@@ -97,19 +92,15 @@ export default function EmployeeOrientationForms({
   };
 
   // Progress steps
-  const steps = [
-    "Personal Information",
-    "Orientation With HRs",
-    "Orientation With Management",
-    "Signature",
-    "Success",
-  ];
-
+  const steps = ["Smoking in the workplace", "Signature", "Success"];
   return (
     <>
-      <title>Employee Orientation - 1staccess Home Care</title>
+      <title>
+        Employee Notification of Policy: Smoking in The Workplace - 1staccess
+        Home Care
+      </title>
 
-      <div className="dashboard">
+      <div class="dashboard">
         <div id="main-wrapper">
           <UserHeader />
           <UserSidebar />
@@ -120,11 +111,11 @@ export default function EmployeeOrientationForms({
                 <div className="row align-items-center justify-content-between">
                   <div className="col-md-6">
                     <div className="page-title-content">
-                      <h3>Employee Orientation</h3>
-                      <p className="mb-2">Fill all required (*) fields</p>
+                      <h3>Smoking in The Workplace</h3>
+                      <p className="mb-2">Fill all required(*) fields</p>
                     </div>
                   </div>
-                  <div className="col-auto">
+                  <div class="col-auto">
                     <div className="breadcrumbs">
                       <Link to={PATHS.USER_DASHBOARD}>Home</Link>
                       <span>
@@ -134,8 +125,9 @@ export default function EmployeeOrientationForms({
                       <span>
                         <i className="ri-arrow-right-s-line"></i>
                       </span>
-                      <Link to={PATHS.USER_EMPLOYEE_ORIENTATION_FORM}>
-                        Employee Orientation
+                      <Link to={PATHS.USER_REPORTING_FORM}>
+                        Employee Notification of Policy: Smoking in The
+                        Workplace
                       </Link>
                     </div>
                   </div>
@@ -167,80 +159,36 @@ export default function EmployeeOrientationForms({
                 <p className="alert alert-danger"> {errors.general} </p>
               )}
 
-              {errors.dateOfOrientation && (
-                <p className="alert alert-danger">
-                  {" "}
-                  {errors.dateOfOrientation[0]}{" "}
-                </p>
-              )}
-
-              {errors.signature && (
-                <p className="alert alert-danger"> {errors.signature[0]} </p>
-              )}
-
-              <div className="row">
-                <div className="col-12">
-                  <div className="card">
-                    <div className="card-body">
+              <div class="row">
+                <div class="col-12">
+                  <div class="card ">
+                    <div class="card-body">
                       <form onSubmit={handleFormSubmit}>
                         {currentStep === 1 && (
                           <div className="step-content">
-                            <h4 className="step-title">Personal Info</h4>
+                            <h4 className="step-title">DEFINITION</h4>
                             <div className="row">
-                              <div className="col-md-4">
-                                <p>
-                                  Employee Name: <u> {fullname} </u>
-                                </p>
-                              </div>
-
-                              {/*  */}
-                              <div className="col-md-4">
-                                <p>
-                                  Postion: <u> {empApp && empApp?.position} </u>
-                                </p>
-                              </div>
-                              {/*  */}
-                              <div className="col-md-4">
-                                <p>
-                                  Date of Hire:{" "}
-                                  <u>
-                                    {" "}
-                                    {empApp && empApp?.employee_hire_date}{" "}
-                                  </u>
-                                </p>
-                              </div>
-                              {/*  */}
                               <div className="col-md-12">
-                                {empOrientation &&
-                                empOrientation.dateOfOrientation ? (
-                                  <p>
-                                    Date of Hire:{" "}
-                                    <u> {empOrientation.dateOfOrientation} </u>
-                                  </p>
-                                ) : (
-                                  <>
-                                    <label
-                                      for="inputState"
-                                      className="form-label"
-                                    >
-                                      Date of Orientation
-                                    </label>
-                                    <input
-                                      type="date"
-                                      className="form-control"
-                                      name="dateOfOrientation"
-                                      autoComplete="off"
-                                      onChange={handleOnChange}
-                                    />
-                                    {errors.dateOfOrientation && (
-                                      <small className="text-danger">
-                                        {errors.dateOfOrientation[0]}
-                                      </small>
-                                    )}
-                                  </>
-                                )}
+                                <p>
+                                  Employee Name: <u>{fullname}</u>
+                                </p>
+
+                                <p>
+                                  It is the policy of the Agency that smoking
+                                  will not be allowed in areas where that can be
+                                  observed by clients or the public. The
+                                  employee may smoke in approved areas, if any.
+                                </p>
+                                <p>
+                                  Smoking and the use of tobacco products are
+                                  prohibited at all times and on all property
+                                  owned, or under the control of 1st Access Home
+                                  Care, including, but not limited to indoor and
+                                  outdoor grounds, walkways and sidewalks,
+                                  parking lots, company vehicles. This policy is
+                                  in effect on the client's property as well.
+                                </p>
                               </div>
-                              {/*  */}
                             </div>
                             <div className="step-actions mt-20">
                               <button
@@ -253,115 +201,7 @@ export default function EmployeeOrientationForms({
                             </div>
                           </div>
                         )}
-
                         {currentStep === 2 && (
-                          <div className="step-content">
-                            <h4 className="step-title">
-                              GENERAL ORIENTATION WITH HUMAN RESOURCES
-                            </h4>
-                            <div className="row">
-                              <div className="col-12">
-                                <h5>
-                                  Unacceptable conduct shall include but is not
-                                  limited to the following:
-                                </h5>
-                                <ol>
-                                  <li>
-                                    ➢ HIPAA Privacy Regulations - Review
-                                    agency’s HIPAA Policy
-                                  </li>
-
-                                  <li>
-                                    ➢ Discuss policies and procedures in the
-                                    agency’s Policies and Procedures Manual with
-                                    focus on new and added updated policies and
-                                    review policy and procedure examination.
-                                  </li>
-
-                                  <li>
-                                    ➢ Review employee benefits as applicable to
-                                    various employee statuses{" "}
-                                  </li>
-
-                                  <li>
-                                    ➢ Review complaint and grievances procedures
-                                  </li>
-
-                                  <li>➢ Review sexual harassment policy.</li>
-                                </ol>
-                              </div>
-                            </div>
-                            <div className="step-actions mt-4">
-                              <button
-                                type="button"
-                                className="btn btn-secondary me-2"
-                                onClick={prevStep}
-                              >
-                                Previous
-                              </button>
-                              <button
-                                type="button"
-                                className="btn btn-primary"
-                                onClick={nextStep}
-                              >
-                                Next
-                              </button>
-                            </div>
-                          </div>
-                        )}
-
-                        {currentStep === 3 && (
-                          <div className="step-content">
-                            <h4 className="step-title">
-                              GENERAL ORIENTATION WITH MANAGEMENT:
-                            </h4>
-                            <div className="row">
-                              <div className="col-12">
-                                <h5>
-                                  Unacceptable conduct shall include but is not
-                                  limited to the following:
-                                </h5>
-                                <ol>
-                                  <li>
-                                    ➢ Instructive memos from Supervisor to home
-                                    care staff.
-                                  </li>
-
-                                  <li>➢ Sample Visit Notes</li>
-
-                                  <li>➢ Quality Management Process</li>
-
-                                  <li>➢ OSHA Infection Control</li>
-
-                                  <li>➢ Skills Checklist</li>
-
-                                  <li>
-                                    ➢ Detecting Patient Abuse: Child Abuse and
-                                    Abuse of the Elderly
-                                  </li>
-                                </ol>
-                              </div>
-                            </div>
-                            <div className="step-actions mt-4">
-                              <button
-                                type="button"
-                                className="btn btn-secondary me-2"
-                                onClick={prevStep}
-                              >
-                                Previous
-                              </button>
-                              <button
-                                type="button"
-                                className="btn btn-primary"
-                                onClick={nextStep}
-                              >
-                                Next
-                              </button>
-                            </div>
-                          </div>
-                        )}
-
-                        {currentStep === 4 && (
                           <div className="step-content">
                             <h4 className="step-title">Signature</h4>
                             <div className="row">
@@ -438,7 +278,7 @@ export default function EmployeeOrientationForms({
                           </div>
                         )}
 
-                        {currentStep === 5 && (
+                        {currentStep === 3 && (
                           <div className="step-content text-center py-5">
                             <div className="success-icon mb-4">
                               <i

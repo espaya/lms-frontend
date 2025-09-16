@@ -86,17 +86,14 @@ export default function EmployeeAgreementForm() {
       const data = await response.json();
 
       if (!response.ok) {
-        if (data.errors) {
-          setErrors(data.errors);
-        } else {
-          setErrors({ general: data.message });
-        }
-      } else {
-        setSuccessMsg(data.message);
-        setCurrentStep(6); // Success step
-        // Delay for 4sec then reload page
-        setTimeout(() => window.location.reload(), 4000);
+        setErrors(data.errors || { general: data.message });
+        return;
       }
+
+      setSuccessMsg(data.message);
+      setCurrentStep(6); // Success step
+      // Delay for 4sec then reload page
+      setTimeout(() => window.location.reload(), 4000);
     } catch (err) {
       setErrors({ general: err.message });
     } finally {

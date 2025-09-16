@@ -1,15 +1,15 @@
 import Cookies from "js-cookie";
 
-const FetchConfidentiality = async (
-  setLoading,
+const FetchEmployeePolicyProcedure = async (
+  setPolicy,
   setErrors,
-  apiBase,
-  setConfidentiality
+  setLoading,
+  apiBase
 ) => {
   setLoading(true);
   try {
     const response = await fetch(
-      `${apiBase}/api/user/confidentiality-forms/get`,
+      `${apiBase}/api/user/policy-and-procedure-forms/get`,
       {
         method: "GET",
         credentials: "include",
@@ -22,11 +22,13 @@ const FetchConfidentiality = async (
     );
 
     const data = await response.json();
+
     if (!response.ok) {
-      setErrors({ general: data.message });
+      setErrors({ general: err.message });
       return;
     }
-    setConfidentiality(data);
+
+    setPolicy(data);
   } catch (err) {
     setErrors({ general: err.message });
   } finally {
@@ -34,4 +36,4 @@ const FetchConfidentiality = async (
   }
 };
 
-export default FetchConfidentiality;
+export default FetchEmployeePolicyProcedure;
