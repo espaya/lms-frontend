@@ -44,6 +44,7 @@ import InfectionControl from "./views/student/forms/InfectionControl";
 import HHA from "./views/student/forms/HHA";
 import HealthSafety from "./views/student/forms/HealthSafety";
 import CellularUse from "./views/student/forms/CellularUse";
+import SingleUserForms from "./views/admin/forms/SingleUserForms";
 
 // Centralized route configuration with metadata
 export const ROUTE_CONFIG = {
@@ -195,6 +196,16 @@ export const ROUTE_CONFIG = {
     roles: ["USER"],
   },
 
+  // Signed forms for admin
+  SINGLE_USER_FORMS: {
+    path: "/admin/dashboard/users/:username/forms",
+    element: <SingleUserForms />,
+    name: "Single User Forms",
+    isProtected: true,
+    roles: ["ADMIN"], // ✅ restrict to ADMIN only
+  },
+  // End signed forms for admin
+
   // User application forms
   USER_FORMS: {
     path: "/user/dashboard/forms",
@@ -308,8 +319,6 @@ export const ROUTE_CONFIG = {
     roles: ["USER"],
   },
 
-
-
   USER_HHA_FORM: {
     path: "/user/dashboard/forms/hha-forms",
     element: <HHA />,
@@ -389,6 +398,8 @@ export const ROUTE_CONFIG = {
     isProtected: true,
     roles: ["USER"],
   },
+
+  // User forms end here
 
   NOT_FOUND: {
     path: "*",

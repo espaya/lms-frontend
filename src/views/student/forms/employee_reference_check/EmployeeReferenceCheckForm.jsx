@@ -4,16 +4,13 @@ import { Link } from "react-router-dom";
 import { PATHS } from "../../../../router";
 import SignatureCanvas from "react-signature-canvas";
 import Cookies from "js-cookie";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 
 export default function EmployeeAgreementForm({ fullname }) {
   const [currentStep, setCurrentStep] = useState(1);
   const sigCanvas = useRef(null);
-  const signatureDataRef = useRef(""); // Use ref for signature data
   const companySigCanvas = useRef(null);
-  const companyDataRef = useRef("");
   const agencyRepCanvas = useRef(null);
-  const agencyRepDataRef = useRef("");
   const [errors, setErrors] = useState({});
   const [successMsg, setSuccessMsg] = useState("");
   const [loading, setLoading] = useState(false);
@@ -28,22 +25,43 @@ export default function EmployeeAgreementForm({ fullname }) {
     name_of_company: "",
     time_off: "",
     rep_title: "",
+    signature: "", // Store signature data in state
+    company_signature: "", // Store company signature data in state
+    rep_signature: "", // Store agency rep signature data in state
   });
   const apiBase = import.meta.env.VITE_API_URL;
 
+  // Initialize signature pads when components are ready
+  useEffect(() => {
+    if (sigCanvas.current && formData.signature) {
+      sigCanvas.current.fromDataURL(formData.signature);
+    }
+    if (companySigCanvas.current && formData.company_signature) {
+      companySigCanvas.current.fromDataURL(formData.company_signature);
+    }
+    if (agencyRepCanvas.current && formData.rep_signature) {
+      agencyRepCanvas.current.fromDataURL(formData.rep_signature);
+    }
+  }, [
+    currentStep,
+    formData.signature,
+    formData.company_signature,
+    formData.rep_signature,
+  ]);
+
   const clearSignature = () => {
     sigCanvas.current.clear();
-    signatureDataRef.current = ""; // Clear the ref instead of state
+    setFormData((prev) => ({ ...prev, signature: "" }));
   };
 
   const clearCompanySignature = () => {
     companySigCanvas.current.clear();
-    companyDataRef.current = "";
+    setFormData((prev) => ({ ...prev, company_signature: "" }));
   };
 
   const clearAgencyRepSignature = () => {
     agencyRepCanvas.current.clear();
-    agencyRepDataRef.current = "";
+    setFormData((prev) => ({ ...prev, rep_signature: "" }));
   };
 
   const handleOnChange = (e) => {
@@ -53,7 +71,43 @@ export default function EmployeeAgreementForm({ fullname }) {
     }));
   };
 
+  const captureSignature = () => {
+    if (!sigCanvas.current.isEmpty()) {
+      const signatureData = sigCanvas.current.toDataURL("image/png");
+      setFormData((prev) => ({ ...prev, signature: signatureData }));
+    }
+  };
+
+  const captureCompanySignature = () => {
+    if (companySigCanvas.current && !companySigCanvas.current.isEmpty()) {
+      const signatureData = companySigCanvas.current.toDataURL("image/png");
+      setFormData((prev) => ({ ...prev, company_signature: signatureData }));
+    }
+  };
+
+  const captureAgencyRepSignature = () => {
+    if (agencyRepCanvas.current && !agencyRepCanvas.current.isEmpty()) {
+      const signatureData = agencyRepCanvas.current.toDataURL("image/png");
+      setFormData((prev) => ({ ...prev, rep_signature: signatureData }));
+    }
+  };
+
   const nextStep = () => {
+    // Capture signatures before moving to next step
+    if (
+      currentStep === 2 &&
+      formData.received_by === "Fax" &&
+      companySigCanvas.current
+    ) {
+      captureCompanySignature();
+    }
+    if (currentStep === 3 && agencyRepCanvas.current) {
+      captureAgencyRepSignature();
+    }
+    if (currentStep === 4 && sigCanvas.current) {
+      captureSignature();
+    }
+
     setCurrentStep(currentStep + 1);
     window.scrollTo(0, 0);
   };
@@ -68,28 +122,15 @@ export default function EmployeeAgreementForm({ fullname }) {
     setLoading(true);
     setErrors({});
 
-    // Capture signature
-    if (sigCanvas.current.isEmpty()) {
+    // Capture signature before submitting
+    captureSignature();
+
+    // Validate signature
+    if (!formData.signature) {
       setErrors({ signature: "Signature is required" });
       setLoading(false);
       return;
     }
-
-    if (formData.received_by === "Fax" && companySigCanvas.current.isEmpty()) {
-      setErrors({ company_signature: "Company signature if required" });
-    }
-
-    // Get signature data only when submitting
-    const signatureData = sigCanvas.current.toDataURL("image/png");
-    signatureDataRef.current = signatureData;
-
-    const companySignatureData =
-      companySigCanvas.current.toDataUrl("image/png");
-    companyDataRef.current = companySignatureData;
-
-    const agencyRepSignatureData =
-      agencyRepCanvas.current.toDataURL("image/png");
-    agencyRepDataRef.current = agencyRepSignatureData;
 
     try {
       const response = await fetch(
@@ -97,12 +138,7 @@ export default function EmployeeAgreementForm({ fullname }) {
         {
           method: "POST",
           credentials: "include",
-          body: JSON.stringify({
-            ...formData,
-            signature: signatureDataRef.current, // Use the ref value
-            company_signature: companyDataRef.current,
-            rep_signature: agencyRepDataRef.current,
-          }),
+          body: JSON.stringify(formData),
           headers: {
             "Content-Type": "application/json",
             Accept: "application/json",
@@ -113,7 +149,7 @@ export default function EmployeeAgreementForm({ fullname }) {
       );
 
       const data = await response.json();
-     if (!response.ok) {
+      if (!response.ok) {
         setErrors(data.errors || { general: data.message });
         return;
       }
@@ -212,16 +248,16 @@ export default function EmployeeAgreementForm({ fullname }) {
                               </div>
                               <div className="col-md-6 mt-20">
                                 <div className="form-group">
-                                  <label for="inputAddress" class="form-label">
+                                  <label className="form-label">
                                     Company Contacted
                                   </label>
-                                  <div class="form-control-wrap">
+                                  <div className="form-control-wrap">
                                     <input
                                       name="company_contacted"
-                                      value=""
+                                      value={formData.company_contacted}
                                       type="text"
                                       className="form-control"
-                                      autocomplete="off"
+                                      autoComplete="off"
                                       onChange={handleOnChange}
                                     />
                                   </div>
@@ -229,16 +265,14 @@ export default function EmployeeAgreementForm({ fullname }) {
                               </div>
                               <div className="col-md-6 mt-20">
                                 <div className="form-group">
-                                  <label for="inputAddress" class="form-label">
-                                    Mr/Mrs
-                                  </label>
-                                  <div class="form-control-wrap">
+                                  <label className="form-label">Mr/Mrs</label>
+                                  <div className="form-control-wrap">
                                     <input
                                       name="employer_name"
-                                      value=""
+                                      value={formData.employer_name}
                                       type="text"
                                       className="form-control "
-                                      autocomplete="off"
+                                      autoComplete="off"
                                       onChange={handleOnChange}
                                     />
                                   </div>
@@ -265,46 +299,43 @@ export default function EmployeeAgreementForm({ fullname }) {
                               </div>
                               <div className="col-md-4 mt-20">
                                 <div className="form-group">
-                                  <label for="inputCity" className="form-label">
-                                    From
-                                  </label>
+                                  <label className="form-label">From</label>
                                   <div className="form-control-wrap">
                                     <input
                                       name="from_date"
-                                      value=""
+                                      value={formData.from_date}
                                       type="date"
                                       className="form-control"
+                                      onChange={handleOnChange}
                                     />
                                   </div>
                                 </div>
                               </div>
                               <div className="col-md-4 mt-20">
                                 <div className="form-group">
-                                  <label for="inputCity" className="form-label">
-                                    To
-                                  </label>
+                                  <label className="form-label">To</label>
                                   <div className="form-control-wrap">
                                     <input
                                       name="to_date"
-                                      value=""
+                                      value={formData.to_date}
                                       type="date"
                                       className="form-control"
+                                      onChange={handleOnChange}
                                     />
                                   </div>
                                 </div>
                               </div>
                               <div className="col-md-4 mt-20">
                                 <div className="form-group">
-                                  <label
-                                    for="inputState"
-                                    className="form-label"
-                                  >
+                                  <label className="form-label">
                                     Eligible For Hire?
                                   </label>
                                   <div className="form-control-wrap">
                                     <select
                                       name="eligible_for_hire"
                                       className="form-select"
+                                      value={formData.eligible_for_hire}
+                                      onChange={handleOnChange}
                                     >
                                       <option value="">Choose...</option>
                                       <option value="Yes">Yes</option>
@@ -315,13 +346,13 @@ export default function EmployeeAgreementForm({ fullname }) {
                               </div>
                               <div className="col-md-12 mt-20">
                                 <div className="form-group">
-                                  <label for="inputZip" className="form-label">
-                                    Comments
-                                  </label>
+                                  <label className="form-label">Comments</label>
                                   <div className="form-control-wrap">
                                     <textarea
                                       name="comments"
                                       className="form-control"
+                                      value={formData.comments}
+                                      onChange={handleOnChange}
                                       aria-label="With textarea"
                                     />
                                   </div>
@@ -347,16 +378,14 @@ export default function EmployeeAgreementForm({ fullname }) {
                             <div className="row">
                               <div className="col-md-6 mt-20">
                                 <div className="form-group">
-                                  <label
-                                    for="inputState"
-                                    className="form-label"
-                                  >
+                                  <label className="form-label">
                                     Information Was Received By
                                   </label>
                                   <div className="form-control-wrap">
                                     <select
                                       name="received_by"
                                       className="form-select"
+                                      value={formData.received_by}
                                       onChange={handleOnChange}
                                     >
                                       <option value="">Choose...</option>
@@ -369,16 +398,17 @@ export default function EmployeeAgreementForm({ fullname }) {
                               </div>
                               <div className="col-md-6 mt-20">
                                 <div className="form-group">
-                                  <label for="inputZip" className="form-label">
+                                  <label className="form-label">
                                     Name of Company
                                   </label>
                                   <div className="form-control-wrap">
                                     <input
                                       name="name_of_company"
-                                      value=""
+                                      value={formData.name_of_company}
                                       type="text"
                                       className="form-control"
-                                      autocomplete="off"
+                                      autoComplete="off"
+                                      onChange={handleOnChange}
                                     />
                                   </div>
                                 </div>
@@ -415,11 +445,12 @@ export default function EmployeeAgreementForm({ fullname }) {
                                             penColor="black"
                                             minWidth={2}
                                             maxWidth={3}
+                                            onEnd={captureCompanySignature}
                                           />
                                         </div>
-                                        {errors.signature && (
+                                        {errors.company_signature && (
                                           <small className="text-danger mt-2">
-                                            {errors.signature}
+                                            {errors.company_signature}
                                           </small>
                                         )}
                                       </div>
@@ -494,11 +525,12 @@ export default function EmployeeAgreementForm({ fullname }) {
                                           penColor="black"
                                           minWidth={2}
                                           maxWidth={3}
+                                          onEnd={captureAgencyRepSignature}
                                         />
                                       </div>
-                                      {errors.signature && (
+                                      {errors.rep_signature && (
                                         <small className="text-danger mt-2">
-                                          {errors.signature}
+                                          {errors.rep_signature}
                                         </small>
                                       )}
                                     </div>
@@ -517,16 +549,17 @@ export default function EmployeeAgreementForm({ fullname }) {
                               </div>
                               <div className="col-md-12 mt-20">
                                 <div className="form-group">
-                                  <label for="inputZip" className="form-label">
+                                  <label className="form-label">
                                     Agency Representative's Title
                                   </label>
                                   <div className="form-control-wrap">
                                     <input
                                       name="rep_title"
-                                      value=""
+                                      value={formData.rep_title}
                                       type="text"
                                       className="form-control"
-                                      autocomplete="off"
+                                      autoComplete="off"
+                                      onChange={handleOnChange}
                                     />
                                   </div>
                                 </div>
@@ -586,6 +619,7 @@ export default function EmployeeAgreementForm({ fullname }) {
                                           penColor="black"
                                           minWidth={2}
                                           maxWidth={3}
+                                          onEnd={captureSignature}
                                         />
                                       </div>
                                       {errors.signature && (
@@ -691,7 +725,7 @@ export default function EmployeeAgreementForm({ fullname }) {
           justify-content: center;
           margin-bottom: 8px;
           font-weight: bold;
-          color: #6c757d;
+          color: "✓";
         }
         .step-label {
           font-size: 0.875rem;
@@ -748,6 +782,10 @@ export default function EmployeeAgreementForm({ fullname }) {
           .progress-step {
             margin: 0 5px 15px;
           }
+        }
+
+        .mt-20 {
+          margin-top: 20px;
         }
       `}</style>
     </>

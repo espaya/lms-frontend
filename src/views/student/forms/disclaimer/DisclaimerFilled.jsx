@@ -148,13 +148,20 @@ export default function DisclaimerFilled({ data, fullname }) {
 
                       {/*  */}
                     </div>
-                    <div className="col-md3 mt-20">
+                    <div className="col-md-3 mt-20">
                       <button
                         onClick={printContent}
                         className="btn btn-primary btn-lg"
                       >
                         Print
                       </button>
+                      <Link
+                        to={PATHS.USER_FORMS}
+                        style={{ marginLeft: "10px" }}
+                        className="btn btn-info btn-lg"
+                      >
+                        Back
+                      </Link>
                     </div>
                   </div>
                 </div>

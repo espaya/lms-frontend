@@ -7,6 +7,7 @@ export default function Nav({ username }) {
 
   const profilePath = PATHS.SINGLE_USER.replace(":username", username);
   const quizzesPath = PATHS.SINGLE_USER_QUIZZES.replace(":username", username);
+  const formsPath = PATHS.SINGLE_USER_FORMS.replace(":username", username);
 
   return (
     <div className="col-md-3">
@@ -28,6 +29,13 @@ export default function Nav({ username }) {
           >
             <i className="ri-arrow-right-s-line" />
             Quizzes
+          </a>
+        </li>
+
+        <li className={location.pathname === formsPath ? "active" : ""}>
+          <a onClick={() => navigate(formsPath)} style={{ cursor: "pointer" }}>
+            <i className="ri-arrow-right-s-line" />
+            Forms
           </a>
         </li>
       </ul>

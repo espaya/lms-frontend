@@ -21,7 +21,7 @@ export default function EmployeeReferenceCheck() {
     <>
       {loading && <Spinner />}
       {data ? (
-        <EmployeeReferenceCheckFilled data={reference} fullname={fullname} />
+        <EmployeeReferenceCheckFilled data={data} fullname={fullname} />
       ) : (
         <EmployeeReferenceCheckForm fullname={fullname} />
       )}
