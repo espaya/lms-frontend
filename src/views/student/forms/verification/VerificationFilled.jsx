@@ -70,12 +70,78 @@ export default function VerificationFilled({ data, fullname }) {
                           Agency Phone: (+1) 804-818-3216
                         </p>
                         <h5 className="mt-4 mb-3">
-                          Universal Precautions Training Document
+                          Verification of Professional License
                         </h5>
                       </div>
                       <div className="step-content">
                         <div className="row">
-                          <div className="col-md-12"></div>
+                          <div className="col-md-12">
+                            <p>
+                              Employee Name: <b> {fullname} </b>
+                            </p>
+                            <p>
+                              {" "}
+                              Check Off Discipline Needing Verification:{" "}
+                              <b>{data.disciplines}</b>{" "}
+                            </p>
+                            <p>
+                              {" "}
+                              License Number: <b>{data.licenseNumber}</b>
+                            </p>
+                            <p>
+                              Expiration Date Of License:{" "}
+                              <b>{data.expirationDate}</b>
+                            </p>
+                            <p>
+                              {" "}
+                              Date Verified: <b>{data.dateVerified}</b>
+                            </p>
+                            <p>
+                              {" "}
+                              License Verified By:{" "}
+                              <b>{data.licenseVerifiedBy}</b>
+                            </p>
+                            <p>
+                              {" "}
+                              Action Outstanding:{" "}
+                              <b>{data.actionOutstanding}</b>
+                            </p>
+                            <p>
+                              {" "}
+                              Comments: <b>comments</b>
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="row">
+                        <div className="col-md-6 mt-20">
+                          <p>Signature:</p>
+                          {data?.signature ? (
+                            <img
+                              src={`${apiBase}/storage/signature/${data.signature}`}
+                              alt="Signature"
+                              style={{ width: "300px" }}
+                            />
+                          ) : (
+                            <p>
+                              <em>No signature provided</em>
+                            </p>
+                          )}
+                        </div>
+                        <div className="col-md-6 mt-50">
+                          <p>Date Signed: </p>
+                          <p>
+                            {data?.created_at
+                              ? new Date(data.created_at).toLocaleDateString(
+                                  "en-US",
+                                  {
+                                    year: "numeric",
+                                    month: "long",
+                                    day: "numeric",
+                                  }
+                                )
+                              : "N/A"}
+                          </p>
                         </div>
                       </div>
                     </div>

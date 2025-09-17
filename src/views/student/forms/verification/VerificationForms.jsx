@@ -33,13 +33,33 @@ export default function VerificationForms({ fullname }) {
   };
 
   const handleOnChange = (e) => {
-    setFormData((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
+    const { name, value, type, checked } = e.target;
+
+    if (type === "checkbox") {
+      // Handle checkbox inputs for disciplines
+      if (name === "disciplines[]") {
+        setFormData((prev) => {
+          const newDisciplines = checked
+            ? [...prev.disciplines, value]
+            : prev.disciplines.filter((d) => d !== value);
+
+          return {
+            ...prev,
+            disciplines: newDisciplines,
+          };
+        });
+      }
+    } else {
+      // Handle all other inputs
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
   };
 
   const nextStep = () => {
+    setErrors({});
     setCurrentStep(currentStep + 1);
     window.scrollTo(0, 0);
   };
@@ -54,7 +74,7 @@ export default function VerificationForms({ fullname }) {
     setLoading(true);
     setErrors({});
 
-    // Capture signature
+    // Only validate signature (as requested)
     if (sigCanvas.current.isEmpty()) {
       setErrors({ signature: "Signature is required" });
       setLoading(false);
@@ -62,10 +82,6 @@ export default function VerificationForms({ fullname }) {
     }
 
     const signatureData = sigCanvas.current.toDataURL("image/png");
-    setFormData((prev) => ({
-      ...prev,
-      signature: signatureData,
-    }));
 
     try {
       const response = await fetch(
@@ -93,17 +109,16 @@ export default function VerificationForms({ fullname }) {
         Swal.fire({
           icon: "error",
           title: "Error",
-          text: data.message,
+          text: data.message || "Failed to submit form",
         });
         return;
       }
 
       setSuccessMsg(data.message);
       setCurrentStep(3); // Success step
-      //delay for 5sec then relaod page
       setTimeout(() => window.location.reload(), 4000);
     } catch (err) {
-      setErrors({ general: err.message });
+      setErrors({ general: err.message || "An error occurred" });
     } finally {
       setLoading(false);
     }
@@ -111,6 +126,7 @@ export default function VerificationForms({ fullname }) {
 
   // Progress steps
   const steps = ["Form", "Signature", "Success"];
+
   return (
     <>
       <title>Verification of Professional License - 1staccess Home Care</title>
@@ -180,16 +196,10 @@ export default function VerificationForms({ fullname }) {
                       <form onSubmit={handleFormSubmit}>
                         {currentStep === 1 && (
                           <div className="step-content">
-                            <h4 className="step-title">
-                              {/* LESSON 1 - BLOOD BORNE INFECTION */}
-                            </h4>
                             <div className="row">
                               <div className="col-md-12">
                                 <div className="form-group">
-                                  <label
-                                    htmlFor="inputPassword4"
-                                    className="form-label"
-                                  >
+                                  <label className="form-label">
                                     Check Off Discipline Needing Verification
                                   </label>
                                   <br />
@@ -200,6 +210,9 @@ export default function VerificationForms({ fullname }) {
                                       id="checkboxRN"
                                       name="disciplines[]"
                                       value="RN"
+                                      checked={formData.disciplines.includes(
+                                        "RN"
+                                      )}
                                       onChange={handleOnChange}
                                     />
                                     <label
@@ -216,6 +229,9 @@ export default function VerificationForms({ fullname }) {
                                       id="checkboxLPN"
                                       name="disciplines[]"
                                       value="LPN"
+                                      checked={formData.disciplines.includes(
+                                        "LPN"
+                                      )}
                                       onChange={handleOnChange}
                                     />
                                     <label
@@ -232,6 +248,9 @@ export default function VerificationForms({ fullname }) {
                                       id="checkboxHHA"
                                       name="disciplines[]"
                                       value="HHA"
+                                      checked={formData.disciplines.includes(
+                                        "HHA"
+                                      )}
                                       onChange={handleOnChange}
                                     />
                                     <label
@@ -248,6 +267,9 @@ export default function VerificationForms({ fullname }) {
                                       id="checkboxCNA"
                                       name="disciplines[]"
                                       value="CNA"
+                                      checked={formData.disciplines.includes(
+                                        "CNA"
+                                      )}
                                       onChange={handleOnChange}
                                     />
                                     <label
@@ -256,20 +278,17 @@ export default function VerificationForms({ fullname }) {
                                     >
                                       CNA
                                     </label>
+                                    {errors.disciplines && (
+                                      <small className="text-danger">
+                                        {errors.disciplines[0]}
+                                      </small>
+                                    )}
                                   </div>
                                 </div>
-                                {errors.discplines && (
-                                  <small className="text-danger">
-                                    {errors.discplines[0]}
-                                  </small>
-                                )}
                               </div>
                               <div className="col-md-4 mt-20">
                                 <div className="form-group">
-                                  <label
-                                    htmlFor="inputPassword4"
-                                    className="form-label"
-                                  >
+                                  <label className="form-label">
                                     License Number
                                   </label>
                                   <div className="form-control-wrap">
@@ -281,20 +300,17 @@ export default function VerificationForms({ fullname }) {
                                       className="form-control"
                                       autoComplete="off"
                                     />
-                                    {errors.licenseNumber && (
-                                      <small className="text-danger">
-                                        {errors.licenseNumber[0]}
-                                      </small>
-                                    )}
                                   </div>
+                                  {errors.licenseNumber && (
+                                    <small className="text-danger">
+                                      {errors.licenseNumber[0]}
+                                    </small>
+                                  )}
                                 </div>
                               </div>
                               <div className="col-md-4 mt-20">
                                 <div className="form-group">
-                                  <label
-                                    htmlFor="inputAddress"
-                                    className="form-label"
-                                  >
+                                  <label className="form-label">
                                     Expiration Date Of License
                                   </label>
                                   <div className="form-control-wrap">
@@ -306,20 +322,17 @@ export default function VerificationForms({ fullname }) {
                                       className="form-control"
                                       autoComplete="off"
                                     />
-                                    {errors.expirationDate && (
-                                      <small className="text-danger">
-                                        {errors.expirationDate[0]}
-                                      </small>
-                                    )}
                                   </div>
+                                  {errors.expirationDate && (
+                                    <small className="text-danger">
+                                      {errors.expirationDate[0]}
+                                    </small>
+                                  )}
                                 </div>
                               </div>
                               <div className="col-md-4 mt-20">
                                 <div className="form-group">
-                                  <label
-                                    htmlFor="inputAddress"
-                                    className="form-label"
-                                  >
+                                  <label className="form-label">
                                     Date Verified
                                   </label>
                                   <div className="form-control-wrap">
@@ -331,26 +344,24 @@ export default function VerificationForms({ fullname }) {
                                       autoComplete="off"
                                       onChange={handleOnChange}
                                     />
-                                    {errors.dateVerified && (
-                                      <small className="text-danger">
-                                        {errors.dateVerified[0]}
-                                      </small>
-                                    )}
                                   </div>
+                                  {errors.dateVerified && (
+                                    <small className="text-danger">
+                                      {errors.dateVerified[0]}
+                                    </small>
+                                  )}
                                 </div>
                               </div>
                               <div className="col-md-6 mt-20">
                                 <div className="form-group">
-                                  <label
-                                    htmlFor="inputAddress"
-                                    className="form-label"
-                                  >
+                                  <label className="form-label">
                                     License Verified By
                                   </label>
                                   <div className="form-control-wrap">
                                     <select
                                       name="licenseVerifiedBy"
                                       className="form-select"
+                                      value={formData.licenseVerifiedBy}
                                       onChange={handleOnChange}
                                     >
                                       <option value="">Choose...</option>
@@ -368,10 +379,7 @@ export default function VerificationForms({ fullname }) {
                               </div>
                               <div className="col-md-6 mt-20">
                                 <div className="form-group">
-                                  <label
-                                    htmlFor="inputAddress"
-                                    className="form-label"
-                                  >
+                                  <label className="form-label">
                                     Action Outstanding
                                   </label>
                                   <div className="form-control-wrap">
@@ -379,6 +387,7 @@ export default function VerificationForms({ fullname }) {
                                       onChange={handleOnChange}
                                       name="actionOutstanding"
                                       className="form-select"
+                                      value={formData.actionOutstanding}
                                     >
                                       <option value="">Choose...</option>
                                       <option value="Yes">Yes</option>
@@ -394,7 +403,10 @@ export default function VerificationForms({ fullname }) {
                               </div>
                               <div className="col-md-12 mt-20">
                                 <div className="form-group">
-                                  <label htmlFor="textarea" className="form-label">
+                                  <label
+                                    htmlFor="textarea"
+                                    className="form-label"
+                                  >
                                     Comments
                                   </label>
                                   <div className="form-control-wrap">
@@ -407,7 +419,8 @@ export default function VerificationForms({ fullname }) {
                                   </div>
                                   {errors.comments && (
                                     <small className="text-danger">
-                                      {errors.comments[0]}
+                                      {" "}
+                                      {errors.comments[0]}{" "}
                                     </small>
                                   )}
                                 </div>
@@ -502,7 +515,7 @@ export default function VerificationForms({ fullname }) {
                             </div>
                           </div>
                         )}
-                        {/* Step 5: Success */}
+                        {/* Step 3: Success */}
                         {currentStep === 3 && (
                           <div className="step-content text-center py-5">
                             <div className="success-icon mb-4">
@@ -512,11 +525,13 @@ export default function VerificationForms({ fullname }) {
                               ></i>
                             </div>
                             <h3 className="text-success">
-                              {successMsg ? successMsg : ""}
+                              {successMsg
+                                ? successMsg
+                                : "Form submitted successfully!"}
                             </h3>
                             <p className="mb-4">
-                              Thank you for submitting your attendance form. We
-                              will review it and contact you soon.
+                              Thank you for submitting your verification form.
+                              We will review it and contact you soon.
                             </p>
                           </div>
                         )}
@@ -578,11 +593,7 @@ export default function VerificationForms({ fullname }) {
           color: white;
         }
         .progress-step.completed .step-number {
-          background-color: #198754;
-          color: white;
-        }
-        .progress-step.completed .step-number::after {
-          content: "✓";
+          background-color: "✓";
         }
         .step-title {
           border-bottom: 1px solid #dee2e6;
@@ -623,6 +634,10 @@ export default function VerificationForms({ fullname }) {
           .progress-step {
             margin: 0 5px 15px;
           }
+        }
+
+        .mt-20 {
+          margin-top: 20px;
         }
       `}</style>
     </>
