@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FetchEmployeeVerification from "../../../controller/user/forms/VerificationController";
 import Spinner from "../../../components/Spinner";
+import VerificationFilled from "./verification/VerificationFilled";
+import VerificationForms from "./verification/VerificationForms";
 
 export default function Verification() {
   const [verification, setVerification] = useState([]);
@@ -8,7 +10,21 @@ export default function Verification() {
   const [errors, setErrors] = useState({});
   const apiBase = import.meta.env.VITE_API_URL;
 
-//   FetchEmployeeVerification(setVerification, setLoading, setErrors, apiBase);
+  useEffect(() => {
+    FetchEmployeeVerification(setVerification, setLoading, setErrors, apiBase);
+  }, []);
 
-  return <> { loading && <Spinner/> } </>;
+  const data = verification?.verificationData;
+  const fullname = verification?.profileData;
+
+  return (
+    <>
+      {loading && <Spinner />}
+      {data ? (
+        <VerificationFilled data={data} fullname={fullname} />
+      ) : (
+        <VerificationForms fullname={fullname} />
+      )}
+    </>
+  );
 }

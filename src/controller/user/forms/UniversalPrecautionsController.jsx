@@ -1,7 +1,7 @@
 import Cookies from "js-cookie";
 
-const FetchEmployeeVerification = async (
-  setVerification,
+const FetchEmployeeUniversalPrecautions = async (
+  setPrecautions,
   setLoading,
   setErrors,
   apiBase
@@ -9,7 +9,7 @@ const FetchEmployeeVerification = async (
   setLoading(true);
   try {
     const response = await fetch(
-      `${apiBase}/api/user/verification-of-professional-license-forms/get`,
+      `${apiBase}/api/user/universal-precautions-forms/get`,
       {
         method: "GET",
         credentials: "include",
@@ -27,7 +27,8 @@ const FetchEmployeeVerification = async (
       setErrors({ general: data.message });
       return;
     }
-    setVerification(data);
+
+    setPrecautions(data);
   } catch (err) {
     setErrors({ general: err.message });
   } finally {
@@ -35,4 +36,4 @@ const FetchEmployeeVerification = async (
   }
 };
 
-export default FetchEmployeeVerification;
+export default FetchEmployeeUniversalPrecautions;
