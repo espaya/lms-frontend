@@ -71,7 +71,6 @@ export default function DisclosureFilled({ data, position, fullname }) {
                         </h4>
                       </div>
                       <div className="step-content">
-                        <h4 className="step-title">PREAMBLE</h4>
                         <div className="row">
                           <div className="col-12">
                             <p>
@@ -98,17 +97,138 @@ export default function DisclosureFilled({ data, position, fullname }) {
                               provided to and maintained at the exempt facility
                               for prospective employees and volunteers.
                             </p>
+                            <p>
+                              Mailing Address: <b>{data.mailing_address}</b>
+                            </p>
+                            <p>
+                              Position Applied For: <b> {position} </b>{" "}
+                            </p>
+                            <p>
+                              1. Have you ever been convicted of or are you the
+                              subject of pending charges for any of the
+                              following offenses: murder; malicious wounding by
+                              mob; abduction; abduction for immoral purposes;
+                              assault and bodily wounding; robbery; carjacking;
+                              extortion by threat; any felony stalking
+                              violation; sexual assault; arson; burglary; any
+                              felony violation relating to possession or
+                              distribution of drugs; drive by shooting; use of a
+                              machine gun in a crime of violence; aggressive use
+                              of a machine gun; use of a sawed-off shotgun in a
+                              crime of violence; pandering; crimes against
+                              nature involving children; incest; taking indecent
+                              liberties with children; abuse and neglect of
+                              children, including failing to secure medical
+                              attention for an injured child; obscenity
+                              offenses; possession of child pornography;
+                              electronic facilitation of pornography; abuse and
+                              neglect of incapacitated adults; employing or
+                              permitting a minor to assist in an act
+                              constituting an obscenity or related offence;
+                              delivery of drugs to prisoners; escape from jail;
+                              felonies by prisoners; within the Commonwealth or
+                              any equivalent offense outside the Commonwealth?{" "}
+                              <b> {data.convicted_outside_commonwealth} </b>
+                            </p>
+
+                            {data.outside_commonwealth_specify ===
+                              "Yes (Convicted)" ||
+                            data.outside_commonwealth_specify ===
+                              "Yes (Pending)" ? (
+                              <p>
+                                If Yes Specify Crimes:
+                                <b> {data.outside_commonwealth_specify} </b>
+                              </p>
+                            ) : (
+                              <p></p>
+                            )}
+
+                            <p>
+                              2. Have you been convicted of or are you the
+                              subject of a pending charge for any other felony
+                              in the five(5) years prior to the date of
+                              employment or volunteering?{" "}
+                              <b>{data.convicted_pending}</b>
+                            </p>
+
+                            {data.convicted_pending_specify ===
+                              "Yes (Convicted)" ||
+                            data.convicted_pending_specify ===
+                              "Yes (Pending)" ? (
+                              <p>
+                                If Yes Specify Crimes:
+                                <b> {data.convicted_pending_specify} </b>
+                              </p>
+                            ) : (
+                              <p></p>
+                            )}
+
+                            <p>
+                              3. Have you ever been the subject of a founded
+                              complaint of child abuse or neglect within or
+                              outside the Commonwealth?{" "}
+                              <b> {data.child_abuse} </b>
+                            </p>
                           </div>
                         </div>
-                        <div className="step-actions mt-2-">
-                          <button
-                            type="button"
-                            className="btn btn-primary"
-                            onClick={nextStep}
-                          >
-                            Next
-                          </button>
+                        <div className="row">
+                        <div className="col-md-6 mt-20">
+                          <p>Witness Signature:</p>
+                          {data?.wit_signature ? (
+                            <img
+                              src={`${apiBase}/storage/signature/${data.wit_signature}`}
+                              alt="Signature"
+                              style={{ width: "300px" }}
+                            />
+                          ) : (
+                            <p>
+                              <em>No signature provided</em>
+                            </p>
+                          )}
                         </div>
+                        <div className="col-md-6 mt-50">
+                          <p>Date Signed: </p>
+                          <p>
+                            {data?.created_at
+                              ? new Date(
+                                  data.created_at
+                                ).toLocaleDateString("en-US", {
+                                  year: "numeric",
+                                  month: "long",
+                                  day: "numeric",
+                                })
+                              : "N/A"}
+                          </p>
+                        </div>
+                        <div className="col-md-6 mt-20">
+                          <p>Applicant Signature:</p>
+                          {data?.signature ? (
+                            <img
+                              src={`${apiBase}/storage/signature/${data.signature}`}
+                              alt="Signature"
+                              style={{ width: "300px" }}
+                            />
+                          ) : (
+                            <p>
+                              <em>No signature provided</em>
+                            </p>
+                          )}
+                        </div>
+                        <div className="col-md-6 mt-50">
+                          <p>Date Signed: </p>
+                          <p>
+                            {data?.created_at
+                              ? new Date(
+                                  data.created_at
+                                ).toLocaleDateString("en-US", {
+                                  year: "numeric",
+                                  month: "long",
+                                  day: "numeric",
+                                })
+                              : "N/A"}
+                          </p>
+                        </div>
+                      </div>
                       </div>
                     </div>
                     <div className="col-md-3 mt-20">

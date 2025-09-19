@@ -4,13 +4,13 @@ import { Link } from "react-router-dom";
 import { PATHS } from "../../../../router";
 import SignatureCanvas from "react-signature-canvas";
 import Cookies from "js-cookie";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 
 export default function DisclosureForms({ fullname, position }) {
   const [successMsg, setSuccessMsg] = useState("");
   const [currentStep, setCurrentStep] = useState(1);
-  const sigCanvas = useRef({});
-  const witnessSigCanvas = useRef({});
+  const sigCanvas = useRef(null);
+  const witnessSigCanvas = useRef(null);
   const [formData, setFormData] = useState({
     mailing_address: "",
     convicted_outside_commonwealth: "",
@@ -18,13 +18,27 @@ export default function DisclosureForms({ fullname, position }) {
     convicted_pending: "",
     convicted_pending_specify: "",
     child_abuse: "",
+    signature: "", // Store signature data
+    wit_signature: "", // Store witness signature data
   });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const apiBase = import.meta.env.VITE_API_URL;
 
+  // Restore signatures when component mounts or step changes
+  useEffect(() => {
+    if (sigCanvas.current && formData.signature) {
+      sigCanvas.current.fromDataURL(formData.signature);
+    }
+    if (witnessSigCanvas.current && formData.wit_signature) {
+      witnessSigCanvas.current.fromDataURL(formData.wit_signature);
+    }
+  }, [currentStep, formData.signature, formData.wit_signature]);
+
   const clearSignature = () => {
-    sigCanvas.current.clear();
+    if (sigCanvas.current) {
+      sigCanvas.current.clear();
+    }
     setFormData((prev) => ({
       ...prev,
       signature: "",
@@ -32,7 +46,9 @@ export default function DisclosureForms({ fullname, position }) {
   };
 
   const clearWitnessSignature = () => {
-    witnessSigCanvas.current.clear();
+    if (witnessSigCanvas.current) {
+      witnessSigCanvas.current.clear();
+    }
     setFormData((prev) => ({
       ...prev,
       wit_signature: "",
@@ -54,7 +70,33 @@ export default function DisclosureForms({ fullname, position }) {
     }));
   };
 
+  const captureSignature = () => {
+    if (sigCanvas.current && !sigCanvas.current.isEmpty()) {
+      const signatureData = sigCanvas.current.toDataURL("image/png");
+      setFormData((prev) => ({ ...prev, signature: signatureData }));
+      return true;
+    }
+    return false;
+  };
+
+  const captureWitnessSignature = () => {
+    if (witnessSigCanvas.current && !witnessSigCanvas.current.isEmpty()) {
+      const signatureData = witnessSigCanvas.current.toDataURL("image/png");
+      setFormData((prev) => ({ ...prev, wit_signature: signatureData }));
+      return true;
+    }
+    return false;
+  };
+
   const nextStep = () => {
+    // Capture signatures before moving to next step
+    if (currentStep === 5) {
+      captureWitnessSignature();
+    }
+    if (currentStep === 6) {
+      captureSignature();
+    }
+
     setCurrentStep(currentStep + 1);
     window.scrollTo(0, 0);
   };
@@ -69,31 +111,22 @@ export default function DisclosureForms({ fullname, position }) {
     setLoading(true);
     setErrors({});
 
-    // Capture signature
-    if (sigCanvas.current.isEmpty()) {
+    // Capture signatures before submitting
+    captureSignature();
+    captureWitnessSignature();
+
+    // Validate signatures by checking the state data, not the capture function return
+    if (!formData.signature) {
       setErrors({ signature: "Signature is required" });
       setLoading(false);
       return;
     }
 
-    if (witnessSigCanvas.current.isEmpty()) {
+    if (!formData.wit_signature) {
       setErrors({ wit_signature: "Witness Signature is required" });
       setLoading(false);
       return;
     }
-
-    const signatureData = sigCanvas.current.toDataURL("image/png");
-    setFormData((prev) => ({
-      ...prev,
-      signature: signatureData,
-    }));
-
-    const witnessSignatureData =
-      witnessSigCanvas.current.toDataURL("image/png");
-    setFormData((prev) => ({
-      ...prev,
-      wit_signature: witnessSignatureData,
-    }));
 
     try {
       const response = await fetch(
@@ -101,11 +134,7 @@ export default function DisclosureForms({ fullname, position }) {
         {
           method: "POST",
           credentials: "include",
-          body: JSON.stringify({
-            ...formData,
-            signature: signatureData,
-            wit_signature: "",
-          }),
+          body: JSON.stringify(formData),
           headers: {
             "Content-Type": "application/json",
             Accept: "application/json",
@@ -174,9 +203,8 @@ export default function DisclosureForms({ fullname, position }) {
                         <i className="ri-arrow-right-s-line"></i>
                       </span>
                       <Link to={PATHS.USER_DISCLOSURE_FORM}>
-                        Sworn Disclosure Statemen
+                        Sworn Disclosure Statement
                       </Link>
-                      <a href="#">Leader Board</a>
                     </div>
                   </div>
                 </div>
@@ -245,7 +273,7 @@ export default function DisclosureForms({ fullname, position }) {
                                 </p>
                               </div>
                             </div>
-                            <div className="step-actions mt-2-">
+                            <div className="step-actions mt-20">
                               <button
                                 type="button"
                                 className="btn btn-primary"
@@ -262,10 +290,7 @@ export default function DisclosureForms({ fullname, position }) {
                             <div className="row">
                               <div className="col-md-6">
                                 <div className="form-group">
-                                  <label
-                                    for="inputEmail4"
-                                    className="form-label"
-                                  >
+                                  <label className="form-label">
                                     Mailing Address
                                   </label>
                                   <div className="form-control-wrap">
@@ -273,9 +298,9 @@ export default function DisclosureForms({ fullname, position }) {
                                       name="mailing_address"
                                       value={formData.mailing_address}
                                       type="text"
-                                      class="form-control"
+                                      className="form-control"
                                       placeholder="Current Mailing Adress Street, Apt No / City / State / Zip"
-                                      autocomplete="off"
+                                      autoComplete="off"
                                       onChange={handleOnChange}
                                     />
                                   </div>
@@ -283,10 +308,7 @@ export default function DisclosureForms({ fullname, position }) {
                               </div>
                               <div className="col-md-6">
                                 <div className="form-group">
-                                  <label
-                                    for="inputAddress"
-                                    className="form-label"
-                                  >
+                                  <label className="form-label">
                                     Position Applied For
                                   </label>
                                   <div className="form-control-wrap">
@@ -358,7 +380,10 @@ export default function DisclosureForms({ fullname, position }) {
                                     </p>
                                     <select
                                       name="convicted_outside_commonwealth"
-                                      class="form-select"
+                                      className="form-select"
+                                      value={
+                                        formData.convicted_outside_commonwealth
+                                      }
                                       onChange={handleOnChange}
                                     >
                                       <option value="">Select</option>
@@ -377,10 +402,7 @@ export default function DisclosureForms({ fullname, position }) {
                               {convicted && (
                                 <div className="col-md-12 mt-20">
                                   <div className="form-group">
-                                    <label
-                                      for="inputZip"
-                                      className="form-label"
-                                    >
+                                    <label className="form-label">
                                       If Yes Specify Crimes
                                     </label>
                                     <div className="form-control-wrap">
@@ -431,7 +453,8 @@ export default function DisclosureForms({ fullname, position }) {
                                   <div className="form-control-wrap">
                                     <select
                                       name="convicted_pending"
-                                      class="form-select"
+                                      className="form-select"
+                                      value={formData.convicted_pending}
                                       onChange={handleOnChange}
                                     >
                                       <option value="">Select</option>
@@ -448,10 +471,7 @@ export default function DisclosureForms({ fullname, position }) {
                               </div>
 
                               {convictedPending && (
-                                <div
-                                  className="col-md-12 mt-20"
-                                  id="convicted_pending_specify"
-                                >
+                                <div className="col-md-12 mt-20">
                                   <div className="form-group">
                                     <p>If Yes, Specify Crime(s)</p>
                                     <div className="form-control-wrap">
@@ -479,8 +499,8 @@ export default function DisclosureForms({ fullname, position }) {
                                   <div className="form-control-wrap">
                                     <select
                                       name="child_abuse"
-                                      id="inputState"
                                       className="form-select"
+                                      value={formData.child_abuse}
                                       onChange={handleOnChange}
                                     >
                                       <option value="">Choose...</option>
@@ -509,7 +529,7 @@ export default function DisclosureForms({ fullname, position }) {
                             </div>
                           </div>
                         )}
-                        {/* Step 4: Signature */}
+                        {/* Step 5: Witness Signature */}
                         {currentStep === 5 && (
                           <div className="step-content">
                             <h4 className="step-title">Witness Signature</h4>
@@ -517,7 +537,7 @@ export default function DisclosureForms({ fullname, position }) {
                               <div className="col-md-12">
                                 <div className="form-group">
                                   <label className="form-label">
-                                    Signature
+                                    Witness Signature
                                     <span className="text-danger">*</span>
                                   </label>
                                   <div className="flex-row">
@@ -533,7 +553,7 @@ export default function DisclosureForms({ fullname, position }) {
                                         }}
                                       >
                                         <SignatureCanvas
-                                          ref={sigCanvas}
+                                          ref={witnessSigCanvas}
                                           canvasProps={{
                                             className: "signature-canvas",
                                             style: {
@@ -545,11 +565,12 @@ export default function DisclosureForms({ fullname, position }) {
                                           penColor="black"
                                           minWidth={2}
                                           maxWidth={3}
+                                          onEnd={captureWitnessSignature}
                                         />
                                       </div>
-                                      {errors.signature && (
+                                      {errors.wit_signature && (
                                         <small className="text-danger mt-2">
-                                          {errors.signature}
+                                          {errors.wit_signature}
                                         </small>
                                       )}
                                     </div>
@@ -558,7 +579,7 @@ export default function DisclosureForms({ fullname, position }) {
                                         disabled={loading}
                                         type="button"
                                         className="btn btn-sm btn-outline-secondary"
-                                        onClick={clearSignature}
+                                        onClick={clearWitnessSignature}
                                       >
                                         <span>Clear Signature</span>
                                       </button>
@@ -586,7 +607,7 @@ export default function DisclosureForms({ fullname, position }) {
                             </div>
                           </div>
                         )}
-                        {/* Step 4: Signature */}
+                        {/* Step 6: Signature */}
                         {currentStep === 6 && (
                           <div className="step-content">
                             <h4 className="step-title">Signature</h4>
@@ -622,6 +643,7 @@ export default function DisclosureForms({ fullname, position }) {
                                           penColor="black"
                                           minWidth={2}
                                           maxWidth={3}
+                                          onEnd={captureSignature}
                                         />
                                       </div>
                                       {errors.signature && (
@@ -663,7 +685,7 @@ export default function DisclosureForms({ fullname, position }) {
                             </div>
                           </div>
                         )}
-                        {/* Step 5: Success */}
+                        {/* Step 7: Success */}
                         {currentStep === 7 && (
                           <div className="step-content text-center py-5">
                             <div className="success-icon mb-4">
@@ -676,7 +698,7 @@ export default function DisclosureForms({ fullname, position }) {
                               {successMsg ? successMsg : ""}
                             </h3>
                             <p className="mb-4">
-                              Thank you for submitting your attendance form. We
+                              Thank you for submitting your disclosure form. We
                               will review it and contact you soon.
                             </p>
                           </div>
