@@ -6,9 +6,11 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Spinner from "../../../components/Spinner";
 import FetchAllEmployeeForms from "../../../controller/admin/AllFormsController";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function SingleUserForms() {
   const { username } = useParams();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [allForms, setAllForms] = useState({});
@@ -23,6 +25,8 @@ export default function SingleUserForms() {
       username
     );
   }, [username, apiBase]);
+
+  console.log(allForms);
 
   // Format date for display
   const formatDate = (dateString) => {
@@ -54,110 +58,164 @@ export default function SingleUserForms() {
     return formatDate(dateString);
   };
 
+  // Safe function to get form URL
+  const getFormUrl = (pathObj) => {
+    if (!pathObj) return "#"; // Fallback if path object is undefined
+    const path = pathObj.path || pathObj; // Handle both object and string cases
+    if (typeof path === "string") {
+      return path.replace(":username", username);
+    }
+    return "#"; // Fallback if path is not a string
+  };
+
+  // Function to handle navigation with form data
+  const handleViewForm = (formDef, formData) => {
+    const formUrl = getFormUrl(formDef.path);
+
+    // Pass the specific form data via state
+    navigate(formUrl, {
+      state: {
+        formData: formData,
+        formType: formDef.key,
+        username: username,
+        allForms: allForms, // Pass the entire allForms object if needed
+      },
+    });
+  };
+
   // Define all possible forms with their display names
   const formDefinitions = [
-    { key: "reference", name: "Reference Form", dateField: "created_at" },
     {
       key: "application_form",
       name: "Application Form",
       dateField: "created_at",
+      path: PATHS.SIGNED_APPLICATION,
     },
     {
       key: "attendance_tardiness",
       name: "Attendance & Tardiness",
       dateField: "created_at",
+      path: PATHS.SIGNED_ATTENDANCE,
     },
     {
       key: "confidentiality_information",
       name: "Confidentiality Agreement",
       dateField: "created_at",
+      path: PATHS.SIGNED_CONFIDENTIALITY,
     },
     {
       key: "criminal_history_search",
       name: "Criminal History Search",
       dateField: "created_at",
+      path: PATHS.SIGNED_CRIMINAL,
     },
     {
       key: "disclaimer_waiver_liability",
       name: "Disclaimer & Waiver",
       dateField: "created_at",
+      path: PATHS.SIGNED_DISCLAIMER,
     },
     {
       key: "drug_testing_policy",
       name: "Drug Testing Policy",
       dateField: "created_at",
+      path: PATHS.SIGNED_DRUG_TESTING,
     },
     {
       key: "employee_agreement",
       name: "Employee Agreement",
       dateField: "created_at",
+      path: PATHS.SIGNED_EMPLOYEE_AGREEMENT,
     },
     {
       key: "employee_conduct",
       name: "Employee Conduct",
       dateField: "created_at",
+      path: PATHS.SIGNED_EMPLOYEE_CONDUCT,
     },
     {
       key: "employee_dress_code",
       name: "Employee Dress Code",
       dateField: "created_at",
+      path: PATHS.SIGNED_DRESS_CODE,
     },
     {
       key: "employee_orientation",
       name: "Employee Orientation",
       dateField: "created_at",
+      path: PATHS.SIGNED_EMPLOYEE_ORIENTATION,
     },
     {
       key: "employee_reference_check",
       name: "Employee Reference Check",
       dateField: "created_at",
+      path: PATHS.SIGNED_EMPLOYEE_REFERENCE_CHECK,
     },
     {
       key: "employee_safety",
       name: "Employee Safety",
       dateField: "created_at",
+      path: PATHS.SIGNED_CELLULAR_USE,
     },
     {
       key: "health_safety_agreement",
       name: "Health & Safety Agreement",
       dateField: "created_at",
+      path: PATHS.SIGNED_HEALTH_SAFETY,
     },
     {
       key: "home_health_aide",
       name: "Home Health Aide",
       dateField: "created_at",
+      path: PATHS.SIGNED_EMPLOYEE_HHA,
     },
     {
       key: "infection_control",
       name: "Infection Control",
       dateField: "created_at",
+      path: PATHS.SIGNED_INFECTION_CONTROL,
     },
     {
       key: "non_compete_agreement",
       name: "Non-Compete Agreement",
       dateField: "created_at",
+      path: PATHS.SIGNED_NON_COMPETE,
     },
     {
       key: "policy_procedure",
       name: "Policy & Procedure",
       dateField: "created_at",
+      path: PATHS.SIGNED_POLICY_PROCEDURE,
     },
-    { key: "reporting", name: "Reporting", dateField: "created_at" },
+    {
+      key: "reporting",
+      name: "Reporting",
+      dateField: "created_at",
+      path: PATHS.SIGNED_REPORTING,
+    },
     {
       key: "sexual_harassment",
       name: "Sexual Harassment Policy",
       dateField: "created_at",
+      path: PATHS.SIGNED_SEXUAL_HARASSMENT,
     },
-    { key: "smoking", name: "Smoking Policy", dateField: "created_at" },
+    {
+      key: "smoking",
+      name: "Smoking Policy",
+      dateField: "created_at",
+      path: PATHS.SIGNED_SMOKING,
+    },
     {
       key: "sworn_disclosure",
       name: "Sworn Disclosure",
       dateField: "created_at",
+      path: PATHS.SIGNED_DISCLOSURE,
     },
     {
       key: "universal_precaution",
       name: "Universal Precaution",
       dateField: "created_at",
+      path: PATHS.SIGNED_UNIVERSAL_PRECAUTION,
     },
   ];
 
@@ -227,6 +285,7 @@ export default function SingleUserForms() {
                               const signedDate = isSigned
                                 ? formData[formDef.dateField]
                                 : null;
+                              const formUrl = getFormUrl(formDef.path);
 
                               return (
                                 <tr key={formDef.key}>
@@ -268,14 +327,9 @@ export default function SingleUserForms() {
                                         <>
                                           <button
                                             className="btn btn-primary btn-xs light"
-                                            onClick={() => {
-                                              // View form details
-                                              console.log(
-                                                "View form:",
-                                                formDef.key,
-                                                formData
-                                              );
-                                            }}
+                                            onClick={() =>
+                                              handleViewForm(formDef, formData)
+                                            }
                                           >
                                             <i className="ri-eye-line me-1"></i>{" "}
                                             View
