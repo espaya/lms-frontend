@@ -217,6 +217,12 @@ export default function SingleUserForms() {
       dateField: "created_at",
       path: PATHS.SIGNED_UNIVERSAL_PRECAUTION,
     },
+    {
+      key: "verification",
+      name: "Verification of Professional License",
+      dateField: "created_at",
+      path: PATHS.SIGNED_VERIFICATION,
+    },
   ];
 
   return (

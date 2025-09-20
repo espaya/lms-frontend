@@ -45,6 +45,30 @@ import HHA from "./views/student/forms/HHA";
 import HealthSafety from "./views/student/forms/HealthSafety";
 import CellularUse from "./views/student/forms/CellularUse";
 import SingleUserForms from "./views/admin/forms/SingleUserForms";
+import SignedAttendance from "./views/admin/forms/attendance/SignedAttendance";
+import SignedCellularUse from "./views/admin/forms/cellular_use/SignedCellularUse";
+import SignedConfidentiality from "./views/admin/forms/confidentiality/SignedConfidentiality";
+import SignedCriminal from "./views/admin/forms/criminal/SignedCriminal";
+import SignedDisclosure from "./views/admin/forms/disclosure/SignedDisclosure";
+import SignedDressCode from "./views/admin/forms/dress_code/SignedDressCode";
+import SignedDrugTesting from "./views/admin/forms/drug_testing/SignedDrugTesting";
+import SignedEmployeeAgreement from "./views/admin/forms/employee_agreement/SIgnedEmployeeAgreement";
+import SignedEmployeeConduct from "./views/admin/forms/employee_conduct/SIgnedEmployeeConduct";
+import SignedEmployeeHHA from "./views/admin/forms/employee_hha/SignedEmployeeHHA";
+import SignedEmployeeOrientation from "./views/admin/forms/employee_orientation/SignedEmployeeOrientation";
+import SignedEmployeeReferenceCheck from "./views/admin/forms/employee_reference_check/SignedEmployeeReferenceCheck";
+import SignedHealthSafety from "./views/admin/forms/health_safety/SignedHealthSafety";
+import SignedInfectionControl from "./views/admin/forms/infection_control/SignedInfectionControl";
+// import SignedMainForms from "./views/admin/forms/main/SignedMainForms";
+import SignedMainForms from "./views/admin/forms/main/SignedMain";
+import SignedNonCompete from "./views/admin/forms/non_compete/SignedNonCompete";
+import SignedPolicyProcedure from "./views/admin/forms/policy_procedure/SignedPolicyProcedure";
+import SignedReporting from "./views/admin/forms/reporting/SignedReporting";
+import SignedSexualHarassment from "./views/admin/forms/sexual_harassment/SignedSexualHarassment";
+import SignedSmoking from "./views/admin/forms/smoking/SignedSmoking";
+import SignedUniversalPrecaution from "./views/admin/forms/universal_precaution/SignedUniversalPrecaution";
+import SignedVerification from "./views/admin/forms/verification/SignedVerification";
+import SignedDisclaimer from "./views/admin/forms/disclaimer/SignedDisclaimer";
 
 // Centralized route configuration with metadata
 export const ROUTE_CONFIG = {
@@ -59,6 +83,7 @@ export const ROUTE_CONFIG = {
     name: "Home",
     isProtected: false,
   },
+
   ACCOUNT: {
     path: "/account",
     element: <Account />,
@@ -163,6 +188,200 @@ export const ROUTE_CONFIG = {
     roles: ["ADMIN"], // ✅ restrict to ADMIN only
   },
 
+  // Signed forms for admin
+  SINGLE_USER_FORMS: {
+    path: "/admin/dashboard/users/:username/forms",
+    element: <SingleUserForms />,
+    name: "Single User Forms",
+    isProtected: true,
+    roles: ["ADMIN"], // ✅ restrict to ADMIN only
+  },
+
+  SIGNED_ATTENDANCE: {
+    path: "/admin/dashboard/users/:username/forms/attendance",
+    element: <SignedAttendance />,
+    name: "Attendance",
+    isProtected: true,
+    roles: ["ADMIN"], // ✅ restrict to ADMIN only
+  },
+
+  SIGNED_CELLULAR_USE: {
+    path: "/admin/dashboard/users/:username/forms/cellular-use",
+    element: <SignedCellularUse />,
+    name: "Cellular Use",
+    isProtected: true,
+    roles: ["ADMIN"], // ✅ restrict to ADMIN only
+  },
+
+  SIGNED_CONFIDENTIALITY: {
+    path: "/admin/dashboard/users/:username/forms/confidentiality-agreement",
+    element: <SignedConfidentiality />,
+    name: "Confidentiality Agreement",
+    isProtected: true,
+    roles: ["ADMIN"], // ✅ restrict to ADMIN only
+  },
+
+  SIGNED_CRIMINAL: {
+    path: "/admin/dashboard/users/:username/forms/criminal-history-search",
+    element: <SignedCriminal />,
+    name: "Criminal History Search",
+    isProtected: true,
+    roles: ["ADMIN"], // ✅ restrict to ADMIN only
+  },
+
+  SIGNED_DISCLAIMER: {
+    path: "/admin/dashboard/users/:username/forms/disclaimer-and-waiver-of-liability",
+    element: <SignedDisclaimer />,
+    name: "Disclaimer And Waiver of Liability",
+    isProtected: true,
+    roles: ["ADMIN"], // ✅ restrict to ADMIN only
+  },
+
+  SIGNED_DISCLOSURE: {
+    path: "/admin/dashboard/users/:username/forms/sworn-disclosure-statement",
+    element: <SignedDisclosure />,
+    name: "Sworn Disclosure Statement",
+    isProtected: true,
+    roles: ["ADMIN"], // ✅ restrict to ADMIN only
+  },
+
+  SIGNED_DRESS_CODE: {
+    path: "/admin/dashboard/users/:username/forms/employee-dress-code",
+    element: <SignedDressCode />,
+    name: "Employee Dress Code",
+    isProtected: true,
+    roles: ["ADMIN"], // ✅ restrict to ADMIN only
+  },
+
+  SIGNED_DRUG_TESTING: {
+    path: "/admin/dashboard/users/:username/forms/drug-testing-policy",
+    element: <SignedDrugTesting />,
+    name: "Drug Testing Policy",
+    isProtected: true,
+    roles: ["ADMIN"], // ✅ restrict to ADMIN only
+  },
+
+  SIGNED_EMPLOYEE_AGREEMENT: {
+    path: "/admin/dashboard/users/:username/forms/employee-agreement",
+    element: <SignedEmployeeAgreement />,
+    name: "Employee Agreement",
+    isProtected: true,
+    roles: ["ADMIN"], // ✅ restrict to ADMIN only
+  },
+
+  SIGNED_EMPLOYEE_CONDUCT: {
+    path: "/admin/dashboard/users/:username/forms/employee-notification-of-policy-employee-conduct",
+    element: <SignedEmployeeConduct />,
+    name: "Employee Notification of Policy: Employee Conduct",
+    isProtected: true,
+    roles: ["ADMIN"], // ✅ restrict to ADMIN only
+  },
+
+  SIGNED_EMPLOYEE_HHA: {
+    path: "/admin/dashboard/users/:username/forms/employee-hha",
+    element: <SignedEmployeeHHA />,
+    name: "Employee Home Health Aide",
+    isProtected: true,
+    roles: ["ADMIN"], // ✅ restrict to ADMIN only
+  },
+
+  SIGNED_EMPLOYEE_ORIENTATION: {
+    path: "/admin/dashboard/users/:username/forms/employee-orientation",
+    element: <SignedEmployeeOrientation />,
+    name: "Employee Orientation",
+    isProtected: true,
+    roles: ["ADMIN"], // ✅ restrict to ADMIN only
+  },
+
+  SIGNED_EMPLOYEE_REFERENCE_CHECK: {
+    path: "/admin/dashboard/users/:username/forms/employee-reference-check",
+    element: <SignedEmployeeReferenceCheck />,
+    name: "Employee Reference Check",
+    isProtected: true,
+    roles: ["ADMIN"], // ✅ restrict to ADMIN only
+  },
+
+  SIGNED_HEALTH_SAFETY: {
+    path: "/admin/dashboard/users/:username/forms/health-safety-agreement",
+    element: <SignedHealthSafety />,
+    name: "Health Safety Agreement",
+    isProtected: true,
+    roles: ["ADMIN"], // ✅ restrict to ADMIN only
+  },
+
+  SIGNED_INFECTION_CONTROL: {
+    path: "/admin/dashboard/users/:username/forms/infection-control-agreement",
+    element: <SignedInfectionControl />,
+    name: "Infection Control Agreement",
+    isProtected: true,
+    roles: ["ADMIN"], // ✅ restrict to ADMIN only
+  },
+
+  SIGNED_APPLICATION: {
+    path: "/admin/dashboard/users/:username/forms/application-for-employment",
+    element: <SignedMainForms />,
+    name: "Application For Employment",
+    isProtected: true,
+    roles: ["ADMIN"], // ✅ restrict to ADMIN only
+  },
+
+  SIGNED_NON_COMPETE: {
+    path: "/admin/dashboard/users/:username/forms/non-compete-agreement",
+    element: <SignedNonCompete />,
+    name: "Non Compete Agreement",
+    isProtected: true,
+    roles: ["ADMIN"], // ✅ restrict to ADMIN only
+  },
+
+  SIGNED_POLICY_PROCEDURE: {
+    path: "/admin/dashboard/users/:username/forms/policies-and-procedures-orientation-acknowledgement",
+    element: <SignedPolicyProcedure />,
+    name: "Policies And Procedures Orientation Acknowledgement",
+    isProtected: true,
+    roles: ["ADMIN"], // ✅ restrict to ADMIN only
+  },
+
+  SIGNED_REPORTING: {
+    path: "/admin/dashboard/users/:username/forms/reporting-abuse-neglect-emploitation",
+    element: <SignedReporting />,
+    name: "Reporting: Abuse/neglect/Exploitation",
+    isProtected: true,
+    roles: ["ADMIN"], // ✅ restrict to ADMIN only
+  },
+
+  SIGNED_SEXUAL_HARASSMENT: {
+    path: "/admin/dashboard/users/:username/forms/sexual-harassment",
+    element: <SignedSexualHarassment />,
+    name: "Sexual Harassment",
+    isProtected: true,
+    roles: ["ADMIN"], // ✅ restrict to ADMIN only
+  },
+
+  SIGNED_SMOKING: {
+    path: "/admin/dashboard/users/:username/forms/smoking-in-the-workplace",
+    element: <SignedSmoking />,
+    name: "Smoking In The Workplace Harassment",
+    isProtected: true,
+    roles: ["ADMIN"], // ✅ restrict to ADMIN only
+  },
+
+  SIGNED_UNIVERSAL_PRECAUTION: {
+    path: "/admin/dashboard/users/:username/forms/universal-precaution",
+    element: <SignedUniversalPrecaution />,
+    name: "Universal Precaution",
+    isProtected: true,
+    roles: ["ADMIN"], // ✅ restrict to ADMIN only
+  },
+
+  SIGNED_VERIFICATION: {
+    path: "/admin/dashboard/users/:username/forms/verification-of-professional-license",
+    element: <SignedVerification />,
+    name: "Verification of Professional License",
+    isProtected: true,
+    roles: ["ADMIN"], // ✅ restrict to ADMIN only
+  },
+  // End signed forms for admin
+
   // users dashboard route
   USER_DASHBOARD: {
     path: "/user/dashboard",
@@ -195,16 +414,6 @@ export const ROUTE_CONFIG = {
     isProtected: true,
     roles: ["USER"],
   },
-
-  // Signed forms for admin
-  SINGLE_USER_FORMS: {
-    path: "/admin/dashboard/users/:username/forms",
-    element: <SingleUserForms />,
-    name: "Single User Forms",
-    isProtected: true,
-    roles: ["ADMIN"], // ✅ restrict to ADMIN only
-  },
-  // End signed forms for admin
 
   // User application forms
   USER_FORMS: {
