@@ -186,7 +186,6 @@ export default function ViewQuestions({
             </ul>
           </div>
         ))}
-
       <p className="text-info mx-auto text-center">
         <a
           download={fileName} // suggested filename
@@ -196,8 +195,8 @@ export default function ViewQuestions({
         </a>
       </p>
 
-      <div className="bg-light">
-        <div className="table-cell" style={{ padding: "20px" }} colSpan={4}>
+      <div className="rtable-row bg-light">
+        <div className="rtable-cell" style={{ padding: "20px" }} colSpan={4}>
           {questions.length > 0 ? (
             <form
               onSubmit={(e) => handleSubmitAnswers(e, topic)}
@@ -344,7 +343,7 @@ export default function ViewQuestions({
                       <p className="text-muted small">Please sign below</p>
                     </div>
                     <div className="mt-4 container">
-                      <div className="row justify-content-center">
+                      <div className="row justify-content-left">
                         <div className="col-12 col-sm-10 col-md-8 col-lg-6">
                           <SignatureCanvas
                             penColor="black"
@@ -374,8 +373,7 @@ export default function ViewQuestions({
                         </div>
                       </div>
                     </div>
-
-                    <div className="d-flex gap-2 mt-2">
+                    <div className="d-flex gap-2 mt-20">
                       <button
                         type="button"
                         className="btn btn-secondary"
@@ -406,7 +404,7 @@ export default function ViewQuestions({
                   )}
 
                   {/* Declaration */}
-                  <div className="form-check mt-4">
+                  <div className="form-check mt-20">
                     <input
                       type="checkbox"
                       id="declaration"
