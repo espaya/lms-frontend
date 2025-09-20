@@ -186,16 +186,8 @@ export default function ViewQuestions({
             </ul>
           </div>
         ))}
+
       <p className="text-info mx-auto text-center">
-        {/* <a
-        download
-          // href={`${apiBase}/view-question-file/${fileName}`}
-          href={`/viewer?file=${encodeURIComponent(fileName)}`}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Click here to read the handout before taking this quiz
-        </a> */}
         <a
           download={fileName} // suggested filename
           href={`${apiBase}/view-question-file/${fileName}`}
@@ -204,8 +196,8 @@ export default function ViewQuestions({
         </a>
       </p>
 
-      <div className="rtable-row bg-light">
-        <div className="rtable-cell" style={{ padding: "20px" }} colSpan={4}>
+      <div className="bg-light">
+        <div className="table-cell" style={{ padding: "20px" }} colSpan={4}>
           {questions.length > 0 ? (
             <form
               onSubmit={(e) => handleSubmitAnswers(e, topic)}
@@ -351,32 +343,38 @@ export default function ViewQuestions({
                       <strong>Signature:</strong>
                       <p className="text-muted small">Please sign below</p>
                     </div>
-                    <div className="mt-20">
-                      <SignatureCanvas
-                        penColor="black"
-                        canvasProps={{
-                          width: 500,
-                          height: 150,
-                          className: "signature-canvas border",
-                          style: { backgroundColor: "#f8f9fa" },
-                        }}
-                        ref={sigPadRef}
-                        onEnd={() => {
-                          if (
-                            sigPadRef.current &&
-                            !sigPadRef.current.isEmpty()
-                          ) {
-                            const sigData = sigPadRef.current
-                              .getTrimmedCanvas()
-                              .toDataURL("image/png");
-                            setSignature(sigData);
-                          }
-                        }}
-                        minWidth={2}
-                        maxWidth={4}
-                        velocityFilterWeight={0.7}
-                      />
+                    <div className="mt-4 container">
+                      <div className="row justify-content-center">
+                        <div className="col-12 col-sm-10 col-md-8 col-lg-6">
+                          <SignatureCanvas
+                            penColor="black"
+                            ref={sigPadRef}
+                            canvasProps={{
+                              className: "signature-canvas border w-100", // w-100 = fill column width
+                              style: {
+                                backgroundColor: "#f8f9fa",
+                                height: "150px",
+                              }, // fixed height, flexible width
+                            }}
+                            onEnd={() => {
+                              if (
+                                sigPadRef.current &&
+                                !sigPadRef.current.isEmpty()
+                              ) {
+                                const sigData = sigPadRef.current
+                                  .getTrimmedCanvas()
+                                  .toDataURL("image/png");
+                                setSignature(sigData);
+                              }
+                            }}
+                            minWidth={2}
+                            maxWidth={4}
+                            velocityFilterWeight={0.7}
+                          />
+                        </div>
+                      </div>
                     </div>
+
                     <div className="d-flex gap-2 mt-2">
                       <button
                         type="button"

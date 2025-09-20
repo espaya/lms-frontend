@@ -52,10 +52,6 @@ export default function AttemptSummary({ apiBase, topic, setErrors }) {
         setError(null);
       } catch (err) {
         console.error("Failed to fetch attempt summary:", err);
-        // setError(err.message);
-        // if (setErrors) {
-        //   setErrors((prev) => ({ ...prev, summary: err.message }));
-        // }
         setSummary(null);
       }
     };
