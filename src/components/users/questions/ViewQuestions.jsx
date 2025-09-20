@@ -186,14 +186,21 @@ export default function ViewQuestions({
             </ul>
           </div>
         ))}
-      <p className="text-info mx-auto">
-        <a
+      <p className="text-info mx-auto text-center">
+        {/* <a
+        download
           // href={`${apiBase}/view-question-file/${fileName}`}
           href={`/viewer?file=${encodeURIComponent(fileName)}`}
           target="_blank"
           rel="noopener noreferrer"
         >
           Click here to read the handout before taking this quiz
+        </a> */}
+        <a
+          download={fileName} // suggested filename
+          href={`${apiBase}/view-question-file/${fileName}`}
+        >
+          Download Handout Before Taking The Quiz
         </a>
       </p>
 
