@@ -40,7 +40,8 @@ export default function PreviewReport() {
         const data = await response.json(); // Added await here
 
         if (!response.ok) {
-          throw new Error(data.message || "Failed to fetch report");
+          setErrors({ general: data.message || "Failed to fetch report" });
+          return;
         }
 
         // Handle both wrapped and direct responses
@@ -161,7 +162,7 @@ export default function PreviewReport() {
                             >
                               <div className="rtable-cell topic-cell">
                                 <div className="rtable-cell--content title-content">
-                                  <h5>{report.user?.name || "User"}</h5>
+                                  <h5>{report.profile?.full_name || "User"}</h5>
                                   <p className="text-muted small">
                                     {report.user?.email || ""}
                                   </p>

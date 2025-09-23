@@ -6,6 +6,7 @@ import Pagination from "../../components/Pagination";
 import { PATHS } from "../../router";
 import { useNavigate } from "react-router-dom";
 import { useRef } from "react";
+import { formatDate } from "../../utils/DateFormatter";
 
 export default function Reports() {
   const [reports, setReports] = useState([]);
@@ -50,21 +51,17 @@ export default function Reports() {
       const data = await response.json();
 
       if (!response.ok) {
-        if (data.message) {
-          setErrors({ general: data.message });
-        } else {
-          setErrors({ general: "An error occurred" });
-        }
-      } else {
-        setReports(data.data);
-        setPagination({
-          current_page: data.pagination.current_page,
-          last_page: data.pagination.last_page,
-          total: data.pagination.total,
-          per_page: data.pagination.per_page,
-        });
-        setErrors(null);
+        setErrors({ general: data.message });
+        return;
       }
+      setReports(data.data);
+      setPagination({
+        current_page: data.pagination.current_page,
+        last_page: data.pagination.last_page,
+        total: data.pagination.total,
+        per_page: data.pagination.per_page,
+      });
+      setErrors(null);
     } catch (err) {
       setErrors({ general: err.message || "Failed to fetch reports" });
     } finally {
@@ -142,22 +139,11 @@ export default function Reports() {
                                 <div className="flex-grow-1">
                                   <h5 className="mb-5">{topic.name}</h5>
                                   <p className="mb-0">
-                                    {new Date(
-                                      topic.created_at
-                                    ).toLocaleDateString("en-US", {
-                                      year: "numeric",
-                                      month: "long",
-                                      day: "numeric",
-                                      hour: "2-digit",
-                                      minute: "2-digit",
-                                    })}
+                                    {formatDate(topic.created_at)}
                                   </p>
                                   <small className="text-muted">
                                     <a
                                       href={`${apiBase}/view-question-file/${topic.fileName}`}
-                                      // href={`/viewer?file=${encodeURIComponent(
-                                      //   topic.fileName
-                                      // )}`}
                                       target="_blank"
                                       rel="noopener noreferrer"
                                     >
