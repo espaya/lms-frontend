@@ -69,6 +69,7 @@ import SignedSmoking from "./views/admin/forms/smoking/SignedSmoking";
 import SignedUniversalPrecaution from "./views/admin/forms/universal_precaution/SignedUniversalPrecaution";
 import SignedVerification from "./views/admin/forms/verification/SignedVerification";
 import SignedDisclaimer from "./views/admin/forms/disclaimer/SignedDisclaimer";
+import ForgotPassword from "./views/ForgotPassword";
 
 // Centralized route configuration with metadata
 export const ROUTE_CONFIG = {
@@ -83,6 +84,19 @@ export const ROUTE_CONFIG = {
     name: "Home",
     isProtected: false,
   },
+
+  FORGOTPASSWORD: {
+    path: "/forgot-password",
+    element: (
+      <GuestRoute>
+        <ForgotPassword />
+      </GuestRoute>
+    ),
+    name: "Home",
+    isProtected: false,
+  },
+
+
 
   ACCOUNT: {
     path: "/account",

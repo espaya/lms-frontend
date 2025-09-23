@@ -102,7 +102,7 @@ export default function EmployeeConductForms({ fullname }) {
         Employee Notification of Policy: Employee Conduct - 1staccess Home Care
       </title>
 
-      <body className="dashboard">
+      <div className="dashboard">
         <div id="main-wrapper">
           <UserHeader />
 
@@ -517,8 +517,8 @@ export default function EmployeeConductForms({ fullname }) {
             </div>
           </div>
         </div>
-      </body>
-      <style jsx>{`
+      </div>
+      <style jsx="true">{`
         .progress-container {
           padding: 20px 0;
         }

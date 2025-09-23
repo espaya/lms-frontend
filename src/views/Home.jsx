@@ -1,8 +1,9 @@
 import { Eye, EyeOff } from "lucide-react";
 import { useContext, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../auth/AuthContext";
 import ReCAPTCHA from "react-google-recaptcha";
+import { PATHS } from "../router";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -172,7 +173,7 @@ export default function Home() {
                       </div>
 
                       <div className="col-6 text-end">
-                        <a href="#">Forgot Password?</a>
+                        <Link to={PATHS.FORGOTPASSWORD}>Forgot Password?</Link>
                       </div>
                     </div>
 

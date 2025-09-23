@@ -21,7 +21,7 @@ export default function CriminalFilled({ data }) {
     <>
       <title>Criminal History Search - 1staccess Home Care</title>
 
-      <body className="dashboard">
+      <div className="dashboard">
         <div id="main-wrapper">
           <UserHeader />
 
@@ -182,7 +182,7 @@ export default function CriminalFilled({ data }) {
             </div>
           </div>
         </div>
-      </body>
+      </div>
     </>
   );
 }

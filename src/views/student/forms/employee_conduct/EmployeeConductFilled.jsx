@@ -2,6 +2,7 @@ import UserHeader from "../../../../components/users/UserHeader";
 import UserSidebar from "../../../../components/users/UserSidebar";
 import { Link } from "react-router-dom";
 import { PATHS } from "../../../../router";
+import { formatDate } from "../../../../utils/DateFormatter";
 
 export default function EmployeeConductFilled({ data, fullname }) {
   const apiBase = import.meta.env.VITE_API_URL;
@@ -22,7 +23,7 @@ export default function EmployeeConductFilled({ data, fullname }) {
         Employee Notification of Policy: Employee Conduct - 1staccess Home Care
       </title>
 
-      <body className="dashboard">
+      <div className="dashboard">
         <div id="main-wrapper">
           <UserHeader />
           <UserSidebar />
@@ -243,18 +244,7 @@ export default function EmployeeConductFilled({ data, fullname }) {
                         </div>
                         <div className="col-md-6 mt-50">
                           <p>Date Signed: </p>
-                          <p>
-                            {conduct?.created_at
-                              ? new Date(conduct.created_at).toLocaleDateString(
-                                  "en-US",
-                                  {
-                                    year: "numeric",
-                                    month: "long",
-                                    day: "numeric",
-                                  }
-                                )
-                              : "N/A"}
-                          </p>
+                          <p>{formatDate(conduct?.created_at)}</p>
                         </div>
                       </div>
                       {/*  */}
@@ -280,7 +270,7 @@ export default function EmployeeConductFilled({ data, fullname }) {
             </div>
           </div>
         </div>
-      </body>
+      </div>
     </>
   );
 }

@@ -314,7 +314,7 @@ export default function DisclaimerForm({ fullname }) {
           </div>
         </div>
       </div>
-      <style jsx>{`
+      <style jsx="true">{`
         .progress-container {
           padding: 20px 0;
         }

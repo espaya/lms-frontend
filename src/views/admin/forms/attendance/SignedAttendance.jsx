@@ -30,7 +30,8 @@ export default function SignedAttendanceForms() {
   return (
     <>
       <title>
-        Attendance, Tardiness, Absenteeism & Leave - 1staccess Home Care
+        Employee Notification of Policy: Attendance, Tardiness, Absenteeism and
+        Leave - 1staccess Home Care
       </title>
       <div id="main-wrapper">
         <MyHeader />

@@ -31,9 +31,9 @@ export default function MainApplication() {
 
         if (!response.ok) {
           setErrors({ general: data.message });
-        } else {
-          setDocument(data);
+          return;
         }
+        setDocument(data);
       } catch (err) {
         setErrors({ general: err.message });
       } finally {

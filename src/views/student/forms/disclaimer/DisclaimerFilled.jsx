@@ -20,7 +20,7 @@ export default function DisclaimerFilled({ data, fullname }) {
     <>
       <title>Disclaimer And Waiver Of Liability - 1staccess Home Care</title>
 
-      <body className="dashboard">
+      <div className="dashboard">
         <div id="main-wrapper">
           <UserHeader />
           <UserSidebar />
@@ -169,7 +169,7 @@ export default function DisclaimerFilled({ data, fullname }) {
             </div>
           </div>
         </div>
-      </body>
+      </div>
     </>
   );
 }

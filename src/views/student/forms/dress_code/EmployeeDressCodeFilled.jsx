@@ -20,7 +20,7 @@ export default function EmployeeDressCodeFilled({ data, fullname }) {
     <>
       <title>Employee Dress Code - 1staccess Home Care</title>
 
-      <body className="dashboard">
+      <div className="dashboard">
         <div id="main-wrapper">
           <UserHeader />
 
@@ -190,7 +190,7 @@ export default function EmployeeDressCodeFilled({ data, fullname }) {
             </div>
           </div>
         </div>
-      </body>
+      </div>
     </>
   );
 }

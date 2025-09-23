@@ -18,10 +18,6 @@ export default function AttemptSummary({ apiBase, topic, setErrors }) {
         const csrfToken = Cookies.get("XSRF-TOKEN");
         const authToken = localStorage.getItem("auth_token");
 
-        if (!authToken) {
-          throw new Error("No authentication token found");
-        }
-
         const response = await fetch(
           `${apiBase}/api/answers/summary/${topic}`,
           {
@@ -40,22 +36,13 @@ export default function AttemptSummary({ apiBase, topic, setErrors }) {
         const data = await response.json();
 
         if (!response.ok) {
-          if (data.message === "Unauthenticated.") {
-            throw new Error("Session expired. Please log in again.");
-          }
-          throw new Error(
-            data.message || `HTTP error! status: ${response.status}`
-          );
+          setErrors({ general: data.message });
+          return;
         }
-
         setSummary(data);
         setError(null);
       } catch (err) {
-        console.error("Failed to fetch attempt summary:", err);
-        // setError(err.message);
-        // if (setErrors) {
-        //   setErrors((prev) => ({ ...prev, summary: err.message }));
-        // }
+        setErrors({ general: err.message });
         setSummary(null);
       }
     };

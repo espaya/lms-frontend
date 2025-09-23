@@ -2,6 +2,7 @@ import UserHeader from "../../../../components/users/UserHeader";
 import UserSidebar from "../../../../components/users/UserSidebar";
 import { Link } from "react-router-dom";
 import { PATHS } from "../../../../router";
+import { formatDate } from "../../../../utils/DateFormatter";
 
 export default function EmployeeOrientationFilled({
   orientation,
@@ -89,7 +90,11 @@ export default function EmployeeOrientationFilled({
                       <div className="col-md-4">
                         <p>
                           Date of Hire:{" "}
-                          <u> {empApp && empApp?.employee_hire_date} </u>
+                          <u>
+                            {" "}
+                            {empApp &&
+                              formatDate(empApp?.employee_hire_date)}{" "}
+                          </u>
                         </p>
                       </div>
                       <div className="col-md-4">
@@ -97,7 +102,8 @@ export default function EmployeeOrientationFilled({
                           Date of Orientation:{" "}
                           <u>
                             {" "}
-                            {orientation && orientation.dateOfOrientation}{" "}
+                            {orientation &&
+                              formatDate(orientation.dateOfOrientation)}{" "}
                           </u>
                         </p>
                       </div>
@@ -188,17 +194,7 @@ export default function EmployeeOrientationFilled({
                         </div>
                         <div className="col-md-6 mt-50">
                           <p>Date Signed: </p>
-                          <p>
-                            {orientation?.created_at
-                              ? new Date(
-                                  orientation.created_at
-                                ).toLocaleDateString("en-US", {
-                                  year: "numeric",
-                                  month: "long",
-                                  day: "numeric",
-                                })
-                              : "N/A"}
-                          </p>
+                          <p>{formatDate(orientation?.created_at)}</p>
                         </div>
                       </div>
                     </div>

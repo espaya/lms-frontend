@@ -141,25 +141,21 @@ export default function ViewQuestions({
       const data = await res.json();
 
       if (!res.ok) {
-        if (data.errors) {
-          setErrors(data.errors);
-        } else {
-          setErrors({ general: data.message });
-        }
-        throw new Error(data.message || "Failed to submit answers");
-      } else {
-        setSubmittedTopics((prev) => ({ ...prev, [topicId]: true }));
-        setSubmittedAnswers((prev) => ({
-          ...prev,
-          [topicId]: payload.answers,
-        }));
-
-        Swal.fire({
-          icon: "success",
-          title: "Success",
-          text: data.message || "Answers submitted successfully!",
-        });
+        setErrors(data.errors || { general: data.message });
+        return;
       }
+
+      setSubmittedTopics((prev) => ({ ...prev, [topicId]: true }));
+      setSubmittedAnswers((prev) => ({
+        ...prev,
+        [topicId]: payload.answers,
+      }));
+
+      Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: data.message || "Answers submitted successfully!",
+      });
     } catch (err) {
       setErrors({ general: err.message });
       Swal.fire({

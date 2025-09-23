@@ -2,6 +2,7 @@ import UserHeader from "../../../../components/users/UserHeader";
 import UserSidebar from "../../../../components/users/UserSidebar";
 import { Link } from "react-router-dom";
 import { PATHS } from "../../../../router";
+import { formatDate } from "../../../../utils/DateFormatter";
 
 export default function DisclosureFilled({ data, position, fullname }) {
   const apiBase = import.meta.env.VITE_API_URL;
@@ -172,63 +173,43 @@ export default function DisclosureFilled({ data, position, fullname }) {
                           </div>
                         </div>
                         <div className="row">
-                        <div className="col-md-6 mt-20">
-                          <p>Witness Signature:</p>
-                          {data?.wit_signature ? (
-                            <img
-                              src={`${apiBase}/storage/signature/${data.wit_signature}`}
-                              alt="Signature"
-                              style={{ width: "300px" }}
-                            />
-                          ) : (
-                            <p>
-                              <em>No signature provided</em>
-                            </p>
-                          )}
+                          <div className="col-md-6 mt-20">
+                            <p>Witness Signature:</p>
+                            {data?.wit_signature ? (
+                              <img
+                                src={`${apiBase}/storage/signature/${data.wit_signature}`}
+                                alt="Signature"
+                                style={{ width: "300px" }}
+                              />
+                            ) : (
+                              <p>
+                                <em>No signature provided</em>
+                              </p>
+                            )}
+                          </div>
+                          <div className="col-md-6 mt-50">
+                            <p>Date Signed: </p>
+                            <p>{formatDate(data?.created_at)}</p>
+                          </div>
+                          <div className="col-md-6 mt-20">
+                            <p>Applicant Signature:</p>
+                            {data?.signature ? (
+                              <img
+                                src={`${apiBase}/storage/signature/${data.signature}`}
+                                alt="Signature"
+                                style={{ width: "300px" }}
+                              />
+                            ) : (
+                              <p>
+                                <em>No signature provided</em>
+                              </p>
+                            )}
+                          </div>
+                          <div className="col-md-6 mt-50">
+                            <p>Date Signed: </p>
+                            <p>{formatDate(data?.created_at)}</p>
+                          </div>
                         </div>
-                        <div className="col-md-6 mt-50">
-                          <p>Date Signed: </p>
-                          <p>
-                            {data?.created_at
-                              ? new Date(
-                                  data.created_at
-                                ).toLocaleDateString("en-US", {
-                                  year: "numeric",
-                                  month: "long",
-                                  day: "numeric",
-                                })
-                              : "N/A"}
-                          </p>
-                        </div>
-                        <div className="col-md-6 mt-20">
-                          <p>Applicant Signature:</p>
-                          {data?.signature ? (
-                            <img
-                              src={`${apiBase}/storage/signature/${data.signature}`}
-                              alt="Signature"
-                              style={{ width: "300px" }}
-                            />
-                          ) : (
-                            <p>
-                              <em>No signature provided</em>
-                            </p>
-                          )}
-                        </div>
-                        <div className="col-md-6 mt-50">
-                          <p>Date Signed: </p>
-                          <p>
-                            {data?.created_at
-                              ? new Date(
-                                  data.created_at
-                                ).toLocaleDateString("en-US", {
-                                  year: "numeric",
-                                  month: "long",
-                                  day: "numeric",
-                                })
-                              : "N/A"}
-                          </p>
-                        </div>
-                      </div>
                       </div>
                     </div>
                     <div className="col-md-3 mt-20">

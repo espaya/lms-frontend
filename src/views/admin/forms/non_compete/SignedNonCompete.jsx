@@ -4,7 +4,6 @@ import MyHeader from "../../../../components/MyHeader";
 import Sidebar from "../../../../components/Sidebar";
 import Nav from "../../single_user/Nav";
 import { Link } from "react-router-dom";
-import { PATHS } from "../../../../router";
 import { formatDate } from "../../../../utils/DateFormatter";
 
 export default function SignedNonCompeteForms() {

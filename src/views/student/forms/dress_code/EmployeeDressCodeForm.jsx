@@ -92,7 +92,7 @@ export default function EmployeeDressCodeForm({ fullname }) {
     <>
       <title>Employee Dress Code - 1staccess Home Care</title>
 
-      <body className="dashboard">
+      <div className="dashboard">
         <div id="main-wrapper">
           <UserHeader />
           <UserSidebar />
@@ -333,8 +333,8 @@ export default function EmployeeDressCodeForm({ fullname }) {
             </div>
           </div>
         </div>
-      </body>
-      <style jsx>{`
+      </div>
+      <style jsx="true">{`
         .progress-container {
           padding: 20px 0;
         }

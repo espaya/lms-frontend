@@ -2,6 +2,7 @@ import UserHeader from "../../../../components/users/UserHeader";
 import UserSidebar from "../../../../components/users/UserSidebar";
 import { Link } from "react-router-dom";
 import { PATHS } from "../../../../router";
+import { formatDate } from "../../../../utils/DateFormatter";
 
 export default function EmployeeReferenceCheckFilled({ data, fullname }) {
   const apiBase = import.meta.env.VITE_API_URL;
@@ -87,9 +88,9 @@ export default function EmployeeReferenceCheckFilled({ data, fullname }) {
                           <p>
                             Please Verify Employment Dates:
                             <br />
-                            From:<b> {data.from_date}</b>
+                            From:<b> {formatDate(data.from_date)}</b>
                             <br />
-                            To:<b> {data.to_date}</b>
+                            To:<b> {formatDate(data.to_date)}</b>
                           </p>
                           <p>
                             Eligible For Hire? <b>{data.eligible_for_hire}</b>
@@ -116,18 +117,7 @@ export default function EmployeeReferenceCheckFilled({ data, fullname }) {
                         </div>
                         <div className="col-md-6 mt-50">
                           <p>Date Signed: </p>
-                          <p>
-                            {data?.created_at
-                              ? new Date(data.created_at).toLocaleDateString(
-                                  "en-US",
-                                  {
-                                    year: "numeric",
-                                    month: "long",
-                                    day: "numeric",
-                                  }
-                                )
-                              : "N/A"}
-                          </p>
+                          <p>{formatDate(data?.created_at)}</p>
                         </div>
                       </div>
                     </div>

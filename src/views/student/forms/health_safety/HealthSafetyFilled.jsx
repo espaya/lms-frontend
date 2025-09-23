@@ -2,6 +2,7 @@ import UserHeader from "../../../../components/users/UserHeader";
 import UserSidebar from "../../../../components/users/UserSidebar";
 import { Link } from "react-router-dom";
 import { PATHS } from "../../../../router";
+import { formatDate } from "../../../../utils/DateFormatter";
 
 export default function HealthSafetyFilled({ data, fullname }) {
   const apiBase = import.meta.env.VITE_API_URL;
@@ -18,7 +19,7 @@ export default function HealthSafetyFilled({ data, fullname }) {
     <>
       <title>Health & Safety Agreement - 1staccess Home Care</title>
 
-      <body className="dashboard">
+      <div className="dashboard">
         <div id="main-wrapper">
           <UserHeader />
           <UserSidebar />
@@ -128,18 +129,7 @@ export default function HealthSafetyFilled({ data, fullname }) {
                         </div>
                         <div className="col-md-6 mt-50">
                           <p>Date Signed: </p>
-                          <p>
-                            {data?.created_at
-                              ? new Date(data.created_at).toLocaleDateString(
-                                  "en-US",
-                                  {
-                                    year: "numeric",
-                                    month: "long",
-                                    day: "numeric",
-                                  }
-                                )
-                              : "N/A"}
-                          </p>
+                          <p>{formatDate(data?.created_at)}</p>
                         </div>
                       </div>
                     </div>
@@ -164,7 +154,7 @@ export default function HealthSafetyFilled({ data, fullname }) {
             </div>
           </div>
         </div>
-      </body>
+      </div>
     </>
   );
 }
