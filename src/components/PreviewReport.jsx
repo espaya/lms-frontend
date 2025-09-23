@@ -162,7 +162,10 @@ export default function PreviewReport() {
                             >
                               <div className="rtable-cell topic-cell">
                                 <div className="rtable-cell--content title-content">
-                                  <h5>{report.profile?.full_name || "User"}</h5>
+                                  <h5>
+                                    {report.profile?.full_name ||
+                                      report.user.name}
+                                  </h5>
                                   <p className="text-muted small">
                                     {report.user?.email || ""}
                                   </p>
