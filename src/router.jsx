@@ -70,6 +70,7 @@ import SignedUniversalPrecaution from "./views/admin/forms/universal_precaution/
 import SignedVerification from "./views/admin/forms/verification/SignedVerification";
 import SignedDisclaimer from "./views/admin/forms/disclaimer/SignedDisclaimer";
 import ForgotPassword from "./views/ForgotPassword";
+import ResetPassword from "./views/ResetPassword";
 
 // Centralized route configuration with metadata
 export const ROUTE_CONFIG = {
@@ -90,6 +91,17 @@ export const ROUTE_CONFIG = {
     element: (
       <GuestRoute>
         <ForgotPassword />
+      </GuestRoute>
+    ),
+    name: "Home",
+    isProtected: false,
+  },
+
+    RESET_PASSWORD: {
+    path: "/reset-password",
+    element: (
+      <GuestRoute>
+        <ResetPassword />
       </GuestRoute>
     ),
     name: "Home",
