@@ -231,7 +231,7 @@ export default function ApplicationForms() {
                   <div className="col-md-6">
                     <div className="page-title-content">
                       <h3>Application Form</h3>
-                      <p className="mb-2">Fill all the required(*) fields</p>
+                      <p className="mb-2"> Fill all the required(*) fields</p>
                     </div>
                   </div>
                   <div className="col-auto">
@@ -254,7 +254,7 @@ export default function ApplicationForms() {
 
               {/* Progress Bar */}
               <div className="row mb-4">
-                <div className="col-12">
+                <div className="col-md-12">
                   <div className="progress-container">
                     <div className="progress-steps">
                       {steps.map((step, index) => (
@@ -3239,6 +3239,80 @@ export default function ApplicationForms() {
           100% {
             transform: scale(1);
             opacity: 1;
+          }
+        }
+
+        .progress-container {
+          width: 100%;
+          overflow-x: auto; /* allow horizontal scroll on very small screens */
+        }
+
+        .progress-steps {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          gap: 1rem; /* spacing between steps */
+          flex-wrap: wrap; /* wrap on small screens */
+        }
+
+        .progress-step {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          min-width: 60px; /* ensures step doesn't shrink too much */
+          flex: 1; /* steps grow evenly */
+          text-align: center;
+        }
+
+        .step-number {
+          width: 35px;
+          height: 35px;
+          border-radius: 50%;
+          background: #ddd;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-weight: bold;
+          margin-bottom: 0.5rem;
+        }
+
+        .progress-step.active .step-number {
+          background: #007bff;
+          color: #fff;
+        }
+
+        .progress-step.completed .step-number {
+          background: #28a745;
+          color: #fff;
+        }
+
+        .step-label {
+          font-size: 0.85rem;
+          word-wrap: break-word; /* break long words */
+        }
+
+        /* Responsive tweaks */
+        @media (max-width: 768px) {
+          .progress-steps {
+            gap: 0.5rem;
+          }
+          .step-label {
+            font-size: 0.75rem;
+          }
+          .step-number {
+            width: 28px;
+            height: 28px;
+            font-size: 0.8rem;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .progress-steps {
+            flex-wrap: nowrap;
+            overflow-x: auto;
+          }
+          .progress-step {
+            min-width: 70px; /* wider for readability */
           }
         }
       `}</style>

@@ -3,6 +3,7 @@ import Cookies from "js-cookie";
 import EmploymentApplication from "./main/EmploymentApplication";
 import ApplicationForms from "./main/ApplicationForms";
 import Spinner from "../../../components/Spinner";
+import fetchApplicationForms from "../../../controller/user/forms/EmploymentApplication";
 
 export default function MainApplication() {
   const [document, setDocument] = useState(null);
@@ -11,37 +12,7 @@ export default function MainApplication() {
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    const fetchApplicationForms = async () => {
-      setLoading(true);
-      try {
-        const response = await fetch(
-          `${apiBase}/api/user/application-forms/get`,
-          {
-            method: "GET",
-            credentials: "include",
-            headers: {
-              Accept: "application/json",
-              Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
-              "X-XSRF-TOKEN": decodeURIComponent(Cookies.get("XSRF-TOKEN")),
-            },
-          }
-        );
-
-        const data = await response.json();
-
-        if (!response.ok) {
-          setErrors({ general: data.message });
-          return;
-        }
-        setDocument(data);
-      } catch (err) {
-        setErrors({ general: err.message });
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchApplicationForms();
+    fetchApplicationForms(setDocument, setLoading, apiBase, setErrors);
   }, []);
 
   if (loading) return <Spinner />;

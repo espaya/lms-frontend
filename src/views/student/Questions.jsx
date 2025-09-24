@@ -3,6 +3,8 @@ import Cookies from "js-cookie";
 import ViewQuestions from "../../components/users/questions/ViewQuestions";
 import UserSidebar from "../../components/users/UserSidebar";
 import UserHeader from "../../components/users/UserHeader";
+import fetchApplicationForms from "../../controller/user/forms/EmploymentApplication";
+import { PATHS } from "../../router";
 
 export default function Questions() {
   const [questions, setQuestions] = useState([]);
@@ -21,6 +23,8 @@ export default function Questions() {
   const [gradesByTopic, setGradesByTopic] = useState({});
   const csrfToken = Cookies.get("XSRF-TOKEN");
   const authToken = localStorage.getItem("auth_token");
+
+  const [document, setDocument] = useState(null);
 
   const fetchQuestions = async (page = 1) => {
     setLoading(true);
@@ -120,6 +124,16 @@ export default function Questions() {
       },
     }));
   };
+
+  useEffect(() => {
+    fetchApplicationForms(setDocument, setLoading, apiBase, setErrors);
+  }, []);
+
+  const isSigned = document?.employmentAplication || document?.profileData;
+
+  if (!isSigned) {
+    window.location.href = PATHS.USER_APPLICATION_FORM;
+  }
 
   return (
     <>

@@ -388,21 +388,77 @@ export default function CellularUseForms({ fullname }) {
           }
         }
 
-        /* Signature canvas styling */
-        .signature-canvas {
-          display: block;
-          border-radius: 4px;
-          cursor: crosshair;
+        .progress-container {
+          width: 100%;
+          overflow-x: auto; /* allow horizontal scroll on very small screens */
         }
 
-        /* Improve touch experience on mobile */
+        .progress-steps {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          gap: 1rem; /* spacing between steps */
+          flex-wrap: wrap; /* wrap on small screens */
+        }
+
+        .progress-step {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          min-width: 60px; /* ensures step doesn't shrink too much */
+          flex: 1; /* steps grow evenly */
+          text-align: center;
+        }
+
+        .step-number {
+          width: 35px;
+          height: 35px;
+          border-radius: 50%;
+          background: #ddd;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-weight: bold;
+          margin-bottom: 0.5rem;
+        }
+
+        .progress-step.active .step-number {
+          background: #007bff;
+          color: #fff;
+        }
+
+        .progress-step.completed .step-number {
+          background: #28a745;
+          color: #fff;
+        }
+
+        .step-label {
+          font-size: 0.85rem;
+          word-wrap: break-word; /* break long words */
+        }
+
+        /* Responsive tweaks */
         @media (max-width: 768px) {
           .progress-steps {
-            flex-wrap: wrap;
-            justify-content: center;
+            gap: 0.5rem;
+          }
+          .step-label {
+            font-size: 0.75rem;
+          }
+          .step-number {
+            width: 28px;
+            height: 28px;
+            font-size: 0.8rem;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .progress-steps {
+            flex-wrap: nowrap;
+            overflow-x: auto;
           }
           .progress-step {
-            margin: 0 5px 15px;
+            min-width: 70px; /* wider for readability */
           }
         }
       `}</style>
