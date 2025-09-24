@@ -131,9 +131,11 @@ export default function Questions() {
 
   const isSigned = document?.employmentAplication || document?.profileData;
 
-  if (!isSigned) {
-    window.location.href = PATHS.USER_APPLICATION_FORM;
-  }
+  useEffect(() => {
+    if (!loading && document && !isSigned) {
+      window.location.href = PATHS.USER_APPLICATION_FORM;
+    }
+  }, [loading, document, isSigned]);
 
   return (
     <>
