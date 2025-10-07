@@ -2,7 +2,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { PATHS } from "../../router";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import fetchApplicationForms from "../../controller/user/forms/EmploymentApplication";
 
 export default function UserSidebar() {
   const location = useLocation();
@@ -15,12 +14,7 @@ export default function UserSidebar() {
 
   const isActive = (path) => location.pathname === path;
 
-  useEffect(() => {
-    fetchApplicationForms(setDocument, setLoading, apiBase, setErrors);
-  }, []);
 
-  const isSigned = document?.employmentAplication || document?.profileData;
-  const applicationForms = () => navigate(PATHS.USER_APPLICATION_FORM);
 
   return (
     <div className="sidebar">
@@ -38,11 +32,7 @@ export default function UserSidebar() {
           <li className={isActive("/user/dashboard") ? "active" : ""}>
             <a
               onClick={() => {
-                if (isSigned) {
-                  navigate("/user/dashboard");
-                } else {
-                  applicationForms(); // <-- now it runs only on click
-                }
+                navigate("/user/dashboard");
               }}
               style={{ cursor: "pointer" }}
             >
@@ -56,11 +46,7 @@ export default function UserSidebar() {
           <li className={isActive(PATHS.USER_QUESTION) ? "active" : ""}>
             <a
               onClick={() => {
-                if (isSigned) {
-                  navigate(PATHS.USER_QUESTION);
-                } else {
-                  applicationForms();
-                }
+                navigate(PATHS.USER_QUESTION);
               }}
               style={{ cursor: "pointer" }}
             >
@@ -74,11 +60,7 @@ export default function UserSidebar() {
           <li className={isActive(PATHS.USER_FORMS) ? "active" : ""}>
             <a
               onClick={() => {
-                if (isSigned) {
-                  navigate(PATHS.USER_FORMS);
-                } else {
-                  applicationForms();
-                }
+                navigate(PATHS.USER_FORMS);
               }}
               style={{ cursor: "pointer" }}
             >

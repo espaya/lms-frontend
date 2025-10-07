@@ -24,7 +24,6 @@ export default function Questions() {
   const csrfToken = Cookies.get("XSRF-TOKEN");
   const authToken = localStorage.getItem("auth_token");
 
-  const [document, setDocument] = useState(null);
 
   const fetchQuestions = async (page = 1) => {
     setLoading(true);
@@ -125,17 +124,6 @@ export default function Questions() {
     }));
   };
 
-  useEffect(() => {
-    fetchApplicationForms(setDocument, setLoading, apiBase, setErrors);
-  }, []);
-
-  const isSigned = document?.employmentAplication || document?.profileData;
-
-  useEffect(() => {
-    if (!loading && document && !isSigned) {
-      window.location.href = PATHS.USER_APPLICATION_FORM;
-    }
-  }, [loading, document, isSigned]);
 
   return (
     <>
