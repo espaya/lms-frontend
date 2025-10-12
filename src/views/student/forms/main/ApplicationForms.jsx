@@ -197,6 +197,9 @@ export default function ApplicationForms() {
 
       setSuccessMsg(data.message);
       setCurrentStep(7); // Success step
+      setTimeout(() => {
+        window.location.reload();
+      }, 3500);
     } catch (err) {
       setErrors({ general: err.message });
     } finally {

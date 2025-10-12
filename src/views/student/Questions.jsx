@@ -3,8 +3,6 @@ import Cookies from "js-cookie";
 import ViewQuestions from "../../components/users/questions/ViewQuestions";
 import UserSidebar from "../../components/users/UserSidebar";
 import UserHeader from "../../components/users/UserHeader";
-import fetchApplicationForms from "../../controller/user/forms/EmploymentApplication";
-import { PATHS } from "../../router";
 
 export default function Questions() {
   const [questions, setQuestions] = useState([]);
