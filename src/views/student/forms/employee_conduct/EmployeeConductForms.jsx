@@ -168,7 +168,7 @@ export default function EmployeeConductForms({ fullname }) {
                       <form onSubmit={handleFormSubmit}>
                         {currentStep === 1 && (
                           <div className="step-content">
-                            <h4 className="step-title">Drug Testing Policy</h4>
+                            <h4 className="step-title">Employee Conduct</h4>
                             <div className="row">
                               <div className="col-12">
                                 <p>
