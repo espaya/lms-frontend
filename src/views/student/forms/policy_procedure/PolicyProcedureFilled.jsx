@@ -71,7 +71,9 @@ export default function PolicyProcedureFilled({ data, fullname }) {
                           6600 Fieldtan Trail, Moseley, VA, 23120 <br />
                           Agency Phone: (+1) 804-818-3216
                         </p>
-                        <h4 className="mt-4 mb-3">Health & Safety Agreement</h4>
+                        <h4 className="mt-4 mb-3">
+                          Policies And Procedures Orientation Acknowledgement
+                        </h4>
                       </div>
                       {/*  */}
                       <div className="step-content">
