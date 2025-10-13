@@ -80,6 +80,9 @@ export default function AttendanceForms() {
       }
       setSuccessMsg(data.message);
       setCurrentStep(5); // Success step
+      setTimeout(() => {
+        window.location.reload();
+      }, 3500);
     } catch (err) {
       setErrors({ general: err.message });
     } finally {
