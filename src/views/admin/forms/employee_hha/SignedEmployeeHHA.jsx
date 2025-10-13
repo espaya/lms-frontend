@@ -84,7 +84,7 @@ export default function SignedEmployeeHHAForms() {
                         <div className="row">
                           <div className="col-md-12">
                             <p>
-                              Employee Name: <u>{fullname}</u>
+                              Employee Name: <u>{fullname ?? 'N/A'}</u>
                             </p>
                             <h6> REPORTS TO: SUPERVISING REGISTERED NURSE</h6>
                             <h6>DEPARTMENT: CLINICAL</h6>

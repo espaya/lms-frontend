@@ -80,8 +80,9 @@ export default function AttendanceFilled({ data }) {
                       </div>
                       <div className="col-12">
                         <p>
-                          Employee Name: <u> {profile.full_name} </u>
+                          Employee Name: <u>{profile.full_name ?? "N/A"}</u>
                         </p>
+
                         <br />
                         <p>
                           Exempt employees are owners, officers, management and

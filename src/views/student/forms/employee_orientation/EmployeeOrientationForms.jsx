@@ -189,7 +189,7 @@ export default function EmployeeOrientationForms({
                             <div className="row">
                               <div className="col-md-4">
                                 <p>
-                                  Employee Name: <u> {fullname} </u>
+                                  Employee Name: <u> {fullname ?? 'N/A'} </u>
                                 </p>
                               </div>
 

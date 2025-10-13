@@ -162,7 +162,7 @@ export default function DisclaimerForm({ fullname }) {
                             <div className="row">
                               <div className="col-12">
                                 <p>
-                                  Employee Name: <u> {fullname} </u>
+                                  Employee Name: <u> {fullname ?? 'N/A'} </u>
                                 </p>
 
                                 <p>

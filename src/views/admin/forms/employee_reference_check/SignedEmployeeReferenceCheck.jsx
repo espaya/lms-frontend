@@ -84,7 +84,7 @@ export default function SignedEmployeeReferenceForms() {
                         <div className="row">
                           <div className="col-md-12">
                             <p>
-                              Employee Name:<b> {fullname}</b>
+                              Employee Name:<b> {fullname ?? 'N/A'}</b>
                             </p>
                             <p>
                               Company Contacted:{" "}

@@ -76,10 +76,10 @@ export default function CriminalFilled({ data }) {
                         <div className="row">
                           <div className="col-12">
                             <p>
-                              Employee Name: <u> {fullname} </u>
+                              Employee Name: <u> {fullname ?? 'N/A'} </u>
                             </p>
                             <p>
-                              I, <u> {fullname}</u> have had no prior
+                              I, <u> {fullname ?? 'N/A'}</u> have had no prior
                               convictions of an offense described in the{" "}
                               <strong>Health and Safety Code</strong> which
                               would bar or potentially bar employment as listed

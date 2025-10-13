@@ -164,7 +164,7 @@ export default function CellularUseForms({ fullname }) {
                             <h4 className="step-title">Cellular Phone Use</h4>
                             <div className="row">
                               <div className="col-md-12">
-                                <p>Employee Name: {fullname}</p>
+                                <p>Employee Name: {fullname ?? "N/A"}</p>
                                 <p>
                                   <strong>
                                     1st Access Home Care Incorporated

@@ -84,7 +84,7 @@ export default function SignedNonCompeteForms() {
                         <div className="row">
                           <div className="col-md-12">
                             <p>
-                              Employee Name: <u>{fullname}</u>
+                              Employee Name: <u>{fullname ?? 'N/A'}</u>
                             </p>
 
                             <p>

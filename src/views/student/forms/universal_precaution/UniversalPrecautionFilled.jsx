@@ -75,7 +75,7 @@ export default function UniversalPrecautionsFilled({ data, fullname }) {
                       </div>
                       <div className="step-content">
                         <p>
-                          Employee Name: <u> {fullname} </u>
+                          Employee Name: <u> {fullname ?? 'N/A'} </u>
                         </p>
 
                         <div className="row">

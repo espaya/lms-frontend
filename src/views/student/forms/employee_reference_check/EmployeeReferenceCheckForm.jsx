@@ -244,7 +244,7 @@ export default function EmployeeAgreementForm({ fullname }) {
                             <h4 className="step-title">Reference Check</h4>
                             <div className="row">
                               <div className="col-md-12">
-                                <p>Employee Name: {fullname}</p>
+                                <p>Employee Name: {fullname ?? 'N/A'}</p>
                               </div>
                               <div className="col-md-6 mt-20">
                                 <div className="form-group">

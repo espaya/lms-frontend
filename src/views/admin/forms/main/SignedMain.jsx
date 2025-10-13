@@ -90,7 +90,7 @@ export default function SignedMainForms() {
                         <div className="row">
                           <div className="col-md-12">
                             <p>
-                              <strong>Name:</strong> {fullname}
+                              <strong>Name:</strong> {fullname ?? 'N/A'}
                             </p>
                             <p>
                               <strong>Email:</strong> {data?.email}
