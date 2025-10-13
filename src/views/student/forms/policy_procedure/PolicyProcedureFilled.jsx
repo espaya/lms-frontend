@@ -77,9 +77,6 @@ export default function PolicyProcedureFilled({ data, fullname }) {
                       </div>
                       {/*  */}
                       <div className="step-content">
-                        <h4 className="step-title">
-                          Policies And Procedures Orientation Acknowledgement
-                        </h4>
                         <div className="row">
                           <div className="col-md-12">
                             <p>
