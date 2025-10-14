@@ -6,9 +6,19 @@ import { PATHS } from "../../../router";
 export default function FormsIndex() {
   const forms = [
     {
+      application: {
+        name: "Application For Employment",
+        url: PATHS.USER_APPLICATION_FORM,
+      },
+
       attendace: {
         name: "Attendance, Tardiness, Absenteeism & Leave",
         url: PATHS.USER_ATTENDANCE_FORM,
+      },
+
+      cellular_use: {
+        name: "Employee Safety (Cellular Phone Use)",
+        url: PATHS.USER_EMPLOYEE_CELLULAR_USE_FORM,
       },
 
       confidentiality: {
@@ -26,6 +36,16 @@ export default function FormsIndex() {
         url: PATHS.USER_DISCLAIMER_FORM,
       },
 
+      disclosure: {
+        name: "Sworn Disclosure Statement",
+        url: PATHS.USER_DISCLOSURE_FORM,
+      },
+
+      dress_code: {
+        name: "Employee Dress Code",
+        url: PATHS.USER_EMPLOYEE_DRESS_CODE_FORM,
+      },
+
       drug_testing: {
         name: "Drug Testing Policy",
         url: PATHS.USER_DRUG_TESTING_FORM,
@@ -41,29 +61,9 @@ export default function FormsIndex() {
         url: PATHS.USER_EMPLOYEE_CONDUCT_FORM,
       },
 
-      dress_code: {
-        name: "Employee Dress Code",
-        url: PATHS.USER_EMPLOYEE_DRESS_CODE_FORM,
-      },
-
       employee_orientation: {
         name: "Employee Orientation",
         url: PATHS.USER_EMPLOYEE_ORIENTATION_FORM,
-      },
-
-      reference_check: {
-        name: "Employee Reference Check",
-        url: PATHS.USER_EMPLOYEE_REFERENCE_CHECK_FORM,
-      },
-
-      cellular_use: {
-        name: "Employee Safety (Cellular Phone Use)",
-        url: PATHS.USER_EMPLOYEE_CELLULAR_USE_FORM,
-      },
-
-      application: {
-        name: "Application For Employment",
-        url: PATHS.USER_APPLICATION_FORM,
       },
 
       health_safety: {
@@ -71,7 +71,10 @@ export default function FormsIndex() {
         url: PATHS.USER_EMPLOYEE_HEALTH_SAFETY_FORM,
       },
 
-      hha: { name: "Home Health Aide", url: PATHS.USER_HHA_FORM },
+      hha: {
+        name: "Home Health Aide",
+        url: PATHS.USER_HHA_FORM,
+      },
 
       infection_control: {
         name: "Infection Control Agreement",
@@ -88,6 +91,11 @@ export default function FormsIndex() {
         url: PATHS.USER_POLICIES_PROCEDURES_FORM,
       },
 
+      reference_check: {
+        name: "Employee Reference Check",
+        url: PATHS.USER_EMPLOYEE_REFERENCE_CHECK_FORM,
+      },
+
       reporting: {
         name: "Reporting: Abuse/Neglect/Exploitation",
         url: PATHS.USER_REPORTING_FORM,
@@ -101,11 +109,6 @@ export default function FormsIndex() {
       smoking: {
         name: "Employee Notification of Policy: Smoking in The Workplace",
         url: PATHS.USER_SMOKING_FORM,
-      },
-
-      disclosure: {
-        name: "Sworn Disclosure Statement",
-        url: PATHS.USER_DISCLOSURE_FORM,
       },
 
       universal_precautions: {

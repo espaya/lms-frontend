@@ -22,7 +22,7 @@ export default function Attendance() {
   return (
     <>
       {loading && <Spinner />}
-      {attendanceData && profileData ? (
+      {attendanceData ? (
         <AttendanceFilled data={attendance} />
       ) : (
         <AttendanceForms />
