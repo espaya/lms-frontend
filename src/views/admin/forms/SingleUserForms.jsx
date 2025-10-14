@@ -26,8 +26,6 @@ export default function SingleUserForms() {
     );
   }, [username, apiBase]);
 
-  console.log(allForms);
-
   // Format date for display
   const formatDate = (dateString) => {
     if (!dateString) return "Not signed";
