@@ -87,6 +87,7 @@ export default function FormsIndex() {
     FetchEmployeeVerification(setVerification, setLoading, setErrors, apiBase);
   }, []);
 
+
   const forms = [
     {
       application: {
@@ -99,8 +100,8 @@ export default function FormsIndex() {
       attendace: {
         name: "Attendance, Tardiness, Absenteeism & Leave",
         url: PATHS.USER_ATTENDANCE_FORM,
-        form: attendace?.attendaceData,
-        created_at: attendace?.attendaceData?.created_at,
+        form: attendace?.attendanceData,
+        created_at: attendace?.attendanceData?.created_at,
       },
 
       cellular_use: {
