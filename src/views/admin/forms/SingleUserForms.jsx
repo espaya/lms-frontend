@@ -7,6 +7,8 @@ import { useEffect, useState } from "react";
 import Spinner from "../../../components/Spinner";
 import FetchAllEmployeeForms from "../../../controller/admin/AllFormsController";
 import { Link, useNavigate } from "react-router-dom";
+import { formatDate } from "../../../utils/DateFormatter";
+import timeAgo from "../../../utils/TimeAgo";
 
 export default function SingleUserForms() {
   const { username } = useParams();
@@ -25,36 +27,6 @@ export default function SingleUserForms() {
       username
     );
   }, [username, apiBase]);
-
-  // Format date for display
-  const formatDate = (dateString) => {
-    if (!dateString) return "Not signed";
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
-  };
-
-  // Calculate how long ago a form was signed
-  const timeAgo = (dateString) => {
-    if (!dateString) return "Never";
-
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffInSeconds = Math.floor((now - date) / 1000);
-
-    if (diffInSeconds < 60) return "Just now";
-    if (diffInSeconds < 3600)
-      return `${Math.floor(diffInSeconds / 60)} minutes ago`;
-    if (diffInSeconds < 86400)
-      return `${Math.floor(diffInSeconds / 3600)} hours ago`;
-    if (diffInSeconds < 2592000)
-      return `${Math.floor(diffInSeconds / 86400)} days ago`;
-
-    return formatDate(dateString);
-  };
 
   // Safe function to get form URL
   const getFormUrl = (pathObj) => {
@@ -285,9 +257,15 @@ export default function SingleUserForms() {
                             {formDefinitions.map((formDef) => {
                               const formData = allForms[formDef.key];
                               const isSigned =
-                                formData !== null && formData !== undefined;
+                                formData &&
+                                typeof formData === "object" &&
+                                Object.keys(formData).length > 0 &&
+                                (formData[formDef.dateField] ||
+                                  formData.signed_at);
+
                               const signedDate = isSigned
-                                ? formData[formDef.dateField]
+                                ? formData[formDef.dateField] ||
+                                  formData.signed_at
                                 : null;
                               const formUrl = getFormUrl(formDef.path);
 
@@ -328,17 +306,15 @@ export default function SingleUserForms() {
                                   <td>
                                     <div className="d-flex justify-content-end">
                                       {isSigned ? (
-                                        <>
-                                          <button
-                                            className="btn btn-primary btn-xs light"
-                                            onClick={() =>
-                                              handleViewForm(formDef, formData)
-                                            }
-                                          >
-                                            <i className="ri-eye-line me-1"></i>{" "}
-                                            View
-                                          </button>
-                                        </>
+                                        <button
+                                          className="btn btn-primary btn-xs light"
+                                          onClick={() =>
+                                            handleViewForm(formDef, formData)
+                                          }
+                                        >
+                                          <i className="ri-eye-line me-1"></i>{" "}
+                                          View
+                                        </button>
                                       ) : (
                                         <span className="text-muted">
                                           No actions available

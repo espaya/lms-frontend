@@ -9,11 +9,11 @@ import { PATHS } from "../../../router";
 export default function EmployeeOrientation() {
   const [loading, setLoading] = useState(false);
   const apiBase = import.meta.env.VITE_API_URL;
-  const [errors, setError] = useState({});
+  const [errors, setErrors] = useState({});
   const [orientation, setOrientation] = useState([]);
 
   useEffect(() => {
-    FetchEmployeeOrientation(setLoading, apiBase, setError, setOrientation);
+    FetchEmployeeOrientation(setLoading, apiBase, setErrors, setOrientation);
   }, []);
 
   const empApp = orientation?.empApp;

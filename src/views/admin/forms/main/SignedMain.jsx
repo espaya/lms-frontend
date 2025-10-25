@@ -27,7 +27,6 @@ export default function SignedMainForms() {
     document.body.innerHTML = originalContents;
   };
 
-  useEffect(() => {}, []);
 
   return (
     <>

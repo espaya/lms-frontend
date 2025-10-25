@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 const FetchEmployeeOrientation = async (
   setLoading,
   apiBase,
-  setError,
+  setErrors,
   setOrientation
 ) => {
   setLoading(true);
@@ -23,12 +23,12 @@ const FetchEmployeeOrientation = async (
 
     const data = await response.json();
     if (!response.ok) {
-      setError({ general: data.message });
+      setErrors({ general: data.message });
       return;
     }
     setOrientation(data);
   } catch (err) {
-    setError({ general: err.message });
+    setErrors({ general: err.message });
   } finally {
     setLoading(false);
   }
