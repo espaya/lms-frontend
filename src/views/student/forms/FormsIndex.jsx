@@ -312,7 +312,7 @@ export default function FormsIndex() {
                             <div className="rtable-cell--content title-content d-flex align-items-center">
                               <i
                                 style={{ marginRight: "10px" }}
-                                className="ri-file-list-3-fill"
+                                className="ri-file-list-3-fill fs-18 text-primary rounded-circle bg-primary-lighten"
                               ></i>
                               <span className="topic-cell-span">{f.name}</span>
                             </div>
@@ -322,7 +322,7 @@ export default function FormsIndex() {
                               Signature
                             </div>
                             <div className="rtable-cell--content replay-link-content">
-                              {f.form ? "Signed" : "N/A"}
+                              {f.form ? <p className="text-primary">Signed</p> : <p className="text-danger">N/A</p>}
                             </div>
                           </div>
                           <div className="rtable-cell rtable-cell--foot sales-cell">
