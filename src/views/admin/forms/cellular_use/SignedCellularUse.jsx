@@ -5,26 +5,28 @@ import Sidebar from "../../../../components/Sidebar";
 import Nav from "../../single_user/Nav";
 import { Link } from "react-router-dom";
 import { PATHS } from "../../../../router";
+import FetchAllEmployeeForms from "../../../../controller/admin/AllFormsController";
+import printContent from "../../../../utils/printContent";
 
 export default function SignedCellularForms() {
-  const location = useLocation();
   const { username } = useParams();
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const apiBase = import.meta.env.VITE_API_URL;
+  const [allForms, setAllForms] = useState([]);
 
-  const { formData, formType, allForms } = location.state || {};
+  useEffect(() => {
+    FetchAllEmployeeForms(
+      setLoading,
+      setErrors,
+      setAllForms,
+      apiBase,
+      username
+    );
+  }, []);
+
   const fullname = allForms?.application_form?.profile?.full_name;
   const data = allForms.employee_safety;
-
-  const printContent = () => {
-    var printArea = document.getElementById("printArea");
-    var printContents = printArea.innerHTML;
-    var originalContents = document.body.innerHTML;
-    document.body.innerHTML = printContents;
-    window.print();
-    document.body.innerHTML = originalContents;
-  };
 
   return (
     <>
@@ -83,7 +85,7 @@ export default function SignedCellularForms() {
                         <div className="row">
                           <div className="col-12">
                             <p>
-                              Employee Name: <u> {fullname ?? 'N/A'} </u>
+                              Employee Name: <u> {fullname ?? "N/A"} </u>
                             </p>
                             <p>
                               <strong>1st Access Home Care Incorporated</strong>{" "}

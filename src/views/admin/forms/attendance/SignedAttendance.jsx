@@ -4,26 +4,28 @@ import MyHeader from "../../../../components/MyHeader";
 import Sidebar from "../../../../components/Sidebar";
 import Nav from "../../single_user/Nav";
 import { Link } from "react-router-dom";
-import { PATHS } from "../../../../router";
 import Spinner from "../../../../components/Spinner";
 import { formatDate } from "../../../../utils/DateFormatter";
+import printContent from "../../../../utils/printContent";
+import FetchAllEmployeeForms from "../../../../controller/admin/AllFormsController";
 
 export default function SignedAttendanceForms() {
-  const location = useLocation();
   const { username } = useParams();
   const [loading, setLoading] = useState(false);
   const apiBase = import.meta.env.VITE_API_URL;
+  const [errors, setErrors] = useState({});
+  const [allForms, setAllForms] = useState([]);
 
-  const printContent = () => {
-    var printArea = document.getElementById("printArea");
-    var printContents = printArea.innerHTML;
-    var originalContents = document.body.innerHTML;
-    document.body.innerHTML = printContents;
-    window.print();
-    document.body.innerHTML = originalContents;
-  };
+  useEffect(() => {
+    FetchAllEmployeeForms(
+      setLoading,
+      setErrors,
+      setAllForms,
+      apiBase,
+      username
+    );
+  }, []);
 
-  const { formData, formType, allForms } = location.state || {};
   const fullname = allForms?.application_form?.profile?.full_name;
   const data = allForms.attendance_tardiness;
 
@@ -87,7 +89,7 @@ export default function SignedAttendanceForms() {
                       </div>
                       <div className="col-12">
                         <p>
-                          Employee Name: <u>{fullname ?? 'N/A'} </u>
+                          Employee Name: <u>{fullname ?? "N/A"} </u>
                         </p>
                         <br />
                         <p>
