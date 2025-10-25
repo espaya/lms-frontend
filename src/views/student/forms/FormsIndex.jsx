@@ -321,8 +321,22 @@ export default function FormsIndex() {
                             <div className="rtable-cell--heading">
                               Signature
                             </div>
-                            <div className="rtable-cell--content replay-link-content">
-                              {f.form ? <p className="text-primary">Signed</p> : <p className="text-danger">N/A</p>}
+                            <div className="rtable-cell--content replay-link-content ">
+                              {f.form ? (
+                                <a
+                                  className="icon mx-16 my-16 py-8 px-8 rounded-circle bg-primary-lighten"
+                                  href="#"
+                                >
+                                  <i className="ri-check-line fs-18 text-primary"></i>
+                                </a>
+                              ) : (
+                                <a
+                                  className="icon mx-16 my-16 py-8 px-8 rounded-circle bg-danger-lighten"
+                                  href="#"
+                                >
+                                  <i className="ri-close-line fs-18 text-danger"></i>
+                                </a>
+                              )}
                             </div>
                           </div>
                           <div className="rtable-cell rtable-cell--foot sales-cell">
