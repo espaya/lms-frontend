@@ -5,8 +5,11 @@ import Cookies from "js-cookie";
 import Pagination from "../../components/Pagination"; // You'll need to create this component
 import { PATHS } from "../../router";
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
 
 export default function Users() {
+  const csrfToken = Cookies.get("XSRF-TOKEN");
+  const authToken = localStorage.getItem("auth_token");
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [errors, setErrors] = useState({});
@@ -24,9 +27,6 @@ export default function Users() {
       await fetch(`${apiBase}/sanctum/csrf-cookie`, {
         credentials: "include",
       });
-
-      const csrfToken = Cookies.get("XSRF-TOKEN");
-      const authToken = localStorage.getItem("auth_token");
 
       const response = await fetch(`${apiBase}/api/users?page=${page}`, {
         credentials: "include",
@@ -66,6 +66,52 @@ export default function Users() {
 
   const handlePageChange = (page) => {
     fetchUsers(page);
+  };
+
+  const handleDeleteUser = async (id, username) => {
+    setErrors({});
+    try {
+      Swal.fire({
+        title: "Confirm",
+        text: `Are you sure you want to permanently delete "${username}"?`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes",
+        cancelButtonText: "No",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          // ✅ Proceed with deletion only if confirmed
+          const response = await fetch(`${apiBase}/api/user/delete/${id}`, {
+            method: "DELETE",
+            credentials: "include",
+            headers: {
+              Accept: "application/json",
+              "X-XSRF-TOKEN": decodeURIComponent(Cookies.get("XSRF-TOKEN")),
+              Authorization: `Bearer ${authToken}`,
+            },
+          });
+
+          const data = await response.json();
+
+          if (!response.ok) {
+            setErrors({ general: data.message });
+            return;
+          }
+
+          Swal.fire({
+            title: "Success",
+            icon: "success",
+            text: data.message,
+          });
+
+          setTimeout(() => {
+            window.location.reload();
+          }, 3000);
+        }
+      });
+    } catch (err) {
+      setErrors({ general: err.message });
+    }
   };
 
   return (
@@ -182,6 +228,9 @@ export default function Users() {
                                   </Link>
 
                                   <a
+                                    onClick={() =>
+                                      handleDeleteUser(user.id, user.name)
+                                    }
                                     style={{ fontSize: "16px" }}
                                     href="#"
                                     className="btn btn-sm btn-danger"
