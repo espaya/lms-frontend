@@ -208,7 +208,7 @@ export default function SignedAttendanceForms() {
                               <img
                                 src={`${apiBase}/storage/signature/${data.signature}`}
                                 alt="Signature"
-                                style={{ width: "200px" }}
+                                style={{ width: "100px" }}
                               />
                             ) : (
                               <p>
@@ -240,7 +240,7 @@ export default function SignedAttendanceForms() {
                                     <img
                                       src={`${apiBase}/storage/signature/${data.signature}`}
                                       alt="Signature"
-                                      style={{ width: "200px" }}
+                                      style={{ width: "100px" }}
                                     />
                                   ) : (
                                     <p>
