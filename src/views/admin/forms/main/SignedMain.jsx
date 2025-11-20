@@ -8,27 +8,68 @@ import { PATHS } from "../../../../router";
 import { formatDate } from "../../../../utils/DateFormatter";
 import printContent from "../../../../utils/printContent";
 import FetchAllEmployeeForms from "../../../../controller/admin/AllFormsController";
+import Cookies from "js-cookie";
+import Spinner from "../../../../components/Spinner";
 
 export default function SignedMainForms() {
-  const location = useLocation();
   const { username } = useParams();
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const apiBase = import.meta.env.VITE_API_URL;
-  const [allForms, setAllForms] = useState([]);
+  const [allForms, setAllForms] = useState({});
+
+  const getApplication = async () => {
+    setLoading(true);
+    setErrors({});
+    try {
+      const response = await fetch(
+        `${apiBase}/api/admin/dashboard/all-forms/${username}`,
+        {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
+            // "X-XSRF-TOKEN": decodeURIComponent(Cookies.get("XSRF-TOKEN")),
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setErrors({ general: data.message || "Failed to fetch forms." });
+        console.log("My error:", data.message);
+        return;
+      }
+
+      setAllForms(data);
+    } catch (err) {
+      setErrors({ general: err.message });
+      console.log("My catch error:", data.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    FetchAllEmployeeForms(
-      setLoading,
-      setErrors,
-      setAllForms,
-      apiBase,
-      username
-    );
+    // FetchAllEmployeeForms(
+    //   setLoading,
+    //   setErrors,
+    //   setAllForms,
+    //   apiBase,
+    //   username
+    // );
+
+    getApplication();
   }, []);
 
   const fullname = allForms?.application_form?.profile?.full_name;
-  const data = allForms.application_form;
+  const data = allForms?.application_form;
+
+  console.log(username); // beehive
+  console.log(allForms); // 0
 
   return (
     <>
@@ -101,11 +142,11 @@ export default function SignedMainForms() {
                             </p>
                             <p>
                               <strong>Present Address: </strong>
-                              {`${data.present_address.present_address}  ${data.present_address.present_city} ${data.present_address.present_state} ${data.present_address.present_zip}`}
+                              {`${data?.present_address?.present_address}  ${data?.present_address?.present_city} ${data?.present_address?.present_state} ${data?.present_address?.present_zip}`}
                             </p>
                             <p>
                               <strong>Permanent Address: </strong>
-                              {`${data.permanent_address.permanent_address}  ${data.permanent_address.permanent_city} ${data.permanent_address.permanent_state} ${data.permanent_address.permanent_zip}`}
+                              {`${data?.permanent_address?.permanent_address}  ${data?.permanent_address?.permanent_city} ${data?.permanent_address?.permanent_state} ${data?.permanent_address?.permanent_zip}`}
                             </p>
                             <p>
                               <strong>Employee Hire Date: </strong>
@@ -301,67 +342,74 @@ export default function SignedMainForms() {
                               <td>Current Academic</td>
                               <td>
                                 {
-                                  data.academic
+                                  data?.academic
                                     ?.edu_current_name_location_school
                                 }
                               </td>
-                              <td>{data.academic?.edu_current_number_years}</td>
-                              <td>{data.academic?.edu_current_did_graduate}</td>
                               <td>
-                                {data.academic?.edu_current_subjects_studied}
+                                {data?.academic?.edu_current_number_years}
+                              </td>
+                              <td>
+                                {data?.academic?.edu_current_did_graduate}
+                              </td>
+                              <td>
+                                {data?.academic?.edu_current_subjects_studied}
                               </td>
                             </tr>
                             <tr>
                               <td>Last Academic</td>
                               <td>
-                                {data.academic?.edu_last_name_location_school}
+                                {data?.academic?.edu_last_name_location_school}
                               </td>
-                              <td>{data.academic?.edu_last_number_years}</td>
-                              <td>{data.academic?.edu_last_did_graduate}</td>
+                              <td>{data?.academic?.edu_last_number_years}</td>
+                              <td>{data?.academic?.edu_last_did_graduate}</td>
                               <td>
-                                {data.academic?.edu_last_subjects_studied}
+                                {data?.academic?.edu_last_subjects_studied}
                               </td>
                             </tr>
                             <tr>
                               <td>Current Trades</td>
                               <td>
                                 {
-                                  data.academic
+                                  data?.academic
                                     ?.trades_current_name_location_school
                                 }
                               </td>
                               <td>
-                                {data.academic?.trades_current_number_years}
+                                {data?.academic?.trades_current_number_years}
                               </td>
                               <td>
-                                {data.academic?.trades_current_did_graduate}
+                                {data?.academic?.trades_current_did_graduate}
                               </td>
                               <td>
-                                {data.academic?.trades_current_subjects_studied}
+                                {
+                                  data?.academic
+                                    ?.trades_current_subjects_studied
+                                }
                               </td>
                             </tr>
                             <tr>
                               <td>Last Trades</td>
                               <td>
                                 {
-                                  data.academic
+                                  data?.academic
                                     ?.trades_last_current_name_location_school
                                 }
                               </td>
                               <td>
                                 {
-                                  data.academic
+                                  data?.academic
                                     ?.trades_last_current_number_years
                                 }
                               </td>
                               <td>
                                 {
-                                  data.academic
+                                  data?.academic
                                     ?.trades_last_current_did_graduate
                                 }
                               </td>
                               <td>
-                                {data.academic?.trades_last_subjects_studied}
+                                {data?.academic?.trades_last_subjects_studied}
                               </td>
                             </tr>
                           </tbody>
@@ -373,7 +421,7 @@ export default function SignedMainForms() {
                           Summarize special skills and qualifications required
                           from employment or other experiences that may qualify
                           you to work with this company:{" "}
-                          <b> {data.special_skills_qualifications} </b>{" "}
+                          <b> {data?.special_skills_qualifications} </b>{" "}
                         </div>
                       </section>
 
@@ -395,51 +443,51 @@ export default function SignedMainForms() {
                           <tbody>
                             <tr>
                               <td>
-                                {formatDate(data.past_emp_info?.from_date_1)}
+                                {formatDate(data?.past_emp_info?.from_date_1)}
                               </td>
                               <td>
-                                {formatDate(data.past_emp_info?.to_date_1)}
+                                {formatDate(data?.past_emp_info?.to_date_1)}
                               </td>
                               <td>
-                                {data.past_emp_info?.name_address_employer_1}
+                                {data?.past_emp_info?.name_address_employer_1}
                               </td>
-                              <td>{data.past_emp_info?.phone_number_1}</td>
-                              <td>{data.past_emp_info?.job_1}</td>
-                              <td>${data.past_emp_info?.salary_1}</td>
-                              <td>{data.past_emp_info?.reason_leaving_1}</td>
+                              <td>{data?.past_emp_info?.phone_number_1}</td>
+                              <td>{data?.past_emp_info?.job_1}</td>
+                              <td>${data?.past_emp_info?.salary_1}</td>
+                              <td>{data?.past_emp_info?.reason_leaving_1}</td>
                             </tr>
-                            {data.past_emp_info?.from_date_2 && (
+                            {data?.past_emp_info?.from_date_2 && (
                               <tr>
                                 <td>
-                                  {formatDate(data.past_emp_info?.from_date_2)}
+                                  {formatDate(data?.past_emp_info?.from_date_2)}
                                 </td>
                                 <td>
-                                  {formatDate(data.past_emp_info?.to_date_2)}
+                                  {formatDate(data?.past_emp_info?.to_date_2)}
                                 </td>
                                 <td>
-                                  {data.past_emp_info?.name_address_employer_2}
+                                  {data?.past_emp_info?.name_address_employer_2}
                                 </td>
-                                <td>{data.past_emp_info?.phone_number_2}</td>
-                                <td>{data.past_emp_info?.job_2}</td>
-                                <td>${data.past_emp_info?.salary_2}</td>
-                                <td>{data.past_emp_info?.reason_leaving_2}</td>
+                                <td>{data?.past_emp_info?.phone_number_2}</td>
+                                <td>{data?.past_emp_info?.job_2}</td>
+                                <td>${data?.past_emp_info?.salary_2}</td>
+                                <td>{data?.past_emp_info?.reason_leaving_2}</td>
                               </tr>
                             )}
-                            {data.past_emp_info?.from_date_3 && (
+                            {data?.past_emp_info?.from_date_3 && (
                               <tr>
                                 <td>
-                                  {formatDate(data.past_emp_info?.from_date_3)}
+                                  {formatDate(data?.past_emp_info?.from_date_3)}
                                 </td>
                                 <td>
-                                  {formatDate(data.past_emp_info?.to_date_3)}
+                                  {formatDate(data?.past_emp_info?.to_date_3)}
                                 </td>
                                 <td>
-                                  {data.past_emp_info?.name_address_employer_3}
+                                  {data?.past_emp_info?.name_address_employer_3}
                                 </td>
-                                <td>{data.past_emp_info?.phone_number_3}</td>
-                                <td>{data.past_emp_info?.job_3}</td>
-                                <td>${data.past_emp_info?.salary_3}</td>
-                                <td>{data.past_emp_info?.reason_leaving_3}</td>
+                                <td>{data?.past_emp_info?.phone_number_3}</td>
+                                <td>{data?.past_emp_info?.job_3}</td>
+                                <td>${data?.past_emp_info?.salary_3}</td>
+                                <td>{data?.past_emp_info?.reason_leaving_3}</td>
                               </tr>
                             )}
                           </tbody>
@@ -460,27 +508,27 @@ export default function SignedMainForms() {
                           </thead>
                           <tbody>
                             <tr>
-                              <td>{data.reference?.reference_name_1}</td>
-                              <td>{data.reference?.reference_address_1}</td>
-                              <td>{data.reference?.reference_phone_1}</td>
+                              <td>{data?.reference?.reference_name_1}</td>
+                              <td>{data?.reference?.reference_address_1}</td>
+                              <td>{data?.reference?.reference_phone_1}</td>
                               <td>
-                                {data.reference?.reference_years_acquainted_1}
+                                {data?.reference?.reference_years_acquainted_1}
                               </td>
                             </tr>
                             <tr>
-                              <td>{data.reference?.reference_name_2}</td>
-                              <td>{data.reference?.reference_address_2}</td>
-                              <td>{data.reference?.reference_phone_2}</td>
+                              <td>{data?.reference?.reference_name_2}</td>
+                              <td>{data?.reference?.reference_address_2}</td>
+                              <td>{data?.reference?.reference_phone_2}</td>
                               <td>
-                                {data.reference?.reference_years_acquainted_2}
+                                {data?.reference?.reference_years_acquainted_2}
                               </td>
                             </tr>
                             <tr>
-                              <td>{data.reference?.reference_name_3}</td>
-                              <td>{data.reference?.reference_address_3}</td>
-                              <td>{data.reference?.reference_phone_3}</td>
+                              <td>{data?.reference?.reference_name_3}</td>
+                              <td>{data?.reference?.reference_address_3}</td>
+                              <td>{data?.reference?.reference_phone_3}</td>
                               <td>
-                                {data.reference?.reference_years_acquainted_3}
+                                {data?.reference?.reference_years_acquainted_3}
                               </td>
                             </tr>
                           </tbody>
@@ -501,18 +549,18 @@ export default function SignedMainForms() {
                           </thead>
                           <tbody>
                             <tr>
-                              <td>{data.language?.language_1}</td>
-                              <td>{data.language?.read_write_1}</td>
-                              <td>{data.language?.read_speak_1}</td>
-                              <td>{data.language?.speak_only_1}</td>
+                              <td>{data?.language?.language_1}</td>
+                              <td>{data?.language?.read_write_1}</td>
+                              <td>{data?.language?.read_speak_1}</td>
+                              <td>{data?.language?.speak_only_1}</td>
                             </tr>
 
                             {data?.language?.language_2 && (
                               <tr>
-                                <td>{data.language?.language_2}</td>
-                                <td>{data.language?.read_write_2}</td>
-                                <td>{data.language?.read_speak_2}</td>
-                                <td>{data.language?.speak_only_2}</td>
+                                <td>{data?.language?.language_2}</td>
+                                <td>{data?.language?.read_write_2}</td>
+                                <td>{data?.language?.read_speak_2}</td>
+                                <td>{data?.language?.speak_only_2}</td>
                               </tr>
                             )}
                           </tbody>
@@ -524,7 +572,7 @@ export default function SignedMainForms() {
                         <h5 className="mb-3">Emergency Address</h5>
                         <div className="col-md-20">
                           <p>
-                            {`${data.emergency_address.emergency_address}, ${data.emergency_address.emergency_city}, ${data.emergency_address.emergency_city}, ${data.emergency_address.emergency_state}, ${data.emergency_address.emergency_zip}`}
+                            {`${data?.emergency_address?.emergency_address}, ${data?.emergency_address?.emergency_city}, ${data?.emergency_address?.emergency_city}, ${data?.emergency_address?.emergency_state}, ${data?.emergency_address?.emergency_zip}`}
                           </p>
                         </div>
                       </section>
@@ -533,14 +581,17 @@ export default function SignedMainForms() {
                       <section className="mt-50">
                         <h5 className="mb-3">Acknowledgement</h5>
 
-                        <div className="row">
-                          <div className="col-md-6">
+
+                        <div id="signature-wrapper" className="no-break">
+                        <div id="signature-row" className="row">
+                          {/* Normal layout for screen */}
+                          <div className="col-md-6 d-print-none">
                             <p>Signature:</p>
-                            {data.signature?.signature ? (
+                            {data?.signautre?.signature ? (
                               <img
-                                src={`${apiBase}/storage/signature/${data.signature.signature}`}
+                                src={`${apiBase}/storage/signature/${data?.signature?.signature}`}
                                 alt="Signature"
-                                style={{ width: "200px" }}
+                                style={{ width: "300px" }}
                               />
                             ) : (
                               <p>
@@ -548,10 +599,55 @@ export default function SignedMainForms() {
                               </p>
                             )}
                           </div>
-                          <div className="col-md-6">
-                            <p>Date Signed: {formatDate(data?.created_at)}</p>
+                          <div className="col-md-6 d-print-none">
+                            <p>Date Signed: </p>
+                            <p>{formatDate(data?.created_at)}</p>
+                          </div>
+
+                          {/* Print-only layout */}
+                          <div
+                            className="d-none d-print-block"
+                            style={{ width: "100%" }}
+                          >
+                            <table style={{ width: "100%", border: "none" }}>
+                              <tr>
+                                <td
+                                  style={{
+                                    width: "50%",
+                                    verticalAlign: "top",
+                                    padding: "10px",
+                                  }}
+                                >
+                                  <p>Signature:</p>
+                                  {data?.signature?.signature ? (
+                                    <img
+                                      src={`${apiBase}/storage/signature/${data?.signature?.signature}`}
+                                      alt="Signature"
+                                      style={{ width: "250px" }}
+                                    />
+                                  ) : (
+                                    <p>
+                                      <em>No signature provided</em>
+                                    </p>
+                                  )}
+                                </td>
+                                <td
+                                  style={{
+                                    width: "50%",
+                                    verticalAlign: "top",
+                                    padding: "10px",
+                                  }}
+                                >
+                                  <p>Date Signed: </p>
+                                  <p>{formatDate(data?.created_at)}</p>
+                                </td>
+                              </tr>
+                            </table>
                           </div>
                         </div>
+                      </div>
+
+
                       </section>
                     </div>
                   </div>

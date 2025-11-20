@@ -227,7 +227,7 @@ export default function FormsIndex() {
         name: "Sexual Harassment",
         url: PATHS.USER_SEXUAL_HARASSMENT_FORM,
         form: sexual?.sexualData,
-        created_at: sexual?.sexualData?.created,
+        created_at: sexual?.sexualData?.created_at,
       },
 
       smoking: {

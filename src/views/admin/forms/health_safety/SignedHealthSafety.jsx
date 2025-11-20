@@ -8,6 +8,7 @@ import { PATHS } from "../../../../router";
 import { formatDate } from "../../../../utils/DateFormatter";
 import printContent from "../../../../utils/printContent";
 import FetchAllEmployeeForms from "../../../../controller/admin/AllFormsController";
+import Spinner from "../../../../components/Spinner";
 
 export default function SignedHealthSafetyForms() {
   const location = useLocation();
@@ -18,16 +19,17 @@ export default function SignedHealthSafetyForms() {
   const [allForms, setAllForms] = useState([]);
 
   useEffect(() => {
-    FetchAllEmployeeForms( setLoading,
+    FetchAllEmployeeForms(
+      setLoading,
       setErrors,
       setAllForms,
       apiBase,
-      username)
-  },[]);
+      username
+    );
+  }, []);
 
   const fullname = allForms?.application_form?.profile?.full_name;
   const data = allForms.health_safety_agreement;
-
 
   return (
     <>
@@ -84,7 +86,7 @@ export default function SignedHealthSafetyForms() {
                       {/*  */}
                       <div className="col-md-12">
                         <p>
-                          Employee Name: <u>{fullname ?? 'N/A'}</u>
+                          Employee Name: <u>{fullname ?? "N/A"}</u>
                         </p>
                         <p>
                           I do understand the physical requirements of my job
@@ -122,24 +124,68 @@ export default function SignedHealthSafetyForms() {
                         </p>
                       </div>
                       {/*  */}
-                      <div className="row">
-                        <div className="col-md-6 mt-20">
-                          <p>Signature:</p>
-                          {data?.signature ? (
-                            <img
-                              src={`${apiBase}/storage/signature/${data.signature}`}
-                              alt="Signature"
-                              style={{ width: "300px" }}
-                            />
-                          ) : (
-                            <p>
-                              <em>No signature provided</em>
-                            </p>
-                          )}
-                        </div>
-                        <div className="col-md-6 mt-50">
-                          <p>Date Signed: </p>
-                          <p>{formatDate(data?.created_at)}</p>
+                      <div id="signature-wrapper" className="no-break">
+                        <div id="signature-row" className="row">
+                          {/* Normal layout for screen */}
+                          <div className="col-md-6 d-print-none">
+                            <p>Signature:</p>
+                            {data?.signature ? (
+                              <img
+                                src={`${apiBase}/storage/signature/${data.signature}`}
+                                alt="Signature"
+                                style={{ width: "300px" }}
+                              />
+                            ) : (
+                              <p>
+                                <em>No signature provided</em>
+                              </p>
+                            )}
+                          </div>
+                          <div className="col-md-6 d-print-none">
+                            <p>Date Signed: </p>
+                            <p>{formatDate(data?.created_at)}</p>
+                          </div>
+
+                          {/* Print-only layout */}
+                          <div
+                            className="d-none d-print-block"
+                            style={{ width: "100%" }}
+                          >
+                            <table style={{ width: "100%", border: "none" }}>
+                              <tr>
+                                <td
+                                  style={{
+                                    width: "50%",
+                                    verticalAlign: "top",
+                                    padding: "10px",
+                                  }}
+                                >
+                                  <p>Signature:</p>
+                                  {data?.signature ? (
+                                    <img
+                                      src={`${apiBase}/storage/signature/${data.signature}`}
+                                      alt="Signature"
+                                      style={{ width: "250px" }}
+                                    />
+                                  ) : (
+                                    <p>
+                                      <em>No signature provided</em>
+                                    </p>
+                                  )}
+                                </td>
+                                <td
+                                  style={{
+                                    width: "50%",
+                                    verticalAlign: "top",
+                                    padding: "10px",
+                                  }}
+                                >
+                                  <p>Date Signed: </p>
+                                  <p>{formatDate(data?.created_at)}</p>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
                         </div>
                       </div>
                     </div>

@@ -8,6 +8,7 @@ import { PATHS } from "../../../../router";
 import { formatDate } from "../../../../utils/DateFormatter";
 import printContent from "../../../../utils/printContent";
 import FetchAllEmployeeForms from "../../../../controller/admin/AllFormsController";
+import Spinner from "../../../../components/Spinner";
 
 export default function SignedDisclosureForms() {
   const location = useLocation();
@@ -29,7 +30,7 @@ export default function SignedDisclosureForms() {
 
   const fullname = allForms?.application_form?.profile?.full_name;
   const data = allForms.sworn_disclosure;
-  const position = allForms.application_form.position;
+  const position = allForms?.application_form?.position;
 
   return (
     <>
@@ -112,9 +113,8 @@ export default function SignedDisclosureForms() {
                               for prospective employees and volunteers.
                             </p>
                             <p>
-                              Mailing Address: <b> {data.mailing_address} </b>
-                            </p>
-                            <p>
+                              Mailing Address: <b> {data?.mailing_address} </b>
+                            <br/>
                               Position: <b> {position} </b>{" "}
                             </p>
                             <p>
@@ -142,16 +142,16 @@ export default function SignedDisclosureForms() {
                               delivery of drugs to prisoners; escape from jail;
                               felonies by prisoners; within the Commonwealth or
                               any equivalent offense outside the Commonwealth?:{" "}
-                              <b> {data.convicted_outside_commonwealth} </b>
+                              <b> {data?.convicted_outside_commonwealth} </b>
                             </p>
 
-                            {data.convicted_outside_commonwealth ==
+                            {data?.convicted_outside_commonwealth ==
                               "Yes (Convicted)" ||
-                            data.convicted_outside_commonwealth ==
+                            data?.convicted_outside_commonwealth ==
                               "Yes (Pending)" ? (
                               <p>
                                 If Yes Specify Crimes:
-                                <b> {data.outside_commonwealth_specify}</b>
+                                <b> {data?.outside_commonwealth_specify}</b>
                               </p>
                             ) : (
                               <p></p>
@@ -162,14 +162,14 @@ export default function SignedDisclosureForms() {
                               subject of a pending charge for any other felony
                               in the five(5) years prior to the date of
                               employment or volunteering?:
-                              <b> {data.convicted_pending} </b>
+                              <b> {data?.convicted_pending} </b>
                             </p>
 
-                            {data.convicted_pending === "Yes (Convicted)" ||
-                            data.convicted_pending === "Yes (Pending)" ? (
+                            {data?.convicted_pending === "Yes (Convicted)" ||
+                            data?.convicted_pending === "Yes (Pending)" ? (
                               <p>
                                 If Yes, Specify Crime(s):
-                                <b> {data.convicted_pending_specify} </b>
+                                <b> {data?.convicted_pending_specify} </b>
                               </p>
                             ) : (
                               <p></p>
@@ -179,48 +179,138 @@ export default function SignedDisclosureForms() {
                               3. Have you ever been the subject of a founded
                               complaint of child abuse or neglect within or
                               outside the Commonwealth?
-                              <b> {data.child_abuse} </b>
+                              <b> {data?.child_abuse} </b>
                             </p>
                           </div>
                         </div>
-                        <div className="row">
-                          <div className="col-md-6 mt-20">
-                            <p>Witness Signature:</p>
-                            {data?.wit_signature ? (
-                              <img
-                                src={`${apiBase}/storage/signature/${data.wit_signature}`}
-                                alt="Signature"
-                                style={{ width: "300px" }}
-                              />
-                            ) : (
-                              <p>
-                                <em>No signature provided</em>
-                              </p>
-                            )}
-                          </div>
-                          <div className="col-md-6 mt-50">
-                            <p>Date Signed: </p>
-                            <p>{formatDate(data.created_at)}</p>
+
+                        <div id="signature-wrapper" className="no-break">
+                          <div id="signature-row" className="row">
+                            {/* Normal layout for screen */}
+                            <div className="col-md-6 d-print-none">
+                              <p>Witness Signature:</p>
+                              {data?.wit_signature ? (
+                                <img
+                                  src={`${apiBase}/storage/signature/${data.wit_signature}`}
+                                  alt="Signature"
+                                  style={{ width: "300px" }}
+                                />
+                              ) : (
+                                <p>
+                                  <em>No signature provided</em>
+                                </p>
+                              )}
+                            </div>
+                            <div className="col-md-6 d-print-none">
+                              <p>Date Signed: </p>
+                              <p>{formatDate(data?.created_at)}</p>
+                            </div>
+
+                            {/* Print-only layout */}
+                            <div
+                              className="d-none d-print-block"
+                              style={{ width: "100%" }}
+                            >
+                              <table style={{ width: "100%", border: "none" }}>
+                                <tr>
+                                  <td
+                                    style={{
+                                      width: "50%",
+                                      verticalAlign: "top",
+                                      padding: "10px",
+                                    }}
+                                  >
+                                    <p>Signature:</p>
+                                    {data?.wit_signature ? (
+                                      <img
+                                        src={`${apiBase}/storage/signature/${data.wit_signature}`}
+                                        alt="Signature"
+                                        style={{ width: "250px" }}
+                                      />
+                                    ) : (
+                                      <p>
+                                        <em>No signature provided</em>
+                                      </p>
+                                    )}
+                                  </td>
+                                  <td
+                                    style={{
+                                      width: "50%",
+                                      verticalAlign: "top",
+                                      padding: "10px",
+                                    }}
+                                  >
+                                    <p>Date Signed: </p>
+                                    <p>{formatDate(data?.created_at)}</p>
+                                  </td>
+                                </tr>
+                              </table>
+                            </div>
                           </div>
                         </div>
-                        <div className="row">
-                          <div className="col-md-6 mt-20">
-                            <p>Employee Signature:</p>
-                            {data?.signature ? (
-                              <img
-                                src={`${apiBase}/storage/signature/${data.signature}`}
-                                alt="Signature"
-                                style={{ width: "300px" }}
-                              />
-                            ) : (
-                              <p>
-                                <em>No signature provided</em>
-                              </p>
-                            )}
-                          </div>
-                          <div className="col-md-6 mt-50">
-                            <p>Date Signed: </p>
-                            <p>{formatDate(data.created_at)}</p>
+
+                        <div id="signature-wrapper" className="no-break">
+                          <div id="signature-row" className="row">
+                            {/* Normal layout for screen */}
+                            <div className="col-md-6 d-print-none">
+                              <p>Signature:</p>
+                              {data?.signature ? (
+                                <img
+                                  src={`${apiBase}/storage/signature/${data.signature}`}
+                                  alt="Signature"
+                                  style={{ width: "300px" }}
+                                />
+                              ) : (
+                                <p>
+                                  <em>No signature provided</em>
+                                </p>
+                              )}
+                            </div>
+                            <div className="col-md-6 d-print-none">
+                              <p>Date Signed: </p>
+                              <p>{formatDate(data?.created_at)}</p>
+                            </div>
+
+                            {/* Print-only layout */}
+                            <div
+                              className="d-none d-print-block"
+                              style={{ width: "100%" }}
+                            >
+                              <table style={{ width: "100%", border: "none" }}>
+                                <tr>
+                                  <td
+                                    style={{
+                                      width: "50%",
+                                      verticalAlign: "top",
+                                      padding: "10px",
+                                    }}
+                                  >
+                                    <p>Signature:</p>
+                                    {data?.signature ? (
+                                      <img
+                                        src={`${apiBase}/storage/signature/${data.signature}`}
+                                        alt="Signature"
+                                        style={{ width: "250px" }}
+                                      />
+                                    ) : (
+                                      <p>
+                                        <em>No signature provided</em>
+                                      </p>
+                                    )}
+                                  </td>
+                                  <td
+                                    style={{
+                                      width: "50%",
+                                      verticalAlign: "top",
+                                      padding: "10px",
+                                    }}
+                                  >
+                                    <p>Date Signed: </p>
+                                    <p>{formatDate(data?.created_at)}</p>
+                                  </td>
+                                </tr>
+                              </table>
+                            </div>
                           </div>
                         </div>
                       </div>

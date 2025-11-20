@@ -8,6 +8,7 @@ import Spinner from "../../../../components/Spinner";
 import { formatDate } from "../../../../utils/DateFormatter";
 import printContent from "../../../../utils/printContent";
 import FetchAllEmployeeForms from "../../../../controller/admin/AllFormsController";
+// import "../../../../../public/assets/css/print.css";
 
 export default function SignedAttendanceForms() {
   const { username } = useParams();
@@ -72,7 +73,7 @@ export default function SignedAttendanceForms() {
                       <div style={{ textAlign: "center" }}>
                         <img
                           src="/assets/images/main_logo.png"
-                          width={200}
+                          width={150}
                           alt="Company Logo"
                         />
                         <h5 className="mt-10">
@@ -88,10 +89,9 @@ export default function SignedAttendanceForms() {
                         </h4>
                       </div>
                       <div className="col-12">
-                        <p>
-                          Employee Name: <u>{fullname ?? "N/A"} </u>
-                        </p>
-                        <br />
+                        {/* <p> */}
+                          Employee Name: <u><b>{fullname ?? "N/A"}</b> </u>
+                        {/* </p> */}
                         <p>
                           Exempt employees are owners, officers, management and
                           supervisors. All full time employees are required to
@@ -101,7 +101,7 @@ export default function SignedAttendanceForms() {
                           their designated hours and tasks as assigned.
                         </p>
                       </div>
-                      <div className="col-12 mt-20">
+                      <div className="col-12 mt-10">
                         <h5>ATTENDANCE:</h5>
                         <ul>
                           <li>
@@ -130,7 +130,7 @@ export default function SignedAttendanceForms() {
                           </li>
                         </ul>
                       </div>
-                      <div className="col-12 mt-20">
+                      <div className="col-12 mt-10">
                         <h5>ABSENTEEISM:</h5>
                         <ul>
                           <li>
@@ -185,7 +185,6 @@ export default function SignedAttendanceForms() {
                             is a cause of emergency or illness.
                           </li>
                         </ul>
-                        <br />
                         <p>
                           <strong>I</strong> acknowledge that I have been
                           oriented to the Agency's policy regarding{" "}
@@ -200,26 +199,71 @@ export default function SignedAttendanceForms() {
                         </p>
                       </div>
 
-                      <div className="row">
-                        <div className="col-md-6 mt-20">
-                          <p>Signature:</p>
-                          {data?.signature ? (
-                            <img
-                              src={`${apiBase}/storage/signature/${data.signature}`}
-                              alt="Signature"
-                              style={{ width: "300px" }}
-                            />
-                          ) : (
-                            <p>
-                              <em>No signature provided</em>
-                            </p>
-                          )}
-                        </div>
-                        <div className="col-md-6 mt-10">
-                          <p>Date Signed: </p>
-                          <p>{formatDate(data?.created_at)}</p>
+                      <div id="signature-wrapper" className="no-break">
+                        <div id="signature-row" className="row">
+                          {/* Normal layout for screen */}
+                          <div className="col-md-6 d-print-none">
+                            <p>Signature:</p>
+                            {data?.signature ? (
+                              <img
+                                src={`${apiBase}/storage/signature/${data.signature}`}
+                                alt="Signature"
+                                style={{ width: "300px" }}
+                              />
+                            ) : (
+                              <p>
+                                <em>No signature provided</em>
+                              </p>
+                            )}
+                          </div>
+                          <div className="col-md-6 d-print-none">
+                            <p>Date Signed: </p>
+                            <p>{formatDate(data?.created_at)}</p>
+                          </div>
+
+                          {/* Print-only layout */}
+                          <div
+                            className="d-none d-print-block"
+                            style={{ width: "100%" }}
+                          >
+                            <table style={{ width: "100%", border: "none" }}>
+                              <tr>
+                                <td
+                                  style={{
+                                    width: "50%",
+                                    verticalAlign: "top",
+                                    padding: "10px",
+                                  }}
+                                >
+                                  <p>Signature:</p>
+                                  {data?.signature ? (
+                                    <img
+                                      src={`${apiBase}/storage/signature/${data.signature}`}
+                                      alt="Signature"
+                                      style={{ width: "250px" }}
+                                    />
+                                  ) : (
+                                    <p>
+                                      <em>No signature provided</em>
+                                    </p>
+                                  )}
+                                </td>
+                                <td
+                                  style={{
+                                    width: "50%",
+                                    verticalAlign: "top",
+                                    padding: "10px",
+                                  }}
+                                >
+                                  <p>Date Signed: </p>
+                                  <p>{formatDate(data?.created_at)}</p>
+                                </td>
+                              </tr>
+                            </table>
+                          </div>
                         </div>
                       </div>
+                      
                     </div>
                     <div className="row mt-20">
                       <div className="col-md-3 mt-20">

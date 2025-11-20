@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { PATHS } from "../../../../router";
 import FetchAllEmployeeForms from "../../../../controller/admin/AllFormsController";
 import printContent from "../../../../utils/printContent";
+import Spinner from "../../../../components/Spinner";
 
 export default function SignedCellularForms() {
   const { username } = useParams();
@@ -59,7 +60,7 @@ export default function SignedCellularForms() {
             <div className="row">
               <Nav username={username} />
               {loading ? (
-                <Spinner />
+                <Spinner/>
               ) : (
                 <div className="col-md-9">
                   <div className="card">

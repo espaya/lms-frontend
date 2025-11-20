@@ -8,6 +8,7 @@ import { PATHS } from "../../../../router";
 import { formatDate } from "../../../../utils/DateFormatter";
 import printContent from "../../../../utils/printContent";
 import FetchAllEmployeeForms from "../../../../controller/admin/AllFormsController";
+import Spinner from "../../../../components/Spinner";
 
 export default function SignedEmployeeHHAForms() {
   const location = useLocation();
@@ -17,7 +18,7 @@ export default function SignedEmployeeHHAForms() {
   const apiBase = import.meta.env.VITE_API_URL;
   const [allForms, setAllForms] = useState([]);
 
-    useEffect(() => {
+  useEffect(() => {
     FetchAllEmployeeForms(
       setLoading,
       setErrors,
@@ -89,12 +90,13 @@ export default function SignedEmployeeHHAForms() {
                             <p>
                               Employee Name: <u>{fullname ?? "N/A"}</u>
                             </p>
-                            <h6> REPORTS TO: SUPERVISING REGISTERED NURSE</h6>
-                            <h6>DEPARTMENT: CLINICAL</h6>
+                            <h6>
+                              REPORTS TO: SUPERVISING REGISTERED NURSE <br />
+                              DEPARTMENT: CLINICAL
+                            </h6>
                             <p>
                               <strong>POSITION SUMMARY:</strong>
-                            </p>
-                            <p>
+                              <br />
                               Works under the supervision of the designated
                               Registered Nurse. Provides direct client care as
                               assigned by the registered nurse. Provides quality
@@ -103,11 +105,7 @@ export default function SignedEmployeeHHAForms() {
                               agency philosophy and standards of home health
                               nursing care of assigned clients.
                             </p>
-                          </div>
-                          <div className="col-12">
-                            <p>
-                              <strong>POSITION QUALIFICATIONS:</strong>
-                            </p>
+                            <strong>POSITION QUALIFICATIONS:</strong>
                             <ol>
                               <li> ● High school graduation required.</li>
                               <li>
@@ -160,8 +158,6 @@ export default function SignedEmployeeHHAForms() {
                               </li>
                               .
                             </ol>
-                          </div>
-                          <div className="col-12">
                             <p>
                               <strong>PHYSICAL REQUIREMENTS:</strong>
                             </p>
@@ -257,18 +253,12 @@ export default function SignedEmployeeHHAForms() {
                                 and property.
                               </li>
                             </ol>
-                          </div>
-                          <div className="col-12">
-                            <p>
-                              <strong>PHYSICAL REQUIREMENTS:</strong>
-                            </p>
-                            <p>
-                              <strong>
-                                The appropriate and safe techniques in personal
-                                hygiene and grooming include:
-                              </strong>
-                            </p>
-
+                            <strong>
+                              PHYSICAL REQUIREMENTS:
+                              <br />
+                              The appropriate and safe techniques in personal
+                              hygiene and grooming include:
+                            </strong>
                             <ol>
                               <li> - Bed bath</li>
                               <li>- Sponge, tub or shower bath;</li>
@@ -289,16 +279,9 @@ export default function SignedEmployeeHHAForms() {
                                 have the home health aide perform.
                               </li>
                             </ol>
-                          </div>
-                          <div className="col-12">
-                            <p>
-                              <strong>DUTIES:</strong>
-                            </p>
-                            <p>
-                              {" "}
-                              1. Ensure quality and safe delivery of home care
-                              services.
-                            </p>
+                            <strong>DUTIES:</strong>
+                            <br /> 1. Ensure quality and safe delivery of home
+                            care services.
                             <ol>
                               <li>
                                 {" "}
@@ -324,11 +307,8 @@ export default function SignedEmployeeHHAForms() {
                                 timely manner.{" "}
                               </li>
                             </ol>
-
-                            <p>
-                              {" "}
-                              2. Implement current Home Health Aide services.{" "}
-                            </p>
+                            {/* <p> */} 2. Implement current Home Health Aide
+                            services. {/* </p> */}
                             <ol>
                               <li>
                                 {" "}
@@ -346,11 +326,12 @@ export default function SignedEmployeeHHAForms() {
                               </li>
                             </ol>
                           </div>
+
+                          {/* </div> */}
                           <div className="col-12">
                             <p>
                               <strong>ACKNOWLEDGEMENT:</strong>
-                            </p>
-                            <p>
+                              <br />
                               <span className="text-danger">*</span> I have
                               reviewed my job description and agree to perform
                               all duties mentioned to the best of my ability;{" "}
@@ -365,24 +346,68 @@ export default function SignedEmployeeHHAForms() {
                             </p>
                           </div>
                         </div>
-                        <div className="row">
-                          <div className="col-md-6 mt-20">
-                            <p>Signature:</p>
-                            {data?.signature ? (
-                              <img
-                                src={`${apiBase}/storage/signature/${data.signature}`}
-                                alt="Signature"
-                                style={{ width: "300px" }}
-                              />
-                            ) : (
-                              <p>
-                                <em>No signature provided</em>
-                              </p>
-                            )}
-                          </div>
-                          <div className="col-md-6 mt-50">
-                            <p>Date Signed: </p>
-                            <p>{formatDate(data?.created_at)}</p>
+                        <div id="signature-wrapper" className="no-break">
+                          <div id="signature-row" className="row">
+                            {/* Normal layout for screen */}
+                            <div className="col-md-6 d-print-none">
+                              <p>Signature:</p>
+                              {data?.signature ? (
+                                <img
+                                  src={`${apiBase}/storage/signature/${data.signature}`}
+                                  alt="Signature"
+                                  style={{ width: "300px" }}
+                                />
+                              ) : (
+                                <p>
+                                  <em>No signature provided</em>
+                                </p>
+                              )}
+                            </div>
+                            <div className="col-md-6 d-print-none">
+                              <p>Date Signed: </p>
+                              <p>{formatDate(data?.created_at)}</p>
+                            </div>
+
+                            {/* Print-only layout */}
+                            <div
+                              className="d-none d-print-block"
+                              style={{ width: "100%" }}
+                            >
+                              <table style={{ width: "100%", border: "none" }}>
+                                <tr>
+                                  <td
+                                    style={{
+                                      width: "50%",
+                                      verticalAlign: "top",
+                                      padding: "10px",
+                                    }}
+                                  >
+                                    <p>Signature:</p>
+                                    {data?.signature ? (
+                                      <img
+                                        src={`${apiBase}/storage/signature/${data.signature}`}
+                                        alt="Signature"
+                                        style={{ width: "250px" }}
+                                      />
+                                    ) : (
+                                      <p>
+                                        <em>No signature provided</em>
+                                      </p>
+                                    )}
+                                  </td>
+                                  <td
+                                    style={{
+                                      width: "50%",
+                                      verticalAlign: "top",
+                                      padding: "10px",
+                                    }}
+                                  >
+                                    <p>Date Signed: </p>
+                                    <p>{formatDate(data?.created_at)}</p>
+                                  </td>
+                                </tr>
+                              </table>
+                            </div>
                           </div>
                         </div>
                       </div>

@@ -8,6 +8,7 @@ import { PATHS } from "../../../../router";
 import { formatDate } from "../../../../utils/DateFormatter";
 import printContent from "../../../../utils/printContent";
 import FetchAllEmployeeForms from "../../../../controller/admin/AllFormsController";
+import Spinner from "../../../../components/Spinner";
 
 export default function SignedEmployeeReferenceForms() {
   const location = useLocation();
@@ -91,10 +92,10 @@ export default function SignedEmployeeReferenceForms() {
                             </p>
                             <p>
                               Company Contacted:{" "}
-                              <b> {data.company_contacted} </b>
+                              <b> {data?.company_contacted} </b>
                             </p>
                             <p>
-                              Mr/Mrs: <b> {data.employer_name} </b> Is checking
+                              Mr/Mrs: <b> {data?.employer_name} </b> Is checking
                               employment with our company. It is our policy to
                               ask for references prior to employment. Please
                               complete this form for our records and sign below.
@@ -104,36 +105,81 @@ export default function SignedEmployeeReferenceForms() {
                             <p>
                               Please Verify Employment Dates:
                               <br />
-                              From:<b> {formatDate(data.from_date)}</b>
+                              From:<b> {formatDate(data?.from_date)}</b>
                               <br />
-                              To:<b> {formatDate(data.to_date)}</b>
+                              To:<b> {formatDate(data?.to_date)}</b>
                             </p>
                             <p>
-                              Eligible For Hire? <b>{data.eligible_for_hire}</b>
+                              Eligible For Hire?{" "}
+                              <b>{data?.eligible_for_hire}</b>
                             </p>
                             <p>
-                              Comments: <b>{data.comments}</b>
+                              Comments: <b>{data?.comments}</b>
                             </p>
                           </div>
                         </div>
-                        <div className="row">
-                          <div className="col-md-6 mt-20">
-                            <p>Signature:</p>
-                            {data?.signature ? (
-                              <img
-                                src={`${apiBase}/storage/signature/${data.signature}`}
-                                alt="Signature"
-                                style={{ width: "300px" }}
-                              />
-                            ) : (
-                              <p>
-                                <em>No signature provided</em>
-                              </p>
-                            )}
-                          </div>
-                          <div className="col-md-6 mt-50">
-                            <p>Date Signed: </p>
-                            <p>{formatDate(data?.created_at)}</p>
+                        <div id="signature-wrapper" className="no-break">
+                          <div id="signature-row" className="row">
+                            {/* Normal layout for screen */}
+                            <div className="col-md-6 d-print-none">
+                              <p>Signature:</p>
+                              {data?.signature ? (
+                                <img
+                                  src={`${apiBase}/storage/signature/${data.signature}`}
+                                  alt="Signature"
+                                  style={{ width: "300px" }}
+                                />
+                              ) : (
+                                <p>
+                                  <em>No signature provided</em>
+                                </p>
+                              )}
+                            </div>
+                            <div className="col-md-6 d-print-none">
+                              <p>Date Signed: </p>
+                              <p>{formatDate(data?.created_at)}</p>
+                            </div>
+
+                            {/* Print-only layout */}
+                            <div
+                              className="d-none d-print-block"
+                              style={{ width: "100%" }}
+                            >
+                              <table style={{ width: "100%", border: "none" }}>
+                                <tr>
+                                  <td
+                                    style={{
+                                      width: "50%",
+                                      verticalAlign: "top",
+                                      padding: "10px",
+                                    }}
+                                  >
+                                    <p>Signature:</p>
+                                    {data?.signature ? (
+                                      <img
+                                        src={`${apiBase}/storage/signature/${data.signature}`}
+                                        alt="Signature"
+                                        style={{ width: "250px" }}
+                                      />
+                                    ) : (
+                                      <p>
+                                        <em>No signature provided</em>
+                                      </p>
+                                    )}
+                                  </td>
+                                  <td
+                                    style={{
+                                      width: "50%",
+                                      verticalAlign: "top",
+                                      padding: "10px",
+                                    }}
+                                  >
+                                    <p>Date Signed: </p>
+                                    <p>{formatDate(data?.created_at)}</p>
+                                  </td>
+                                </tr>
+                              </table>
+                            </div>
                           </div>
                         </div>
                       </div>

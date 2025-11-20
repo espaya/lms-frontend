@@ -1,0 +1,40 @@
+@media print {
+  @page {
+    size: A4;
+    margin: 10mm;
+  }
+
+  body {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  #printArea {
+    width: 100%;
+    max-width: 190mm;
+    margin: 0 auto;
+    page-break-after: always;
+  }
+
+  /* Never allow signature section to break across pages */
+  #signature-row,
+  #signature-wrapper,
+  #signature-row table,
+  #signature-row tr,
+  #signature-row td {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  /* Reduce image size if needed to prevent overflow */
+  #signature-row img {
+    max-width: 250px !important;
+    height: auto;
+  }
+
+  /* Generic no-break utility */
+  .no-break {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+}
