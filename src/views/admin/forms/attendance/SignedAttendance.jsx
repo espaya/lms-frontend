@@ -101,7 +101,7 @@ export default function SignedAttendanceForms() {
                           their designated hours and tasks as assigned.
                         </p>
                       </div>
-                      <div className="col-12 mt-10">
+                      {/* <div className="col-12"> */}
                         <h5>ATTENDANCE:</h5>
                         <ul>
                           <li>
@@ -129,8 +129,8 @@ export default function SignedAttendanceForms() {
                             supervisor and/or administrator.
                           </li>
                         </ul>
-                      </div>
-                      <div className="col-12 mt-10">
+                      {/* </div> */}
+                      {/* <div className="col-12"> */}
                         <h5>ABSENTEEISM:</h5>
                         <ul>
                           <li>
@@ -197,7 +197,7 @@ export default function SignedAttendanceForms() {
                           this policy and I know where it's located for future
                           reference.
                         </p>
-                      </div>
+                      {/* </div> */}
 
                       <div id="signature-wrapper" className="no-break">
                         <div id="signature-row" className="row">
