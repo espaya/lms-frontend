@@ -156,7 +156,7 @@ export default function SignedReportingForms() {
                               success of 1st Access Home Care.
                             </p>
                             <p>
-                              <strong>
+                              <strong style={{fontSize: "11px"}}>
                                 *ANY CONTROVERSY OR CLAIM ARISING OUT OF OR
                                 RELATING TO THIS AGREEMENT SHALL BE SUBMITTED TO
                                 ARBITRATION BEFORE ONE(1) ARBITRATOR IN
