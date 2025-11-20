@@ -90,7 +90,10 @@ export default function SignedAttendanceForms() {
                       </div>
                       <div className="col-12">
                         {/* <p> */}
-                          Employee Name: <u><b>{fullname ?? "N/A"}</b> </u>
+                        Employee Name:{" "}
+                        <u>
+                          <b>{fullname ?? "N/A"}</b>{" "}
+                        </u>
                         {/* </p> */}
                         <p>
                           Exempt employees are owners, officers, management and
@@ -100,91 +103,81 @@ export default function SignedAttendanceForms() {
                           required to arrive on time and appropriately complete
                           their designated hours and tasks as assigned.
                         </p>
-                      </div>
-                      {/* <div className="col-12"> */}
-                        <h5>ATTENDANCE:</h5>
-                        <ul>
-                          <li>
-                            1. The employee must notify the Supervisor in all
-                            events of tardiness. If the office is closed, call
-                            the answering service to have on-call Supervisor
-                            paged and relay information to him or her. Only 3
-                            tardiness in a calendar month will be accepted
-                            unless very extenuating circumstances are present
-                            and approved by the Supervisor. More than 3
-                            tardiness within a given month may result in
-                            counselling with Supervisor and every effort made to
-                            avoid further tardiness. A copy of counselling will
-                            be placed in the personnel file. Two consecutive
-                            months of written warnings for excessive tardiness
-                            may result in dismissal or termination
-                          </li>
-                          <li>
-                            2. No show/no call situations are not tolerated and
-                            may result in termination.
-                          </li>
-                          <li>
-                            3. Perfect attendance throughout the year may be
-                            rewarded at year - end at the discretion of
-                            supervisor and/or administrator.
-                          </li>
-                        </ul>
-                      {/* </div> */}
-                      {/* <div className="col-12"> */}
-                        <h5>ABSENTEEISM:</h5>
-                        <ul>
-                          <li>
-                            1. Employees are required to inform the Supervisor
-                            as soon as possible when absenteeism is known, to
-                            allow the Agency time to cover assignments. The
-                            employee is not excused from work until the
-                            Supervisor approves the absence or verified he/she
-                            is aware.
-                          </li>
-                          <li>
-                            2. Illness and or injury that requires a physician's
-                            treatment and that may take more than a day for
-                            recovery will need to be called in and discussed
-                            with the Supervisor. When the office is closed,
-                            request the answering service to contact the person
-                            on call with the information and give your phone
-                            number for follow-up.
-                          </li>
-                          <li>
-                            3. If an employee needs to be absent for reasons
-                            other than illness, he/she must submit a Leave
-                            Request Form at least 14 days prior to time
-                            requested.
-                          </li>
-                          <li>
-                            4. More than 3 consecutive days of absenteeism
-                            requires a physician's note for illness or injury
-                            sustained. Medically verified illness may be
-                            excused. Failure to provide proper notice will
-                            result in counselling and a written warning will be
-                            placed in the personnel file.
-                          </li>
-                          <li>
-                            5. Excessive absenteeism without just cause or
-                            physician's excuse is reason for dismissal.
-                          </li>
-                          <li>
-                            6.{" "}
-                            <strong>
-                              No shows / no calls are not tolerated.
-                            </strong>{" "}
-                            The need to follow policy and procedure is a
-                            courtesy to other employees. Disciplinary action may
-                            be supervised in an effort to avoid any further
-                            complications.
-                          </li>
-                          <li>
-                            7. Notice to your Supervisor in writing for
-                            consideration on a requested leave of absence must
-                            be submitted at least 14 days to leave, unless there
-                            is a cause of emergency or illness.
-                          </li>
-                        </ul>
+                        <h6>ATTENDANCE:</h6>
+                        <li>
+                          1. The employee must notify the Supervisor in all
+                          events of tardiness. If the office is closed, call the
+                          answering service to have on-call Supervisor paged and
+                          relay information to him or her. Only 3 tardiness in a
+                          calendar month will be accepted unless very
+                          extenuating circumstances are present and approved by
+                          the Supervisor. More than 3 tardiness within a given
+                          month may result in counselling with Supervisor and
+                          every effort made to avoid further tardiness. A copy
+                          of counselling will be placed in the personnel file.
+                          Two consecutive months of written warnings for
+                          excessive tardiness may result in dismissal or
+                          termination
+                        </li>
+                        <li>
+                          2. No show/no call situations are not tolerated and
+                          may result in termination.
+                        </li>
+                        <li>
+                          3. Perfect attendance throughout the year may be
+                          rewarded at year - end at the discretion of supervisor
+                          and/or administrator.
+                        </li>
+                        <h6>ABSENTEEISM:</h6>
+                        <li>
+                          1. Employees are required to inform the Supervisor as
+                          soon as possible when absenteeism is known, to allow
+                          the Agency time to cover assignments. The employee is
+                          not excused from work until the Supervisor approves
+                          the absence or verified he/she is aware.
+                        </li>
+                        <li>
+                          2. Illness and or injury that requires a physician's
+                          treatment and that may take more than a day for
+                          recovery will need to be called in and discussed with
+                          the Supervisor. When the office is closed, request the
+                          answering service to contact the person on call with
+                          the information and give your phone number for
+                          follow-up.
+                        </li>
+                        <li>
+                          3. If an employee needs to be absent for reasons other
+                          than illness, he/she must submit a Leave Request Form
+                          at least 14 days prior to time requested.
+                        </li>
+                        <li>
+                          4. More than 3 consecutive days of absenteeism
+                          requires a physician's note for illness or injury
+                          sustained. Medically verified illness may be excused.
+                          Failure to provide proper notice will result in
+                          counselling and a written warning will be placed in
+                          the personnel file.
+                        </li>
+                        <li>
+                          5. Excessive absenteeism without just cause or
+                          physician's excuse is reason for dismissal.
+                        </li>
+                        <li>
+                          6.{" "}
+                          <strong>
+                            No shows / no calls are not tolerated.
+                          </strong>{" "}
+                          The need to follow policy and procedure is a courtesy
+                          to other employees. Disciplinary action may be
+                          supervised in an effort to avoid any further
+                          complications.
+                        </li>
+                        <li>
+                          7. Notice to your Supervisor in writing for
+                          consideration on a requested leave of absence must be
+                          submitted at least 14 days to leave, unless there is a
+                          cause of emergency or illness.
+                        </li>
                         <p>
                           <strong>I</strong> acknowledge that I have been
                           oriented to the Agency's policy regarding{" "}
@@ -197,7 +190,7 @@ export default function SignedAttendanceForms() {
                           this policy and I know where it's located for future
                           reference.
                         </p>
-                      {/* </div> */}
+                      </div>
 
                       <div id="signature-wrapper" className="no-break">
                         <div id="signature-row" className="row">
@@ -263,7 +256,6 @@ export default function SignedAttendanceForms() {
                           </div>
                         </div>
                       </div>
-                      
                     </div>
                     <div className="row mt-20">
                       <div className="col-md-3 mt-20">
