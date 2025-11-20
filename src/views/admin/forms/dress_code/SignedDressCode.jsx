@@ -189,7 +189,7 @@ export default function SignedDressCodeForms() {
                                     <img
                                       src={`${apiBase}/storage/signature/${data.signature}`}
                                       alt="Signature"
-                                      style={{ width: "250px" }}
+                                      style={{ width: "200px" }}
                                     />
                                   ) : (
                                     <p>

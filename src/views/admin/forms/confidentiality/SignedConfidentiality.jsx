@@ -167,7 +167,7 @@ export default function SignedConfidentialityForm() {
                               <img
                                 src={`${apiBase}/storage/signature/${data.signature}`}
                                 alt="Signature"
-                                style={{ width: "300px" }}
+                                style={{ width: "200px" }}
                               />
                             ) : (
                               <p>
@@ -199,7 +199,7 @@ export default function SignedConfidentialityForm() {
                                     <img
                                       src={`${apiBase}/storage/signature/${data.signature}`}
                                       alt="Signature"
-                                      style={{ width: "300px" }}
+                                      style={{ width: "200px" }}
                                     />
                                   ) : (
                                     <p>

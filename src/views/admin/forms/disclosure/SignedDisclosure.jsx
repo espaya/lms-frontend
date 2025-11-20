@@ -193,7 +193,7 @@ export default function SignedDisclosureForms() {
                                 <img
                                   src={`${apiBase}/storage/signature/${data.wit_signature}`}
                                   alt="Signature"
-                                  style={{ width: "300px" }}
+                                  style={{ width: "200px" }}
                                 />
                               ) : (
                                 <p>
@@ -225,7 +225,7 @@ export default function SignedDisclosureForms() {
                                       <img
                                         src={`${apiBase}/storage/signature/${data.wit_signature}`}
                                         alt="Signature"
-                                        style={{ width: "250px" }}
+                                        style={{ width: "200px" }}
                                       />
                                     ) : (
                                       <p>

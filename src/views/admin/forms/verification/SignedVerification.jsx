@@ -135,7 +135,7 @@ export default function SignedVerificationForms() {
                               <img
                                 src={`${apiBase}/storage/signature/${data?.signature}`}
                                 alt="Signature"
-                                style={{ width: "300px" }}
+                                style={{ width: "200px" }}
                               />
                             ) : (
                               <p>
@@ -167,7 +167,7 @@ export default function SignedVerificationForms() {
                                     <img
                                       src={`${apiBase}/storage/signature/${data.signature}`}
                                       alt="Signature"
-                                      style={{ width: "250px" }}
+                                      style={{ width: "200px" }}
                                     />
                                   ) : (
                                     <p>

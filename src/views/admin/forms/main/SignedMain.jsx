@@ -591,7 +591,7 @@ export default function SignedMainForms() {
                               <img
                                 src={`${apiBase}/storage/signature/${data?.signature?.signature}`}
                                 alt="Signature"
-                                style={{ width: "300px" }}
+                                style={{ width: "200px" }}
                               />
                             ) : (
                               <p>
@@ -623,7 +623,7 @@ export default function SignedMainForms() {
                                     <img
                                       src={`${apiBase}/storage/signature/${data?.signature?.signature}`}
                                       alt="Signature"
-                                      style={{ width: "250px" }}
+                                      style={{ width: "200px" }}
                                     />
                                   ) : (
                                     <p>
