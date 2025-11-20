@@ -80,13 +80,12 @@ export default function SignedAttendanceForms() {
                           1st Access Home Care Incorporated
                         </h5>
                         <p>
-                          6600 Fieldtan Trail, Moseley, VA, 23120 <br />
-                          Agency Phone: (+1) 804-818-3216
+                          6600 Fieldtan Trail, Moseley, VA, 23120 | Agency Phone: (+1) 804-818-3216
                         </p>
-                        <h4 className="">
+                        <h5 className="">
                           Employee Notification of Policy: Attendance,
                           Tardiness, Absenteeism and Leave
-                        </h4>
+                        </h5>
                       </div>
                       <div className="col-12">
                         {/* <p> */}
