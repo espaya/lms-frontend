@@ -314,7 +314,7 @@ export default function DisclosureForms({ fullname, position }) {
                                   <div className="form-control-wrap">
                                     <input
                                       disabled
-                                      value={position}
+                                      value={position ?? "N/A"}
                                       type="text"
                                       className="form-control"
                                     />
