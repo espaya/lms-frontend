@@ -102,7 +102,7 @@ export default function DisclosureFilled({ data, position, fullname }) {
                               Mailing Address: <b>{data.mailing_address}</b>
                             </p>
                             <p>
-                              Position Applied For: <b> {position} </b>{" "}
+                              Position Applied For: <b> {position ?? "N/A"} </b>{" "}
                             </p>
                             <p>
                               1. Have you ever been convicted of or are you the
