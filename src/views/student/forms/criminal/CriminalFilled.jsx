@@ -6,7 +6,7 @@ import { PATHS } from "../../../../router";
 export default function CriminalFilled({ data }) {
   const apiBase = import.meta.env.VITE_API_URL;
   const criminal = data?.criminalHistory || {};
-  const fullname = data?.profileData?.full_name || {};
+  const fullname = data?.profileData?.full_name || "N/A";
 
   const printContent = () => {
     var printArea = document.getElementById("printArea");
