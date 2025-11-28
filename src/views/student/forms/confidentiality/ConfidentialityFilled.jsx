@@ -7,7 +7,7 @@ import { PATHS } from "../../../../router";
 
 export default function ConfidentialityFilled({ data }) {
   const confidentiality = data?.confidentiality || {};
-  const fullname = data?.profileData?.full_name || {};
+  const fullname = data?.profileData?.full_name || "N/A";
   const apiBase = import.meta.env.VITE_API_URL;
 
   const printContent = () => {
