@@ -1,14 +1,13 @@
 import html2pdf from "html2pdf.js";
-import * as XLSX from "xlsx";
 import domtoimage from "dom-to-image-more";
 import Cookies from "js-cookie";
+import ExcelJS from "exceljs";
+import { saveAs } from "file-saver";
 
 export default function ExportReport({ reportRef, reports }) {
   const csrfToken = Cookies.get("XSRF-TOKEN");
   const authToken = localStorage.getItem("auth_token");
   const apiBase = import.meta.env.VITE_API_URL;
-  
-
 
   async function exportToPDF() {
     try {
@@ -19,8 +18,8 @@ export default function ExportReport({ reportRef, reports }) {
         topic: report.topic?.name || "Untitled",
         grade:
           report.total > 0
-            ? Math.round((report.score / report.total) * 100) + '%'
-            : 0 + '%',
+            ? Math.round((report.score / report.total) * 100) + "%"
+            : 0 + "%",
         signature: report.signature
           ? `${apiBase}/storage/signature/${report.signature}`
           : null,
@@ -42,7 +41,7 @@ export default function ExportReport({ reportRef, reports }) {
             Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
           },
           body: JSON.stringify({ reports: data }),
-        }
+        },
       );
 
       if (!response.ok) throw new Error("Failed to export PDF");
@@ -60,7 +59,7 @@ export default function ExportReport({ reportRef, reports }) {
     }
   }
 
-  const exportToExcel = () => {
+  const exportToExcel = async () => {
     try {
       const element = reportRef?.current;
       if (!element) {
@@ -74,14 +73,25 @@ export default function ExportReport({ reportRef, reports }) {
         return;
       }
 
-      const workbook = XLSX.utils.table_to_book(table, {
-        sheet: "Report Data",
-        raw: true,
+      const workbook = new ExcelJS.Workbook();
+      const worksheet = workbook.addWorksheet("Report Data");
+
+      const rows = Array.from(table.querySelectorAll("tr"));
+
+      rows.forEach((row) => {
+        const cells = Array.from(row.querySelectorAll("th, td")).map(
+          (cell) => cell.innerText,
+        );
+        worksheet.addRow(cells);
       });
 
-      XLSX.writeFile(workbook, "report.xlsx", {
-        compression: true,
+      const buffer = await workbook.xlsx.writeBuffer();
+
+      const blob = new Blob([buffer], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       });
+
+      saveAs(blob, "report.xlsx");
     } catch (error) {
       console.error("Excel export failed:", error);
     }
