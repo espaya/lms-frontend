@@ -18,22 +18,11 @@ export const AuthProvider = ({ children }) => {
   const login = async (credentials) => {
     setLoading(true);
     try {
-      // Get CSRF token first
-      // await fetch(`${apiBase}/sanctum/csrf-cookie`, {
-      //   credentials: "include",
-      // });
-
-      // const csrfToken = Cookies.get("XSRF-TOKEN");
-
-      // hash the password before sending to the server
-
       const response = await fetch(`${apiBase}/api/login`, {
         method: "POST",
-        // credentials: "include",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
-          // "X-XSRF-TOKEN": decodeURIComponent(csrfToken),
         },
         body: JSON.stringify(credentials),
       });
@@ -79,7 +68,6 @@ export const AuthProvider = ({ children }) => {
           Authorization: `Bearer ${token}`,
           Accept: "application/json",
           "Content-Type": "application/json",
-          // "X-XSRF-TOKEN": decodeURIComponent(Cookies.get("XSRF-TOKEN")),
         },
         // Remove credentials: "include" for pure token auth
       });
