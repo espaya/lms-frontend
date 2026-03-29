@@ -4,11 +4,8 @@ import MyHeader from "../../../../components/MyHeader";
 import Sidebar from "../../../../components/Sidebar";
 import Nav from "../../single_user/Nav";
 import { Link } from "react-router-dom";
-import { PATHS } from "../../../../router";
 import { formatDate } from "../../../../utils/DateFormatter";
 import printContent from "../../../../utils/printContent";
-import FetchAllEmployeeForms from "../../../../controller/admin/AllFormsController";
-import Cookies from "js-cookie";
 import Spinner from "../../../../components/Spinner";
 
 export default function SignedMainForms() {
@@ -31,45 +28,31 @@ export default function SignedMainForms() {
             Accept: "application/json",
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
-            // "X-XSRF-TOKEN": decodeURIComponent(Cookies.get("XSRF-TOKEN")),
           },
-        }
+        },
       );
 
       const data = await response.json();
 
       if (!response.ok) {
         setErrors({ general: data.message || "Failed to fetch forms." });
-        console.log("My error:", data.message);
         return;
       }
 
       setAllForms(data);
     } catch (err) {
       setErrors({ general: err.message });
-      console.log("My catch error:", data.message);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    // FetchAllEmployeeForms(
-    //   setLoading,
-    //   setErrors,
-    //   setAllForms,
-    //   apiBase,
-    //   username
-    // );
-
     getApplication();
   }, []);
 
   const fullname = allForms?.application_form?.profile?.full_name;
   const data = allForms?.application_form;
-
-  console.log(username); // beehive
-  console.log(allForms); // 0
 
   return (
     <>
@@ -204,7 +187,8 @@ export default function SignedMainForms() {
                             <div className="col-md-12">
                               <p>
                                 <strong>
-                                  If So May We Inquire Your Present Employer?:{" "}
+                                  If So May We Inquire Your Present
+                                  Employer?:{" "}
                                 </strong>
                                 {data?.inqure_present_employer}
                               </p>
@@ -581,73 +565,70 @@ export default function SignedMainForms() {
                       <section className="mt-50">
                         <h5 className="mb-3">Acknowledgement</h5>
 
-
                         <div id="signature-wrapper" className="no-break">
-                        <div id="signature-row" className="row">
-                          {/* Normal layout for screen */}
-                          <div className="col-md-6 d-print-none">
-                            <p>Signature:</p>
-                            {data?.signautre?.signature ? (
-                              <img
-                                src={`${apiBase}/storage/signature/${data?.signature?.signature}`}
-                                alt="Signature"
-                                style={{ width: "100px" }}
-                              />
-                            ) : (
-                              <p>
-                                <em>No signature provided</em>
-                              </p>
-                            )}
-                          </div>
-                          <div className="col-md-6 d-print-none">
-                            <p>Date Signed: </p>
-                            <p>{formatDate(data?.created_at)}</p>
-                          </div>
+                          <div id="signature-row" className="row">
+                            {/* Normal layout for screen */}
+                            <div className="col-md-6 d-print-none">
+                              <p>Signature:</p>
+                              {data?.signautre?.signature ? (
+                                <img
+                                  src={`${apiBase}/storage/signature/${data?.signature?.signature}`}
+                                  alt="Signature"
+                                  style={{ width: "100px" }}
+                                />
+                              ) : (
+                                <p>
+                                  <em>No signature provided</em>
+                                </p>
+                              )}
+                            </div>
+                            <div className="col-md-6 d-print-none">
+                              <p>Date Signed: </p>
+                              <p>{formatDate(data?.created_at)}</p>
+                            </div>
 
-                          {/* Print-only layout */}
-                          <div
-                            className="d-none d-print-block"
-                            style={{ width: "100%" }}
-                          >
-                            <table style={{ width: "100%", border: "none" }}>
-                              <tr>
-                                <td
-                                  style={{
-                                    width: "50%",
-                                    verticalAlign: "top",
-                                    padding: "10px",
-                                  }}
-                                >
-                                  <p>Signature:</p>
-                                  {data?.signature?.signature ? (
-                                    <img
-                                      src={`${apiBase}/storage/signature/${data?.signature?.signature}`}
-                                      alt="Signature"
-                                      style={{ width: "100px" }}
-                                    />
-                                  ) : (
-                                    <p>
-                                      <em>No signature provided</em>
-                                    </p>
-                                  )}
-                                </td>
-                                <td
-                                  style={{
-                                    width: "50%",
-                                    verticalAlign: "top",
-                                    padding: "10px",
-                                  }}
-                                >
-                                  <p>Date Signed: </p>
-                                  <p>{formatDate(data?.created_at)}</p>
-                                </td>
-                              </tr>
-                            </table>
+                            {/* Print-only layout */}
+                            <div
+                              className="d-none d-print-block"
+                              style={{ width: "100%" }}
+                            >
+                              <table style={{ width: "100%", border: "none" }}>
+                                <tr>
+                                  <td
+                                    style={{
+                                      width: "50%",
+                                      verticalAlign: "top",
+                                      padding: "10px",
+                                    }}
+                                  >
+                                    <p>Signature:</p>
+                                    {data?.signature?.signature ? (
+                                      <img
+                                        src={`${apiBase}/storage/signature/${data?.signature?.signature}`}
+                                        alt="Signature"
+                                        style={{ width: "100px" }}
+                                      />
+                                    ) : (
+                                      <p>
+                                        <em>No signature provided</em>
+                                      </p>
+                                    )}
+                                  </td>
+                                  <td
+                                    style={{
+                                      width: "50%",
+                                      verticalAlign: "top",
+                                      padding: "10px",
+                                    }}
+                                  >
+                                    <p>Date Signed: </p>
+                                    <p>{formatDate(data?.created_at)}</p>
+                                  </td>
+                                </tr>
+                              </table>
+                            </div>
                           </div>
                         </div>
-                      </div>
-
-
                       </section>
                     </div>
                   </div>

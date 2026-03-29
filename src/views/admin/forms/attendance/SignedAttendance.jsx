@@ -232,7 +232,7 @@ export default function SignedAttendanceForms() {
                                     <img
                                       src={`${apiBase}/storage/signature/${data.signature}`}
                                       alt="Signature"
-                                      style={{ width: "70px" }}
+                                      style={{ width: "100px" }}
                                     />
                                   ) : (
                                     <p>
