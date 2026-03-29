@@ -54,6 +54,8 @@ export default function SignedMainForms() {
   const fullname = allForms?.application_form?.profile?.full_name;
   const data = allForms?.application_form;
 
+  console.log(data?.signature?.signature);
+
   return (
     <>
       <title>Application For Employment - 1staccess Home Care</title>
