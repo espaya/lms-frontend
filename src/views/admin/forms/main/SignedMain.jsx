@@ -604,7 +604,7 @@ export default function SignedMainForms() {
                                     }}
                                   >
                                     <p>Signature:</p>
-                                    {data?.signature?.signature ? (
+                                    {signature ? (
                                       <img
                                         src={`${apiBase}/storage/signature/${signature}`}
                                         alt="Signature"
