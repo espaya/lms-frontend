@@ -54,7 +54,7 @@ export default function SignedMainForms() {
   const fullname = allForms?.application_form?.profile?.full_name;
   const data = allForms?.application_form;
 
-  console.log(data?.signature?.signature);
+  const signature = data?.signature?.signature;
 
   return (
     <>
@@ -606,7 +606,7 @@ export default function SignedMainForms() {
                                     <p>Signature:</p>
                                     {data?.signature?.signature ? (
                                       <img
-                                        src={`${apiBase}/storage/signature/${data?.signature?.signature}`}
+                                        src={`${apiBase}/storage/signature/${signature}`}
                                         alt="Signature"
                                         style={{ width: "100px" }}
                                       />
