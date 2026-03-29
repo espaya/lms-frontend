@@ -572,9 +572,9 @@ export default function SignedMainForms() {
                             {/* Normal layout for screen */}
                             <div className="col-md-6 d-print-none">
                               <p>Signature:</p>
-                              {data?.signautre?.signature ? (
+                              {signature ? (
                                 <img
-                                  src={`${apiBase}/storage/signature/${data?.signature?.signature}`}
+                                  src={`${apiBase}/storage/signature/${signature}`}
                                   alt="Signature"
                                   style={{ width: "100px" }}
                                 />
