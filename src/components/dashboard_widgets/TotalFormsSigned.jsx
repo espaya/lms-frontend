@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Cookies from "js-cookie";
 
 export default function TotalFormsSigned() {
   const [forms, setForms] = useState({
@@ -12,7 +13,14 @@ export default function TotalFormsSigned() {
   useEffect(() => {
     const fetchForms = async () => {
       try {
-        const res = await fetch(`${apiBase}/dashboard/forms`);
+        const res = await fetch(`${apiBase}/api/dashboard/forms`, {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
+            "X-XSRF-TOKEN": decodeURIComponent(Cookies.get("XSRF-TOKEN")),
+          },
+        });
         const data = await res.json();
         setForms(data);
       } catch (err) {
@@ -31,7 +39,9 @@ export default function TotalFormsSigned() {
             <i className="ri-stack-line text-danger bg-danger-lighten fs-30 py-12 px-12 rounded me-20" />
           </span>
           <div>
-            <p className="mb-0"><strong>Forms Signed</strong></p>
+            <p className="mb-0">
+              <strong>Forms Signed</strong>
+            </p>
             <h3 className="mb-0">{forms.total}</h3>
           </div>
         </div>

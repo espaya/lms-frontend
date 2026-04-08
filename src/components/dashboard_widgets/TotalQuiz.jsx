@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Cookies from "js-cookie";
 
 export default function TotalQuiz() {
   const [quiz, setQuiz] = useState({
@@ -12,7 +13,14 @@ export default function TotalQuiz() {
   useEffect(() => {
     const fetchQuiz = async () => {
       try {
-        const res = await fetch(`${apiBase}/dashboard/quizzes`);
+        const res = await fetch(`${apiBase}/api/dashboard/quizzes`, {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
+            "X-XSRF-TOKEN": decodeURIComponent(Cookies.get("XSRF-TOKEN")),
+          },
+        });
         const data = await res.json();
         setQuiz(data);
       } catch (err) {
@@ -31,7 +39,9 @@ export default function TotalQuiz() {
             <i className="ri-add-circle-line text-warning bg-warning-lighten fs-30 py-12 px-12 rounded me-20" />
           </span>
           <div>
-            <p className="mb-0"><strong>Total Quiz</strong></p>
+            <p className="mb-0">
+              <strong>Total Quiz</strong>
+            </p>
             <h3 className="mb-0">{quiz.total}</h3>
           </div>
         </div>

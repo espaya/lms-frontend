@@ -15,6 +15,7 @@
     "@types/signature_pad": "^4.0.0",
     "axios": "^1.14.0",
     "chart.js": "^4.5.1",
+    "d3-geo": "^3.1.1",
     "docx": "^9.6.1",
     "dom-to-image-more": "^3.7.2",
     "event-source-polyfill": "^1.0.31",
@@ -32,6 +33,7 @@
     "react-google-recaptcha": "^3.1.0",
     "react-router-dom": "^7.13.2",
     "react-signature-canvas": "^1.1.0-alpha.2",
+    "react-simple-maps": "^1.0.0",
     "sweetalert2": "^11.26.24",
     "trim-canvas": "^0.1.2",
     "uuid": "^13.0.0"

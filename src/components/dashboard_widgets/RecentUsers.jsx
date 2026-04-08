@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Cookies from "js-cookie";
 
 export default function RecentUsers() {
   const [users, setUsers] = useState([]);
@@ -7,7 +8,15 @@ export default function RecentUsers() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await fetch(`${apiBase}/dashboard/recent-users`);
+        const res = await fetch(`${apiBase}/api/dashboard/recent-users`, {
+          credentials: "include",
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
+            "X-XSRF-TOKEN": decodeURIComponent(Cookies.get("XSRF-TOKEN")),
+          },
+        });
         const data = await res.json();
         setUsers(data);
       } catch (err) {

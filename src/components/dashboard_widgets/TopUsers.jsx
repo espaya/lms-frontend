@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Cookies from "js-cookie";
 
 export default function TopUsers() {
   const [users, setUsers] = useState([]);
@@ -7,7 +8,15 @@ export default function TopUsers() {
   useEffect(() => {
     const fetchTopUsers = async () => {
       try {
-        const res = await fetch(`${apiBase}/dashboard/top-users`);
+        const res = await fetch(`${apiBase}/api/dashboard/top-users`, {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
+            "X-XSRF-TOKEN": decodeURIComponent(Cookies.get("XSRF-TOKEN")),
+          },
+          credentials: "include",
+        });
         const data = await res.json();
         setUsers(data);
       } catch (err) {
@@ -27,7 +36,6 @@ export default function TopUsers() {
 
         <div className="card-body">
           <div className="rtable rtable--5cols rtable--collapse">
-            
             {/* HEADER */}
             <div className="rtable-row rtable-row--head bg-transparent">
               <div className="rtable-cell topic-cell column-heading text-dark">
@@ -50,7 +58,6 @@ export default function TopUsers() {
             {/* DATA */}
             {users.map((user, i) => (
               <div className="rtable-row" key={i}>
-                
                 <div className="rtable-cell topic-cell">
                   <div className="rtable-cell--content title-content d-flex align-items-center">
                     <img
@@ -89,7 +96,6 @@ export default function TopUsers() {
                     {user.score}%
                   </div>
                 </div>
-
               </div>
             ))}
           </div>

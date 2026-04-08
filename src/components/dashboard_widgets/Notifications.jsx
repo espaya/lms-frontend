@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Cookies from "js-cookie";
 
 export default function Notification() {
   const [notifications, setNotifications] = useState([]);
@@ -6,7 +7,14 @@ export default function Notification() {
 
   useEffect(() => {
     const fetchNotifications = async () => {
-      const res = await fetch(`${apiBase}/dashboard/notifications`);
+      const res = await fetch(`${apiBase}/api/dashboard/notifications`, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
+          "X-XSRF-TOKEN": decodeURIComponent(Cookies.get("XSRF-TOKEN")),
+        },
+      });
       const data = await res.json();
       setNotifications(data);
     };

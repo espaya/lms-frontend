@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Cookies from "js-cookie";
 
 export default function TotalUsers() {
   const [users, setUsers] = useState({
@@ -12,7 +13,15 @@ export default function TotalUsers() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await fetch(`${apiBase}/dashboard/users`);
+        const res = await fetch(`${apiBase}/api/dashboard/users`, {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
+            "X-XSRF-TOKEN": decodeURIComponent(Cookies.get("XSRF-TOKEN")),
+          },
+          credentials: "include",
+        });
         const data = await res.json();
         setUsers(data);
       } catch (err) {
@@ -31,7 +40,9 @@ export default function TotalUsers() {
             <i className="ri-team-line text-primary bg-primary-lighten fs-30 py-12 px-12 rounded me-20" />
           </span>
           <div>
-            <p className="mb-0"><strong>Total Users</strong></p>
+            <p className="mb-0">
+              <strong>Total Users</strong>
+            </p>
             <h3 className="mb-0">{users.total}</h3>
           </div>
         </div>

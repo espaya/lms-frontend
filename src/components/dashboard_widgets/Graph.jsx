@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import Cookies from "js-cookie";
 import {
   Chart,
   LineController,
@@ -21,7 +22,14 @@ export default function Graph() {
 
   useEffect(() => {
     const fetchGraph = async () => {
-      const res = await fetch(`${apiBase}/dashboard/graph`);
+      const res = await fetch(`${apiBase}/api/dashboard/graph`, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
+          "X-XSRF-TOKEN": decodeURIComponent(Cookies.get("XSRF-TOKEN")),
+        },
+      });
       const data = await res.json();
 
       new Chart(document.getElementById("EarningGraph"), {

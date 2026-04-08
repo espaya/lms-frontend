@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Cookies from "js-cookie";
 
 export default function QuickQctions() {
   const [data, setData] = useState({
@@ -14,7 +15,15 @@ export default function QuickQctions() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch(`${apiBase}/dashboard/quick-actions`);
+        const res = await fetch(`${apiBase}/api/dashboard/quick-actions`, {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
+            "X-XSRF-TOKEN": decodeURIComponent(Cookies.get("XSRF-TOKEN")),
+          },
+        });
         const result = await res.json();
         setData(result);
       } catch (err) {
