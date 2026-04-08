@@ -9,6 +9,7 @@ import { formatDate } from "../../../../utils/DateFormatter";
 import printContent from "../../../../utils/printContent";
 import FetchAllEmployeeForms from "../../../../controller/admin/AllFormsController";
 import Spinner from "../../../../components/Spinner";
+import exportToWord from "../../../../utils/exportToWord";
 
 export default function SIgnedSexualHarassmentForms() {
   const location = useLocation();
@@ -24,12 +25,13 @@ export default function SIgnedSexualHarassmentForms() {
       setErrors,
       setAllForms,
       apiBase,
-      username
+      username,
     );
   }, []);
 
   const fullname = allForms?.application_form?.profile?.full_name;
   const data = allForms?.sexual_harassment;
+  const title = "Sexual Harassment";
 
   return (
     <>
@@ -157,6 +159,7 @@ export default function SIgnedSexualHarassmentForms() {
                               <p>Signature:</p>
                               {data?.signature ? (
                                 <img
+                                  className="signature"
                                   src={`${apiBase}/storage/signature/${data.signature}`}
                                   alt="Signature"
                                   style={{ width: "100px" }}
@@ -173,7 +176,7 @@ export default function SIgnedSexualHarassmentForms() {
                             </div>
 
                             {/* Print-only layout */}
-                            <div
+                            {/* <div
                               className="d-none d-print-block"
                               style={{ width: "100%" }}
                             >
@@ -211,14 +214,14 @@ export default function SIgnedSexualHarassmentForms() {
                                   </td>
                                 </tr>
                               </table>
-                            </div>
+                            </div> */}
                           </div>
                         </div>
                       </div>
                     </div>
                     <div className="col-md-3 mt-20">
                       <button
-                        onClick={printContent}
+                        onClick={() => exportToWord({ fullname, title })}
                         className="btn btn-primary btn-lg"
                       >
                         Print

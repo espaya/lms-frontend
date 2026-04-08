@@ -8,6 +8,7 @@ import { formatDate } from "../../../../utils/DateFormatter";
 import printContent from "../../../../utils/printContent";
 import FetchAllEmployeeForms from "../../../../controller/admin/AllFormsController";
 import Spinner from "../../../../components/Spinner";
+import exportToWord from "../../../../utils/exportToWord";
 
 export default function SignedNonCompeteForms() {
   const location = useLocation();
@@ -23,12 +24,13 @@ export default function SignedNonCompeteForms() {
       setErrors,
       setAllForms,
       apiBase,
-      username
+      username,
     );
   }, []);
 
   const fullname = allForms?.application_form?.profile?.full_name;
   const data = allForms?.non_compete_agreement;
+  const title = "Non Compete Agreement";
 
   return (
     <>
@@ -88,7 +90,8 @@ export default function SignedNonCompeteForms() {
                         <div className="row">
                           <div className="col-md-12">
                             <p>
-                              Employee Name: <u>{fullname ?? "N/A"}</u><br/>
+                              Employee Name: <u>{fullname ?? "N/A"}</u>
+                              <br />
                               As an employee of 1st Access Home Care, the
                               employee acknowledges that they will be in receipt
                               of confidential information. This information
@@ -127,8 +130,7 @@ export default function SignedNonCompeteForms() {
                               agreement or cost of litigation, including
                               attorney’s fees and other damages found by the
                               trier fact.
-                            <br/>
-                            
+                              <br />
                               As consideration for employment and for the
                               release of this confidential information, the
                               employee agrees not to compete against 1st Access
@@ -157,8 +159,8 @@ export default function SignedNonCompeteForms() {
                               general public or to a competitor, the revelation
                               would destroy or impair the expected success of
                               1st Access Home Care.
-                            <br/>
-                              <strong style={{fontSize: "11px"}}>
+                              <br />
+                              <strong style={{ fontSize: "11px" }}>
                                 *ANY CONTROVERSY OR CLAIM ARISING OUT OF OR
                                 RELATING TO THIS AGREEMENT SHALL BE SUBMITTED TO
                                 ARBITRATION BEFORE ONE(1) ARBITRATOR IN
@@ -171,9 +173,9 @@ export default function SignedNonCompeteForms() {
                                 OF RESOLUTION OF ANY CLAIM OR CONTROVERSY
                                 BETWEEN 1st Access Home Care AND EMPLOYEE
                                 ARISING FROM THIS AGREEMENT
-                              </strong><br/>
-                              I HAVE READ AND UNDERSTAND THE ABOVE AND WILL
-                              COMPLY WITH THIS AGREEMENT.
+                              </strong>
+                              <br />I HAVE READ AND UNDERSTAND THE ABOVE AND
+                              WILL COMPLY WITH THIS AGREEMENT.
                             </p>
                           </div>
                         </div>
@@ -185,6 +187,7 @@ export default function SignedNonCompeteForms() {
                               <p>Signature:</p>
                               {data?.signature ? (
                                 <img
+                                  className="signature"
                                   src={`${apiBase}/storage/signature/${data.signature}`}
                                   alt="Signature"
                                   style={{ width: "100px" }}
@@ -201,7 +204,7 @@ export default function SignedNonCompeteForms() {
                             </div>
 
                             {/* Print-only layout */}
-                            <div
+                            {/* <div
                               className="d-none d-print-block"
                               style={{ width: "100%" }}
                             >
@@ -239,14 +242,14 @@ export default function SignedNonCompeteForms() {
                                   </td>
                                 </tr>
                               </table>
-                            </div>
+                            </div> */}
                           </div>
                         </div>
                       </div>
                     </div>
                     <div className="col-md-3 mt-20">
                       <button
-                        onClick={printContent}
+                        onClick={() => exportToWord({ fullname, title })}
                         className="btn btn-primary btn-lg"
                       >
                         Print

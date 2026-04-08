@@ -9,6 +9,7 @@ import { formatDate } from "../../../../utils/DateFormatter";
 import printContent from "../../../../utils/printContent";
 import FetchAllEmployeeForms from "../../../../controller/admin/AllFormsController";
 import Spinner from "../../../../components/Spinner";
+import exportToWord from "../../../../utils/exportToWord";
 
 export default function SignedDrugTestingForms() {
   const location = useLocation();
@@ -30,6 +31,7 @@ export default function SignedDrugTestingForms() {
 
   const fullname = allForms?.application_form?.profile?.full_name;
   const data = allForms.drug_testing_policy;
+  const title = "Drug Testing Policy";
 
   return (
     <>
@@ -137,6 +139,7 @@ export default function SignedDrugTestingForms() {
                             <p>Signature:</p>
                             {data?.signature ? (
                               <img
+                              className="signature"
                                 src={`${apiBase}/storage/signature/${data.signature}`}
                                 alt="Signature"
                                 style={{ width: "100px" }}
@@ -153,7 +156,7 @@ export default function SignedDrugTestingForms() {
                           </div>
 
                           {/* Print-only layout */}
-                          <div
+                          {/* <div
                             className="d-none d-print-block"
                             style={{ width: "100%" }}
                           >
@@ -191,14 +194,14 @@ export default function SignedDrugTestingForms() {
                                 </td>
                               </tr>
                             </table>
-                          </div>
+                          </div> */}
                         </div>
                       </div>
                       {/*  */}
                     </div>
                     <div className="col-md-3 mt-20">
                       <button
-                        onClick={printContent}
+                        onClick={() => exportToWord({ fullname, title })}
                         className="btn btn-primary btn-lg"
                       >
                         Print

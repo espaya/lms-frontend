@@ -8,6 +8,8 @@ import Spinner from "../../../../components/Spinner";
 import { formatDate } from "../../../../utils/DateFormatter";
 import printContent from "../../../../utils/printContent";
 import FetchAllEmployeeForms from "../../../../controller/admin/AllFormsController";
+import ExportReport from "../../../../components/admin/ExportReport";
+import exportToWord from "../../../../utils/exportToWord";
 
 export default function SignedAttendanceForms() {
   const { username } = useParams();
@@ -15,7 +17,7 @@ export default function SignedAttendanceForms() {
   const apiBase = import.meta.env.VITE_API_URL;
   const [errors, setErrors] = useState({});
   const [allForms, setAllForms] = useState([]);
-
+// console.log("All Forms Data:", allForms);
   useEffect(() => {
     FetchAllEmployeeForms(
       setLoading,
@@ -28,6 +30,7 @@ export default function SignedAttendanceForms() {
 
   const fullname = allForms?.application_form?.profile?.full_name;
   const data = allForms.attendance_tardiness;
+  const title = "Employee Notification of Policy - Attendance, Tardiness, Absenteeism and Leave";
 
   return (
     <>
@@ -197,9 +200,10 @@ export default function SignedAttendanceForms() {
                             <p>Signature:</p>
                             {data?.signature ? (
                               <img
+                              className="signature"
                                 src={`${apiBase}/storage/signature/${data.signature}`}
                                 alt="Signature"
-                                style={{ width: "70px" }}
+                                style={{ width: "80%" }}
                               />
                             ) : (
                               <p>
@@ -213,7 +217,7 @@ export default function SignedAttendanceForms() {
                           </div>
 
                           {/* Print-only layout */}
-                          <div
+                          {/* <div
                             className="d-none d-print-block"
                             style={{ width: "100%" }}
                           >
@@ -251,14 +255,14 @@ export default function SignedAttendanceForms() {
                                 </td>
                               </tr>
                             </table>
-                          </div>
+                          </div> */}
                         </div>
                       </div>
                     </div>
                     <div className="row mt-20">
                       <div className="col-md-3 mt-20">
                         <button
-                          onClick={printContent}
+                          onClick={() => exportToWord({ fullname, title })}
                           className="btn btn-primary btn-lg"
                         >
                           Print

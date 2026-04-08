@@ -9,6 +9,7 @@ import { formatDate } from "../../../../utils/DateFormatter";
 import FetchAllEmployeeForms from "../../../../controller/admin/AllFormsController";
 import printContent from "../../../../utils/printContent";
 import Spinner from "../../../../components/Spinner";
+import exportToWord from "../../../../utils/exportToWord";
 
 export default function SignedDisclaimerForms() {
   const location = useLocation();
@@ -30,6 +31,7 @@ export default function SignedDisclaimerForms() {
 
   const fullname = allForms?.application_form?.profile?.full_name;
   const data = allForms.disclaimer_waiver_liability;
+  const title = "Disclaimer And Waiver Of Liability";
 
   return (
     <>
@@ -131,6 +133,7 @@ export default function SignedDisclaimerForms() {
                             <p>Signature:</p>
                             {data?.signature ? (
                               <img
+                              className="signature"
                                 src={`${apiBase}/storage/signature/${data.signature}`}
                                 alt="Signature"
                                 style={{ width: "100px" }}
@@ -147,7 +150,7 @@ export default function SignedDisclaimerForms() {
                           </div>
 
                           {/* Print-only layout */}
-                          <div
+                          {/* <div
                             className="d-none d-print-block"
                             style={{ width: "100%" }}
                           >
@@ -185,7 +188,7 @@ export default function SignedDisclaimerForms() {
                                 </td>
                               </tr>
                             </table>
-                          </div>
+                          </div> */}
                         </div>
                       </div>
 
@@ -193,7 +196,7 @@ export default function SignedDisclaimerForms() {
                     </div>
                     <div className="col-md-3 mt-20">
                       <button
-                        onClick={printContent}
+                        onClick={() => exportToWord({ fullname, title })}
                         className="btn btn-primary btn-lg"
                       >
                         Print

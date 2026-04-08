@@ -9,6 +9,7 @@ import { formatDate } from "../../../../utils/DateFormatter";
 import printContent from "../../../../utils/printContent";
 import FetchAllEmployeeForms from "../../../../controller/admin/AllFormsController";
 import Spinner from "../../../../components/Spinner";
+import exportToWord from "../../../../utils/exportToWord";
 
 export default function SignedDisclosureForms() {
   const location = useLocation();
@@ -31,6 +32,7 @@ export default function SignedDisclosureForms() {
   const fullname = allForms?.application_form?.profile?.full_name;
   const data = allForms.sworn_disclosure;
   const position = allForms?.application_form?.position;
+  const title = "Sworn Disclosure Statement";
 
   return (
     <>
@@ -191,6 +193,7 @@ export default function SignedDisclosureForms() {
                               <p>Witness Signature:</p>
                               {data?.wit_signature ? (
                                 <img
+                                className="signature"
                                   src={`${apiBase}/storage/signature/${data.wit_signature}`}
                                   alt="Signature"
                                   style={{ width: "100px" }}
@@ -207,7 +210,7 @@ export default function SignedDisclosureForms() {
                             </div>
 
                             {/* Print-only layout */}
-                            <div
+                            {/* <div
                               className="d-none d-print-block"
                               style={{ width: "100%" }}
                             >
@@ -245,7 +248,7 @@ export default function SignedDisclosureForms() {
                                   </td>
                                 </tr>
                               </table>
-                            </div>
+                            </div> */}
                           </div>
                         </div>
 
@@ -317,7 +320,7 @@ export default function SignedDisclosureForms() {
                     </div>
                     <div className="col-md-3 mt-20">
                       <button
-                        onClick={printContent}
+                        onClick={() => exportToWord({ fullname, title })}
                         className="btn btn-primary btn-lg"
                       >
                         Print

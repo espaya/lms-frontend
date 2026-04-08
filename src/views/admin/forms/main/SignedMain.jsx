@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { formatDate } from "../../../../utils/DateFormatter";
 import printContent from "../../../../utils/printContent";
 import Spinner from "../../../../components/Spinner";
+import exportToWord from "../../../../utils/exportToWord";
 
 export default function SignedMainForms() {
   const { username } = useParams();
@@ -52,6 +53,7 @@ export default function SignedMainForms() {
   }, []);
 
   const fullname = allForms?.application_form?.profile?.full_name;
+  const title = "Application For Employment";
   const data = allForms?.application_form;
 
   const signature = data?.signature?.signature;
@@ -296,7 +298,7 @@ export default function SignedMainForms() {
 
                           <div className="col-md-6">
                             <p>
-                              <strong>Driver's License NUmber: </strong>
+                              <strong>Driver's License Number: </strong>
                               {data?.drivers_license}
                             </p>
                           </div>
@@ -574,9 +576,10 @@ export default function SignedMainForms() {
                               <p>Signature:</p>
                               {signature ? (
                                 <img
+                                  className="signature"
                                   src={`${apiBase}/storage/signature/${signature}`}
                                   alt="Signature"
-                                  style={{ width: "100px" }}
+                                  style={{ width: "150px" }}
                                 />
                               ) : (
                                 <p>
@@ -590,7 +593,7 @@ export default function SignedMainForms() {
                             </div>
 
                             {/* Print-only layout */}
-                            <div
+                            {/* <div
                               className="d-none d-print-block"
                               style={{ width: "100%" }}
                             >
@@ -628,7 +631,7 @@ export default function SignedMainForms() {
                                   </td>
                                 </tr>
                               </table>
-                            </div>
+                            </div> */}
                           </div>
                         </div>
                       </section>
@@ -636,7 +639,7 @@ export default function SignedMainForms() {
                   </div>
                   <div className="col-md-3 mt-20">
                     <button
-                      onClick={printContent}
+                      onClick={() => exportToWord({ fullname, title })}
                       className="btn btn-primary btn-lg"
                     >
                       Print

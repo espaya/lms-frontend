@@ -8,6 +8,7 @@ import { PATHS } from "../../../../router";
 import FetchAllEmployeeForms from "../../../../controller/admin/AllFormsController";
 import printContent from "../../../../utils/printContent";
 import Spinner from "../../../../components/Spinner";
+import exportToWord from "../../../../utils/exportToWord";
 
 export default function SignedCellularForms() {
   const { username } = useParams();
@@ -22,12 +23,13 @@ export default function SignedCellularForms() {
       setErrors,
       setAllForms,
       apiBase,
-      username
+      username,
     );
   }, []);
 
   const fullname = allForms?.application_form?.profile?.full_name;
   const data = allForms.employee_safety;
+  const title = "Employee Safety (Cellular Phone Use)";
 
   return (
     <>
@@ -60,7 +62,7 @@ export default function SignedCellularForms() {
             <div className="row">
               <Nav username={username} />
               {loading ? (
-                <Spinner/>
+                <Spinner />
               ) : (
                 <div className="col-md-9">
                   <div className="card">
@@ -121,6 +123,7 @@ export default function SignedCellularForms() {
                             <p>Signature:</p>
                             {data?.signature ? (
                               <img
+                                className="signature"
                                 src={`${apiBase}/storage/signature/${data.signature}`}
                                 alt="Signature"
                                 style={{ width: "100px" }}
@@ -141,7 +144,7 @@ export default function SignedCellularForms() {
                                       year: "numeric",
                                       month: "long",
                                       day: "numeric",
-                                    }
+                                    },
                                   )
                                 : "N/A"}
                             </p>
@@ -151,7 +154,7 @@ export default function SignedCellularForms() {
                     </div>
                     <div className="col-md-3 mt-20">
                       <button
-                        onClick={printContent}
+                        onClick={() => exportToWord({ fullname, title })}
                         className="btn btn-primary btn-lg"
                       >
                         Print
