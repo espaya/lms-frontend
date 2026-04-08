@@ -1,5 +1,4 @@
-import { useEffect } from "react";
-import Cookies from "js-cookie";
+import { useEffect, useRef } from "react";
 import {
   Chart,
   LineController,
@@ -20,6 +19,9 @@ Chart.register(
 export default function Graph() {
   const apiBase = import.meta.env.VITE_API_URL;
 
+  const chartRef = useRef(null); // canvas ref
+  const chartInstance = useRef(null); // chart instance
+
   useEffect(() => {
     const fetchGraph = async () => {
       const res = await fetch(`${apiBase}/api/dashboard/graph`, {
@@ -27,12 +29,18 @@ export default function Graph() {
         headers: {
           Accept: "application/json",
           Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
-          // "X-XSRF-TOKEN": decodeURIComponent(Cookies.get("XSRF-TOKEN")),
         },
       });
+
       const data = await res.json();
 
-      new Chart(document.getElementById("EarningGraph"), {
+      // 🔥 DESTROY previous chart if exists
+      if (chartInstance.current) {
+        chartInstance.current.destroy();
+      }
+
+      // 🔥 CREATE new chart
+      chartInstance.current = new Chart(chartRef.current, {
         type: "line",
         data: {
           labels: data.labels,
@@ -40,17 +48,32 @@ export default function Graph() {
             {
               label: "Users Registered",
               data: data.users,
+              borderWidth: 2,
+              tension: 0.4, // smooth curve
             },
             {
               label: "Quiz Attempts",
               data: data.quizzes,
+              borderWidth: 2,
+              tension: 0.4,
             },
           ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
         },
       });
     };
 
     fetchGraph();
+
+    // 🔥 CLEANUP ON UNMOUNT
+    return () => {
+      if (chartInstance.current) {
+        chartInstance.current.destroy();
+      }
+    };
   }, []);
 
   return (
@@ -59,8 +82,8 @@ export default function Graph() {
         <div className="card-header">
           <h4 className="card-title">System Activity</h4>
         </div>
-        <div className="card-body">
-          <canvas id="EarningGraph" height={280}></canvas>
+        <div className="card-body" style={{ height: "300px" }}>
+          <canvas ref={chartRef}></canvas>
         </div>
       </div>
     </div>
