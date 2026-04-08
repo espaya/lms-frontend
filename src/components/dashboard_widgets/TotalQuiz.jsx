@@ -18,13 +18,16 @@ export default function TotalQuiz() {
           headers: {
             Accept: "application/json",
             Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
-            // "X-XSRF-TOKEN": decodeURIComponent(Cookies.get("XSRF-TOKEN")),
           },
         });
         const data = await res.json();
+        if (!res.ok) {
+          console.error(`Total Quiz error: ${data.message}`);
+          return;
+        }
         setQuiz(data);
       } catch (err) {
-        console.error(err);
+        console.error(`Total Quiz error: ${err.message}`);
       }
     };
 

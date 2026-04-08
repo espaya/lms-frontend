@@ -13,19 +13,27 @@ export default function UsersLocation() {
 
   useEffect(() => {
     const fetchLocations = async () => {
-      const res = await fetch(`${apiBase}/api/dashboard/users-location`, {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
-          // "X-XSRF-TOKEN": decodeURIComponent(Cookies.get("XSRF-TOKEN")),
-        },
-      });
+      try {
+        const res = await fetch(`${apiBase}/api/dashboard/users-location`, {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
+          },
+        });
 
-      const data = await res.json();
-      const result = Array.isArray(data) ? data : data.data;
+        const data = await res.json();
+        const result = Array.isArray(data) ? data : data.data;
 
-      setLocations(result || []);
+        if (!res.ok) {
+          console.error(`Users Location error: ${data.message}`);
+          return;
+        }
+
+        setLocations(result || []);
+      } catch (err) {
+        console.error(`Users Location error: ${err.message}`);
+      }
     };
 
     fetchLocations();
@@ -37,8 +45,7 @@ export default function UsersLocation() {
 
     const match = locations.find(
       (l) =>
-        l.state &&
-        l.state.toLowerCase() === geo.properties.name.toLowerCase()
+        l.state && l.state.toLowerCase() === geo.properties.name.toLowerCase(),
     );
 
     return match ? match.count : 0;

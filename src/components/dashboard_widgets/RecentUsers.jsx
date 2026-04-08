@@ -14,13 +14,19 @@ export default function RecentUsers() {
           headers: {
             Accept: "application/json",
             Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
-            // "X-XSRF-TOKEN": decodeURIComponent(Cookies.get("XSRF-TOKEN")),
           },
         });
         const data = await res.json();
+
+          if (!res.ok) {
+            console.error(`Recent Users error: ${data.message}`);
+            return;
+          }
+
+
         setUsers(data);
       } catch (err) {
-        console.error(err);
+        console.error(`Recent Users error: ${err.message}`);
       }
     };
 

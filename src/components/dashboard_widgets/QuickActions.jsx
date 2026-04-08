@@ -14,6 +14,7 @@ export default function QuickQctions() {
 
   useEffect(() => {
     const fetchData = async () => {
+
       try {
         const res = await fetch(`${apiBase}/api/dashboard/quick-actions`, {
           method: "GET",
@@ -21,14 +22,20 @@ export default function QuickQctions() {
           headers: {
             Accept: "application/json",
             Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
-            // "X-XSRF-TOKEN": decodeURIComponent(Cookies.get("XSRF-TOKEN")),
           },
         });
         const result = await res.json();
+
+        if(!res.ok) {
+          console.error(`Quick Actions error: ${result.message}`);
+          return;
+        }
+
         setData(result);
       } catch (err) {
-        console.error(err);
+        console.error(`Quick Actions error: ${err.message}`);
       }
+
     };
 
     fetchData();

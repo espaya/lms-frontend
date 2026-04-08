@@ -24,46 +24,55 @@ export default function Graph() {
 
   useEffect(() => {
     const fetchGraph = async () => {
-      const res = await fetch(`${apiBase}/api/dashboard/graph`, {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
-        },
-      });
+      try {
+        const res = await fetch(`${apiBase}/api/dashboard/graph`, {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
+          },
+        });
 
-      const data = await res.json();
+        const data = await res.json();
 
-      // 🔥 DESTROY previous chart if exists
-      if (chartInstance.current) {
-        chartInstance.current.destroy();
+        if (!res.ok) {
+          console.error(`Graph error: ${data.message}`);
+          return;
+        }
+
+        // 🔥 DESTROY previous chart if exists
+        if (chartInstance.current) {
+          chartInstance.current.destroy();
+        }
+
+        // 🔥 CREATE new chart
+        chartInstance.current = new Chart(chartRef.current, {
+          type: "line",
+          data: {
+            labels: data.labels,
+            datasets: [
+              {
+                label: "Users Registered",
+                data: data.users,
+                borderWidth: 2,
+                tension: 0.4, // smooth curve
+              },
+              {
+                label: "Quiz Attempts",
+                data: data.quizzes,
+                borderWidth: 2,
+                tension: 0.4,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+          },
+        });
+      } catch (err) {
+        console.error(`Graph error: ${err.message}`);
       }
-
-      // 🔥 CREATE new chart
-      chartInstance.current = new Chart(chartRef.current, {
-        type: "line",
-        data: {
-          labels: data.labels,
-          datasets: [
-            {
-              label: "Users Registered",
-              data: data.users,
-              borderWidth: 2,
-              tension: 0.4, // smooth curve
-            },
-            {
-              label: "Quiz Attempts",
-              data: data.quizzes,
-              borderWidth: 2,
-              tension: 0.4,
-            },
-          ],
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-        },
-      });
     };
 
     fetchGraph();

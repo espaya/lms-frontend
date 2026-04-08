@@ -18,14 +18,20 @@ export default function TotalUsers() {
           headers: {
             Accept: "application/json",
             Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
-            // "X-XSRF-TOKEN": decodeURIComponent(Cookies.get("XSRF-TOKEN")),
           },
           credentials: "include",
         });
+
         const data = await res.json();
+
+        if (!res.ok) {
+          console.error(`Total Users error: ${data.message}`);
+          return;
+        }
+        
         setUsers(data);
       } catch (err) {
-        console.error(err);
+        console.error(`Total Users error: ${err.message}`);
       }
     };
 

@@ -18,13 +18,19 @@ export default function TotalFormsSigned() {
           headers: {
             Accept: "application/json",
             Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
-            // "X-XSRF-TOKEN": decodeURIComponent(Cookies.get("XSRF-TOKEN")),
           },
         });
+        
         const data = await res.json();
+        
+        if (!res.ok) {
+          console.error(`Total Forms Signed error: ${data.message}`);
+          return;
+        }
+
         setForms(data);
       } catch (err) {
-        console.error(err);
+        console.error(`Total Forms Signed error: ${err.message}`);
       }
     };
 
