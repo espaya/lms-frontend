@@ -18,7 +18,7 @@ export default function TotalUsers() {
           headers: {
             Accept: "application/json",
             Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
-            "X-XSRF-TOKEN": decodeURIComponent(Cookies.get("XSRF-TOKEN")),
+            // "X-XSRF-TOKEN": decodeURIComponent(Cookies.get("XSRF-TOKEN")),
           },
           credentials: "include",
         });
