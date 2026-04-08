@@ -1,165 +1,91 @@
+import { useEffect, useState } from "react";
+
 export default function RecentUsers() {
+  const [users, setUsers] = useState([]);
+  const apiBase = import.meta.env.VITE_API_URL;
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const res = await fetch(`${apiBase}/dashboard/recent-users`);
+        const data = await res.json();
+        setUsers(data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchUsers();
+  }, []);
+
   return (
-    <>
-      <div className="col-lg-6 col-xl-8 ">
-        <div className="card">
-          <div className="card-header">
-            <h5 className="card-title">Recent Users</h5>
-          </div>
-          <div className="card-body">
-            <div
-              className="students-queries ps ps--active-y"
-              style={{ height: 305, position: "relative" }}
-            >
-              <div className="scrollbar-container ps">
-                <div className="student-query-inner d-flex justify-content-between align-items-start">
-                  <img
-                    className="me-20 rounded-circle"
-                    src="images/avatar/7.jpg"
-                    alt=""
-                  />
-                  <div className="student-query-details flex-basis-50 flex-grow-1 me-20">
-                    <h6 className="mb-5">Machine Learning Bootcamp</h6>
-                    <p>
-                      By
-                      {/* */}Brandon Taylor
-                    </p>
-                  </div>
-                  <div className="d-flex flex-wrap justify-content-end mb-3">
-                    <a
-                      className="icon mx-16 my-16 py-8 px-8 rounded-circle bg-primary-lighten"
-                      href="#"
-                    >
-                      <i className="ri-check-line fs-18 text-primary" />
-                    </a>
-                    <a
-                      className="icon mx-16 my-16 py-8 px-8 rounded-circle bg-danger-lighten"
-                      href="#"
-                    >
-                      <i className="ri-close-line fs-18 text-danger" />
-                    </a>
-                  </div>
-                </div>
-                <div className="student-query-inner d-flex justify-content-between align-items-start">
-                  <img
-                    className="me-20 rounded-circle"
-                    src="images/avatar/8.jpg"
-                    alt=""
-                  />
-                  <div className="student-query-details flex-basis-50 flex-grow-1 me-20">
-                    <h6 className="mb-5">Python Bootcamp from Zero to Hero</h6>
-                    <p>
-                      By
-                      {/* */}Stweart Mark
-                    </p>
-                  </div>
-                  <div className="d-flex flex-wrap justify-content-end mb-3">
-                    <a
-                      className="icon mx-16 my-16 py-8 px-8 rounded-circle bg-primary-lighten"
-                      href="#"
-                    >
-                      <i className="ri-check-line fs-18 text-primary" />
-                    </a>
-                    <a
-                      className="icon mx-16 my-16 py-8 px-8 rounded-circle bg-danger-lighten"
-                      href="#"
-                    >
-                      <i className="ri-close-line fs-18 text-danger" />
-                    </a>
-                  </div>
-                </div>
-                <div className="student-query-inner d-flex justify-content-between align-items-start">
-                  <img
-                    className="me-20 rounded-circle"
-                    src="images/avatar/9.jpg"
-                    alt=""
-                  />
-                  <div className="student-query-details flex-basis-50 flex-grow-1 me-20">
-                    <h6 className="mb-5">Amazon Web Services Certification</h6>
-                    <p>
-                      By
-                      {/* */}Jhon Cane
-                    </p>
-                  </div>
-                  <div className="d-flex flex-wrap justify-content-end mb-3">
-                    <a
-                      className="icon mx-16 my-16 py-8 px-8 rounded-circle bg-primary-lighten"
-                      href="#"
-                    >
-                      <i className="ri-check-line fs-18 text-primary" />
-                    </a>
-                    <a
-                      className="icon mx-16 my-16 py-8 px-8 rounded-circle bg-danger-lighten"
-                      href="#"
-                    >
-                      <i className="ri-close-line fs-18 text-danger" />
-                    </a>
-                  </div>
-                </div>
-                <div className="student-query-inner d-flex justify-content-between align-items-start">
-                  <img
-                    className="me-20 rounded-circle"
-                    src="images/avatar/10.jpg"
-                    alt=""
-                  />
-                  <div className="student-query-details flex-basis-50 flex-grow-1 me-20">
-                    <h6 className="mb-5">The Web Developer Bootcamp 2021</h6>
-                    <p>
-                      By
-                      {/* */}Nicky Bonje
-                    </p>
-                  </div>
-                  <div className="d-flex flex-wrap justify-content-end mb-3">
-                    <a
-                      className="icon mx-16 my-16 py-8 px-8 rounded-circle bg-primary-lighten"
-                      href="#"
-                    >
-                      <i className="ri-check-line fs-18 text-primary" />
-                    </a>
-                    <a
-                      className="icon mx-16 my-16 py-8 px-8 rounded-circle bg-danger-lighten"
-                      href="#"
-                    >
-                      <i className="ri-close-line fs-18 text-danger" />
-                    </a>
-                  </div>
-                </div>
-                <div className="ps__rail-x" style={{ left: 0, top: 0 }}>
-                  <div
-                    className="ps__thumb-x"
-                    tabIndex={0}
-                    style={{ left: 0, width: 0 }}
-                  />
-                </div>
-                <div className="ps__rail-y" style={{ top: 0, left: 0 }}>
-                  <div
-                    className="ps__thumb-y"
-                    tabIndex={0}
-                    style={{ top: 0, height: 0 }}
-                  />
-                </div>
-              </div>
-              <div className="ps__rail-x" style={{ left: 0, bottom: 0 }}>
-                <div
-                  className="ps__thumb-x"
-                  tabIndex={0}
-                  style={{ left: 0, width: 0 }}
-                />
-              </div>
+    <div className="col-lg-6 col-xl-8">
+      <div className="card">
+        <div className="card-header">
+          <h5 className="card-title">Recent Users</h5>
+        </div>
+
+        <div className="card-body">
+          <div style={{ height: 305, overflow: "auto" }}>
+            {users.map((user, i) => (
               <div
-                className="ps__rail-y"
-                style={{ top: 0, height: 305, right: 0 }}
+                key={i}
+                className="student-query-inner d-flex justify-content-between align-items-start mb-3"
               >
-                <div
-                  className="ps__thumb-y"
-                  tabIndex={0}
-                  style={{ top: 0, height: 255 }}
+                <img
+                  className="me-20 rounded-circle"
+                  src={user.avatar || "images/avatar/default.png"}
+                  alt=""
+                  width={50}
                 />
+
+                <div className="student-query-details flex-grow-1 me-20">
+                  <h6 className="mb-5">{user.name}</h6>
+                  <p>{user.email}</p>
+                </div>
+
+                <div className="d-flex flex-wrap justify-content-end">
+                  {user.status === "pending" ? (
+                    <>
+                      <button
+                        className="icon mx-2 py-2 px-2 rounded-circle bg-primary-lighten"
+                        onClick={() => handleApprove(user.id)}
+                      >
+                        <i className="ri-check-line fs-18 text-primary" />
+                      </button>
+
+                      <button
+                        className="icon mx-2 py-2 px-2 rounded-circle bg-danger-lighten"
+                        onClick={() => handleReject(user.id)}
+                      >
+                        <i className="ri-close-line fs-18 text-danger" />
+                      </button>
+                    </>
+                  ) : (
+                    <span className="text-success">Verified</span>
+                  )}
+                </div>
               </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
+
+  async function handleApprove(id) {
+    await fetch(`${apiBase}/users/${id}/approve`, { method: "POST" });
+    refresh();
+  }
+
+  async function handleReject(id) {
+    await fetch(`${apiBase}/users/${id}/reject`, { method: "POST" });
+    refresh();
+  }
+
+  async function refresh() {
+    const res = await fetch(`${apiBase}/dashboard/recent-users`);
+    const data = await res.json();
+    setUsers(data);
+  }
 }
