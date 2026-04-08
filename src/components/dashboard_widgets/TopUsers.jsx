@@ -32,6 +32,12 @@ export default function TopUsers() {
     fetchTopUsers();
   }, []);
 
+  const getAvatar = (email) => {
+    return `https://ui-avatars.com/api/?name=${encodeURIComponent(
+      email,
+    )}&background=0d6efd&color=fff`;
+  };
+
   return (
     <div className="col-xl-12">
       <div className="card transparent">
@@ -67,7 +73,7 @@ export default function TopUsers() {
                   <div className="rtable-cell--content title-content d-flex align-items-center">
                     <img
                       className="topic-cell-img"
-                      src={user.avatar || "images/avatar/default.png"}
+                      src={getAvatar(user.email)}
                       width={95}
                       alt=""
                     />

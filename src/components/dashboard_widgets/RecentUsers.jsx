@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import Cookies from "js-cookie";
+// import md5 from "md5";
+
 
 export default function RecentUsers() {
   const [users, setUsers] = useState([]);
@@ -33,6 +34,13 @@ export default function RecentUsers() {
     fetchUsers();
   }, []);
 
+
+const getAvatar = (email) => {
+  return `https://ui-avatars.com/api/?name=${encodeURIComponent(
+    email
+  )}&background=0d6efd&color=fff`;
+};
+
   return (
     <div className="col-lg-6 col-xl-8">
       <div className="card">
@@ -49,7 +57,7 @@ export default function RecentUsers() {
               >
                 <img
                   className="me-20 rounded-circle"
-                  src={user.avatar || "images/avatar/default.png"}
+                 src={getAvatar(user.email)}
                   alt=""
                   width={50}
                 />

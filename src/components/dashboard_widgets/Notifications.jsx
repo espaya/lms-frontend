@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { formatDate } from "../../utils/DateFormatter";
 
 export default function Notification() {
   const [notifications, setNotifications] = useState([]);
@@ -42,7 +43,7 @@ export default function Notification() {
             {notifications.map((item, i) => (
               <div key={i} className="border-bottom py-2">
                 <h6 className="mb-1">{item.title}</h6>
-                <span className="text-muted">{item.date}</span>
+                <span className="text-muted">{formatDate(item.date)}</span>
               </div>
             ))}
           </div>
