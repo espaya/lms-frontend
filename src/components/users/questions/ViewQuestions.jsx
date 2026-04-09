@@ -42,14 +42,16 @@ export default function ViewQuestions({
       setSubmittedAnswers,
       setErrors,
       apiBase,
-      csrfToken
+      csrfToken,
     );
   }, [submittedTopics, topic]);
 
   // Add this function to explicitly capture signature
   const captureSignature = () => {
     if (sigPadRef.current && !sigPadRef.current.isEmpty()) {
-      const trimmed = trimCanvas(sigPadRef.current.getCanvas());
+      const trimmed = trimCanvas.default
+        ? trimCanvas.default(sigPadRef.current.getCanvas())
+        : trimCanvas(sigPadRef.current.getCanvas());
       const sigData = trimmed.toDataURL("image/png");
       setSignature(sigData);
       return sigData;
@@ -95,7 +97,7 @@ export default function ViewQuestions({
         icon: "warning",
         title: "Retake Required",
         text: `Your score is ${scorePercentage.toFixed(
-          2
+          2,
         )}%. You need at least 80% to submit. Please retake the quiz.`,
       });
       setLoading(false);
@@ -314,7 +316,7 @@ export default function ViewQuestions({
                                     handleAnswerChange(
                                       topic,
                                       question.id,
-                                      parseInt(e.target.value)
+                                      parseInt(e.target.value),
                                     )
                                   }
                                 />
@@ -420,7 +422,7 @@ export default function ViewQuestions({
                   )}
 
                   {/* Submit button */}
-                  <button type="submit" className="btn btn-primary mt-20">
+                  <button type="submit" className="btn btn-primary mt-20" disabled={loading}>
                     {loading ? "Processing..." : "Submit Answers"}
                   </button>
                 </>

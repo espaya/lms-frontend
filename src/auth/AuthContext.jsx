@@ -1,5 +1,4 @@
 import { createContext, useEffect, useState } from "react";
-import Cookies from "js-cookie";
 
 export const AuthContext = createContext();
 
@@ -23,6 +22,7 @@ export const AuthProvider = ({ children }) => {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("auth_token") || ""}`,
         },
         body: JSON.stringify(credentials),
       });
@@ -64,6 +64,7 @@ export const AuthProvider = ({ children }) => {
       }
 
       const response = await fetch(`${apiBase}/api/user`, {
+        method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
           Accept: "application/json",
