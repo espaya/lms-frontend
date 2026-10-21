@@ -79,7 +79,7 @@ const exportToWord = async ({ fullname, title }) => {
   const col6 = cloned.querySelectorAll(".col-md-6");
   col6.forEach((col) => {
     col.style.display = "table-cell";
-    col.style.width = "50%";
+    col.style.width = "100%";
     col.style.verticalAlign = "top";
     col.style.paddingRight = "12pt";
   });
