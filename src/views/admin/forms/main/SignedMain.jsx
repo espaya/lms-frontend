@@ -29,7 +29,7 @@ export default function SignedMainForms() {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
           },
-        }
+        },
       );
 
       const data = await response.json();
@@ -92,48 +92,90 @@ export default function SignedMainForms() {
               ) : (
                 <div className="col-md-9">
                   <div className="card">
-                    
                     {/* MS Word Style Container */}
-                    <div id="printArea" className="card-body p-0 bg-secondary-light">
+                    <div
+                      id="printArea"
+                      className="card-body p-0 bg-secondary-light"
+                    >
                       <div className="word-doc">
-                        
                         {/* Header */}
-                        <div style={{ textAlign: "center", marginBottom: "40px" }}>
+                        <div
+                          style={{ textAlign: "center", marginBottom: "40px" }}
+                        >
                           <img
                             src="/assets/images/main_logo.png"
                             width={150}
                             alt="Company Logo"
                             style={{ marginBottom: "20px" }}
                           />
-                          <h5 style={{ fontSize: "14pt", margin: "0 0 10px 0", fontWeight: "bold" }}>
+                          <h5
+                            style={{
+                              fontSize: "14pt",
+                              margin: "0 0 10px 0",
+                              fontWeight: "bold",
+                            }}
+                          >
                             1st Access Home Care Incorporated
                           </h5>
-                          <p style={{ margin: "5px 0", fontSize: "12pt" }}>
-                            6600 Fieldtan Trail, Moseley, VA, 23120<br />
+                          <p
+                            style={{
+                              textAlign: "center",
+                              margin: "5px 0",
+                              fontSize: "12pt",
+                            }}
+                          >
+                            6600 Fieldtan Trail, Moseley, VA, 23120
+                            <br />
                             Agency Phone: (+1) 804-818-3216
                           </p>
-                          <h4 style={{ fontSize: "14pt", margin: "20px 0", fontWeight: "bold" }}>
+                          <h4
+                            style={{
+                              fontSize: "14pt",
+                              margin: "20px 0",
+                              fontWeight: "bold",
+                            }}
+                          >
                             Application For Employment
                           </h4>
                         </div>
 
                         {errors.general && (
-                          <div className="alert alert-danger">{errors.general}</div>
+                          <div className="alert alert-danger">
+                            {errors.general}
+                          </div>
                         )}
 
                         {/* Personal Info */}
                         <section style={{ marginBottom: "30px" }}>
-                          <h5 style={{ fontSize: "12pt", fontWeight: "bold", borderBottom: "1px solid #000", paddingBottom: "5px", marginBottom: "15px" }}>
+                          <h5
+                            style={{
+                              fontSize: "12pt",
+                              fontWeight: "bold",
+                              borderBottom: "1px solid #000",
+                              paddingBottom: "5px",
+                              marginBottom: "15px",
+                            }}
+                          >
                             Personal Information
                           </h5>
                           <div className="row" style={{ marginBottom: "10px" }}>
                             <div className="col-md-6">
-                              <p style={{ margin: 0 }}><strong>Name:</strong> {fullname ?? "N/A"}</p>
-                              <p style={{ margin: 0 }}><strong>Email:</strong> {data?.email || "N/A"}</p>
-                              <p style={{ margin: 0 }}><strong>Phone:</strong> {data?.profile?.phone || "N/A"}</p>
+                              <p style={{ margin: 0 }}>
+                                <strong>Name:</strong> {fullname ?? "N/A"}
+                              </p>
+                              <p style={{ margin: 0 }}>
+                                <strong>Email:</strong> {data?.email || "N/A"}
+                              </p>
+                              <p style={{ margin: 0 }}>
+                                <strong>Phone:</strong>{" "}
+                                {data?.profile?.phone || "N/A"}
+                              </p>
                             </div>
                             <div className="col-md-6">
-                              <p style={{ margin: 0 }}><strong>Employee Hire Date:</strong> {formatDate(data?.employee_hire_date)}</p>
+                              <p style={{ margin: 0 }}>
+                                <strong>Employee Hire Date:</strong>{" "}
+                                {formatDate(data?.employee_hire_date)}
+                              </p>
                               <p style={{ margin: 0 }}>
                                 <strong>Present Address:</strong>{" "}
                                 {`${data?.present_address?.present_address || ""} ${data?.present_address?.present_city || ""} ${data?.present_address?.present_state || ""} ${data?.present_address?.present_zip || ""}`}
@@ -148,47 +190,135 @@ export default function SignedMainForms() {
 
                         {/* Employment Details */}
                         <section style={{ marginBottom: "30px" }}>
-                          <h5 style={{ fontSize: "12pt", fontWeight: "bold", borderBottom: "1px solid #000", paddingBottom: "5px", marginBottom: "15px" }}>
+                          <h5
+                            style={{
+                              fontSize: "12pt",
+                              fontWeight: "bold",
+                              borderBottom: "1px solid #000",
+                              paddingBottom: "5px",
+                              marginBottom: "15px",
+                            }}
+                          >
                             Employment Details
                           </h5>
                           <div className="row">
                             <div className="col-md-6">
-                              <p style={{ margin: "0 0 8px 0" }}><strong>Are you 18 and older:</strong> {data?.furnish_work || "N/A"}</p>
-                              <p style={{ margin: "0 0 8px 0" }}><strong>Employment Desired:</strong> {data?.employment_desired || "N/A"}</p>
-                              <p style={{ margin: "0 0 8px 0" }}><strong>Date You Can Start:</strong> {formatDate(data?.date_start)}</p>
-                              <p style={{ margin: "0 0 8px 0" }}><strong>Position:</strong> {data?.position || "N/A"}</p>
-                              <p style={{ margin: "0 0 8px 0" }}><strong>Salary:</strong> {data?.salary || "N/A"}</p>
+                              <p style={{ margin: "0 0 8px 0" }}>
+                                <strong>Are you 18 and older:</strong>{" "}
+                                {data?.furnish_work || "N/A"}
+                              </p>
+                              <p style={{ margin: "0 0 8px 0" }}>
+                                <strong>Employment Desired:</strong>{" "}
+                                {data?.employment_desired || "N/A"}
+                              </p>
+                              <p style={{ margin: "0 0 8px 0" }}>
+                                <strong>Date You Can Start:</strong>{" "}
+                                {formatDate(data?.date_start)}
+                              </p>
+                              <p style={{ margin: "0 0 8px 0" }}>
+                                <strong>Position:</strong>{" "}
+                                {data?.position || "N/A"}
+                              </p>
+                              <p style={{ margin: "0 0 8px 0" }}>
+                                <strong>Salary:</strong> {data?.salary || "N/A"}
+                              </p>
                             </div>
                             <div className="col-md-6">
-                              <p style={{ margin: "0 0 8px 0" }}><strong>Are You Employed Now:</strong> {data?.employed_now || "N/A"}</p>
+                              <p style={{ margin: "0 0 8px 0" }}>
+                                <strong>Are You Employed Now:</strong>{" "}
+                                {data?.employed_now || "N/A"}
+                              </p>
                               {data?.employed_now && (
-                                <p style={{ margin: "0 0 8px 0" }}><strong>If So May We Inquire Your Present Employer?:</strong> {data?.inqure_present_employer || "N/A"}</p>
+                                <p style={{ margin: "0 0 8px 0" }}>
+                                  <strong>
+                                    If So May We Inquire Your Present Employer?:
+                                  </strong>{" "}
+                                  {data?.inqure_present_employer || "N/A"}
+                                </p>
                               )}
-                              <p style={{ margin: "0 0 8px 0" }}><strong>Ever Applied For This Company Before?:</strong> {data?.applied_before || "N/A"}</p>
+                              <p style={{ margin: "0 0 8px 0" }}>
+                                <strong>
+                                  Ever Applied For This Company Before?:
+                                </strong>{" "}
+                                {data?.applied_before || "N/A"}
+                              </p>
                               {data?.applied_before === "Yes" && (
                                 <>
-                                  <p style={{ margin: "0 0 8px 0" }}><strong>Where?:</strong> {data?.where || "N/A"}</p>
-                                  <p style={{ margin: "0 0 8px 0" }}><strong>When?:</strong> {data?.when || "N/A"}</p>
+                                  <p style={{ margin: "0 0 8px 0" }}>
+                                    <strong>Where?:</strong>{" "}
+                                    {data?.where || "N/A"}
+                                  </p>
+                                  <p style={{ margin: "0 0 8px 0" }}>
+                                    <strong>When?:</strong>{" "}
+                                    {data?.when || "N/A"}
+                                  </p>
                                 </>
                               )}
                             </div>
                             <div className="col-md-12 mt-2">
-                              <p style={{ margin: "0 0 8px 0" }}><strong>Are You On Layoff And Subject To Recall?:</strong> {data?.on_layoff_subject_to_recall || "N/A"}</p>
-                              <p style={{ margin: "0 0 8px 0" }}><strong>Will You Travel If Required?:</strong> {data?.travel_if_required || "N/A"}</p>
-                              <p style={{ margin: "0 0 8px 0" }}><strong>Will You Relocate If The Job Requires It?:</strong> {data?.relocate_if_required || "N/A"}</p>
-                              <p style={{ margin: "0 0 8px 0" }}><strong>Will You Work Overtime if Required:</strong> {data?.overtime_if_required || "N/A"}</p>
-                              <p style={{ margin: "0 0 8px 0" }}><strong>Are you able to meet the attendance requirements of this position?:</strong> {data?.attendance_requirements_position || "N/A"}</p>
-                              <p style={{ margin: "0 0 8px 0" }}><strong>Have you ever been Bonded?:</strong> {data?.bonded || "N/A"}</p>
-                              <p style={{ margin: "0 0 8px 0" }}><strong>Have you ever been convicted of a felony in the past 7years?:</strong> {data?.convicted || "N/A"}</p>
+                              <p style={{ margin: "0 0 8px 0" }}>
+                                <strong>
+                                  Are You On Layoff And Subject To Recall?:
+                                </strong>{" "}
+                                {data?.on_layoff_subject_to_recall || "N/A"}
+                              </p>
+                              <p style={{ margin: "0 0 8px 0" }}>
+                                <strong>Will You Travel If Required?:</strong>{" "}
+                                {data?.travel_if_required || "N/A"}
+                              </p>
+                              <p style={{ margin: "0 0 8px 0" }}>
+                                <strong>
+                                  Will You Relocate If The Job Requires It?:
+                                </strong>{" "}
+                                {data?.relocate_if_required || "N/A"}
+                              </p>
+                              <p style={{ margin: "0 0 8px 0" }}>
+                                <strong>
+                                  Will You Work Overtime if Required:
+                                </strong>{" "}
+                                {data?.overtime_if_required || "N/A"}
+                              </p>
+                              <p style={{ margin: "0 0 8px 0" }}>
+                                <strong>
+                                  Are you able to meet the attendance
+                                  requirements of this position?:
+                                </strong>{" "}
+                                {data?.attendance_requirements_position ||
+                                  "N/A"}
+                              </p>
+                              <p style={{ margin: "0 0 8px 0" }}>
+                                <strong>Have you ever been Bonded?:</strong>{" "}
+                                {data?.bonded || "N/A"}
+                              </p>
+                              <p style={{ margin: "0 0 8px 0" }}>
+                                <strong>
+                                  Have you ever been convicted of a felony in
+                                  the past 7years?:
+                                </strong>{" "}
+                                {data?.convicted || "N/A"}
+                              </p>
                               {data?.convicted === "Yes" && (
-                                <p style={{ margin: "0 0 8px 0" }}><strong>Such conviction may be relevant if job related, but does not bar you from employment. If yes - explain:</strong> {data?.explain_convicted || "N/A"}</p>
+                                <p style={{ margin: "0 0 8px 0" }}>
+                                  <strong>
+                                    Such conviction may be relevant if job
+                                    related, but does not bar you from
+                                    employment. If yes - explain:
+                                  </strong>{" "}
+                                  {data?.explain_convicted || "N/A"}
+                                </p>
                               )}
                               <div className="row mt-2">
                                 <div className="col-md-6">
-                                  <p style={{ margin: 0 }}><strong>Driver's License Number:</strong> {data?.drivers_license || "N/A"}</p>
+                                  <p style={{ margin: 0 }}>
+                                    <strong>Driver's License Number:</strong>{" "}
+                                    {data?.drivers_license || "N/A"}
+                                  </p>
                                 </div>
                                 <div className="col-md-6">
-                                  <p style={{ margin: 0 }}><strong>State:</strong> {data?.drivers_license_state || "N/A"}</p>
+                                  <p style={{ margin: 0 }}>
+                                    <strong>State:</strong>{" "}
+                                    {data?.drivers_license_state || "N/A"}
+                                  </p>
                                 </div>
                               </div>
                             </div>
@@ -197,7 +327,15 @@ export default function SignedMainForms() {
 
                         {/* Education */}
                         <section style={{ marginBottom: "30px" }}>
-                          <h5 style={{ fontSize: "12pt", fontWeight: "bold", borderBottom: "1px solid #000", paddingBottom: "5px", marginBottom: "15px" }}>
+                          <h5
+                            style={{
+                              fontSize: "12pt",
+                              fontWeight: "bold",
+                              borderBottom: "1px solid #000",
+                              paddingBottom: "5px",
+                              marginBottom: "15px",
+                            }}
+                          >
                             Education
                           </h5>
                           <table className="word-table">
@@ -213,31 +351,79 @@ export default function SignedMainForms() {
                             <tbody>
                               <tr>
                                 <td>Current Academic</td>
-                                <td>{data?.academic?.edu_current_name_location_school || "-"}</td>
-                                <td>{data?.academic?.edu_current_number_years || "-"}</td>
-                                <td>{data?.academic?.edu_current_did_graduate || "-"}</td>
-                                <td>{data?.academic?.edu_current_subjects_studied || "-"}</td>
+                                <td>
+                                  {data?.academic
+                                    ?.edu_current_name_location_school || "-"}
+                                </td>
+                                <td>
+                                  {data?.academic?.edu_current_number_years ||
+                                    "-"}
+                                </td>
+                                <td>
+                                  {data?.academic?.edu_current_did_graduate ||
+                                    "-"}
+                                </td>
+                                <td>
+                                  {data?.academic
+                                    ?.edu_current_subjects_studied || "-"}
+                                </td>
                               </tr>
                               <tr>
                                 <td>Last Academic</td>
-                                <td>{data?.academic?.edu_last_name_location_school || "-"}</td>
-                                <td>{data?.academic?.edu_last_number_years || "-"}</td>
-                                <td>{data?.academic?.edu_last_did_graduate || "-"}</td>
-                                <td>{data?.academic?.edu_last_subjects_studied || "-"}</td>
+                                <td>
+                                  {data?.academic
+                                    ?.edu_last_name_location_school || "-"}
+                                </td>
+                                <td>
+                                  {data?.academic?.edu_last_number_years || "-"}
+                                </td>
+                                <td>
+                                  {data?.academic?.edu_last_did_graduate || "-"}
+                                </td>
+                                <td>
+                                  {data?.academic?.edu_last_subjects_studied ||
+                                    "-"}
+                                </td>
                               </tr>
                               <tr>
                                 <td>Current Trades</td>
-                                <td>{data?.academic?.trades_current_name_location_school || "-"}</td>
-                                <td>{data?.academic?.trades_current_number_years || "-"}</td>
-                                <td>{data?.academic?.trades_current_did_graduate || "-"}</td>
-                                <td>{data?.academic?.trades_current_subjects_studied || "-"}</td>
+                                <td>
+                                  {data?.academic
+                                    ?.trades_current_name_location_school ||
+                                    "-"}
+                                </td>
+                                <td>
+                                  {data?.academic
+                                    ?.trades_current_number_years || "-"}
+                                </td>
+                                <td>
+                                  {data?.academic
+                                    ?.trades_current_did_graduate || "-"}
+                                </td>
+                                <td>
+                                  {data?.academic
+                                    ?.trades_current_subjects_studied || "-"}
+                                </td>
                               </tr>
                               <tr>
                                 <td>Last Trades</td>
-                                <td>{data?.academic?.trades_last_current_name_location_school || "-"}</td>
-                                <td>{data?.academic?.trades_last_current_number_years || "-"}</td>
-                                <td>{data?.academic?.trades_last_current_did_graduate || "-"}</td>
-                                <td>{data?.academic?.trades_last_subjects_studied || "-"}</td>
+                                <td>
+                                  {data?.academic
+                                    ?.trades_last_current_name_location_school ||
+                                    "-"}
+                                </td>
+                                <td>
+                                  {data?.academic
+                                    ?.trades_last_current_number_years || "-"}
+                                </td>
+                                <td>
+                                  {data?.academic
+                                    ?.trades_last_current_did_graduate || "-"}
+                                </td>
+                                <td>
+                                  {data?.academic
+                                    ?.trades_last_subjects_studied || "-"}
+                                </td>
                               </tr>
                             </tbody>
                           </table>
@@ -245,7 +431,11 @@ export default function SignedMainForms() {
 
                         <section style={{ marginBottom: "30px" }}>
                           <p>
-                            <strong>Summarize special skills and qualifications required from employment or other experiences that may qualify you to work with this company:</strong>
+                            <strong>
+                              Summarize special skills and qualifications
+                              required from employment or other experiences that
+                              may qualify you to work with this company:
+                            </strong>
                             <br />
                             {data?.special_skills_qualifications || "N/A"}
                           </p>
@@ -253,7 +443,15 @@ export default function SignedMainForms() {
 
                         {/* Past Employment Info */}
                         <section style={{ marginBottom: "30px" }}>
-                          <h5 style={{ fontSize: "12pt", fontWeight: "bold", borderBottom: "1px solid #000", paddingBottom: "5px", marginBottom: "15px" }}>
+                          <h5
+                            style={{
+                              fontSize: "12pt",
+                              fontWeight: "bold",
+                              borderBottom: "1px solid #000",
+                              paddingBottom: "5px",
+                              marginBottom: "15px",
+                            }}
+                          >
                             Past Employment Info
                           </h5>
                           <table className="word-table">
@@ -270,34 +468,85 @@ export default function SignedMainForms() {
                             </thead>
                             <tbody>
                               <tr>
-                                <td>{formatDate(data?.past_emp_info?.from_date_1)}</td>
-                                <td>{formatDate(data?.past_emp_info?.to_date_1)}</td>
-                                <td>{data?.past_emp_info?.name_address_employer_1 || "-"}</td>
-                                <td>{data?.past_emp_info?.phone_number_1 || "-"}</td>
-                                <td>{data?.past_emp_info?.salary_1 ? `$${data.past_emp_info.salary_1}` : "-"}</td>
+                                <td>
+                                  {formatDate(data?.past_emp_info?.from_date_1)}
+                                </td>
+                                <td>
+                                  {formatDate(data?.past_emp_info?.to_date_1)}
+                                </td>
+                                <td>
+                                  {data?.past_emp_info
+                                    ?.name_address_employer_1 || "-"}
+                                </td>
+                                <td>
+                                  {data?.past_emp_info?.phone_number_1 || "-"}
+                                </td>
+                                <td>
+                                  {data?.past_emp_info?.salary_1
+                                    ? `$${data.past_emp_info.salary_1}`
+                                    : "-"}
+                                </td>
                                 <td>{data?.past_emp_info?.job_1 || "-"}</td>
-                                <td>{data?.past_emp_info?.reason_leaving_1 || "-"}</td>
+                                <td>
+                                  {data?.past_emp_info?.reason_leaving_1 || "-"}
+                                </td>
                               </tr>
                               {data?.past_emp_info?.from_date_2 && (
                                 <tr>
-                                  <td>{formatDate(data?.past_emp_info?.from_date_2)}</td>
-                                  <td>{formatDate(data?.past_emp_info?.to_date_2)}</td>
-                                  <td>{data?.past_emp_info?.name_address_employer_2 || "-"}</td>
-                                  <td>{data?.past_emp_info?.phone_number_2 || "-"}</td>
-                                  <td>{data?.past_emp_info?.salary_2 ? `$${data.past_emp_info.salary_2}` : "-"}</td>
+                                  <td>
+                                    {formatDate(
+                                      data?.past_emp_info?.from_date_2,
+                                    )}
+                                  </td>
+                                  <td>
+                                    {formatDate(data?.past_emp_info?.to_date_2)}
+                                  </td>
+                                  <td>
+                                    {data?.past_emp_info
+                                      ?.name_address_employer_2 || "-"}
+                                  </td>
+                                  <td>
+                                    {data?.past_emp_info?.phone_number_2 || "-"}
+                                  </td>
+                                  <td>
+                                    {data?.past_emp_info?.salary_2
+                                      ? `$${data.past_emp_info.salary_2}`
+                                      : "-"}
+                                  </td>
                                   <td>{data?.past_emp_info?.job_2 || "-"}</td>
-                                  <td>{data?.past_emp_info?.reason_leaving_2 || "-"}</td>
+                                  <td>
+                                    {data?.past_emp_info?.reason_leaving_2 ||
+                                      "-"}
+                                  </td>
                                 </tr>
                               )}
                               {data?.past_emp_info?.from_date_3 && (
                                 <tr>
-                                  <td>{formatDate(data?.past_emp_info?.from_date_3)}</td>
-                                  <td>{formatDate(data?.past_emp_info?.to_date_3)}</td>
-                                  <td>{data?.past_emp_info?.name_address_employer_3 || "-"}</td>
-                                  <td>{data?.past_emp_info?.phone_number_3 || "-"}</td>
-                                  <td>{data?.past_emp_info?.salary_3 ? `$${data.past_emp_info.salary_3}` : "-"}</td>
+                                  <td>
+                                    {formatDate(
+                                      data?.past_emp_info?.from_date_3,
+                                    )}
+                                  </td>
+                                  <td>
+                                    {formatDate(data?.past_emp_info?.to_date_3)}
+                                  </td>
+                                  <td>
+                                    {data?.past_emp_info
+                                      ?.name_address_employer_3 || "-"}
+                                  </td>
+                                  <td>
+                                    {data?.past_emp_info?.phone_number_3 || "-"}
+                                  </td>
+                                  <td>
+                                    {data?.past_emp_info?.salary_3
+                                      ? `$${data.past_emp_info.salary_3}`
+                                      : "-"}
+                                  </td>
                                   <td>{data?.past_emp_info?.job_3 || "-"}</td>
-                                  <td>{data?.past_emp_info?.reason_leaving_3 || "-"}</td>
+                                  <td>
+                                    {data?.past_emp_info?.reason_leaving_3 ||
+                                      "-"}
+                                  </td>
                                 </tr>
                               )}
                             </tbody>
@@ -306,7 +555,15 @@ export default function SignedMainForms() {
 
                         {/* References */}
                         <section style={{ marginBottom: "30px" }}>
-                          <h5 style={{ fontSize: "12pt", fontWeight: "bold", borderBottom: "1px solid #000", paddingBottom: "5px", marginBottom: "15px" }}>
+                          <h5
+                            style={{
+                              fontSize: "12pt",
+                              fontWeight: "bold",
+                              borderBottom: "1px solid #000",
+                              paddingBottom: "5px",
+                              marginBottom: "15px",
+                            }}
+                          >
                             References
                           </h5>
                           <table className="word-table">
@@ -320,22 +577,49 @@ export default function SignedMainForms() {
                             </thead>
                             <tbody>
                               <tr>
-                                <td>{data?.reference?.reference_name_1 || "-"}</td>
-                                <td>{data?.reference?.reference_address_1 || "-"}</td>
-                                <td>{data?.reference?.reference_phone_1 || "-"}</td>
-                                <td>{data?.reference?.reference_years_acquainted_1 || "-"}</td>
+                                <td>
+                                  {data?.reference?.reference_name_1 || "-"}
+                                </td>
+                                <td>
+                                  {data?.reference?.reference_address_1 || "-"}
+                                </td>
+                                <td>
+                                  {data?.reference?.reference_phone_1 || "-"}
+                                </td>
+                                <td>
+                                  {data?.reference
+                                    ?.reference_years_acquainted_1 || "-"}
+                                </td>
                               </tr>
                               <tr>
-                                <td>{data?.reference?.reference_name_2 || "-"}</td>
-                                <td>{data?.reference?.reference_address_2 || "-"}</td>
-                                <td>{data?.reference?.reference_phone_2 || "-"}</td>
-                                <td>{data?.reference?.reference_years_acquainted_2 || "-"}</td>
+                                <td>
+                                  {data?.reference?.reference_name_2 || "-"}
+                                </td>
+                                <td>
+                                  {data?.reference?.reference_address_2 || "-"}
+                                </td>
+                                <td>
+                                  {data?.reference?.reference_phone_2 || "-"}
+                                </td>
+                                <td>
+                                  {data?.reference
+                                    ?.reference_years_acquainted_2 || "-"}
+                                </td>
                               </tr>
                               <tr>
-                                <td>{data?.reference?.reference_name_3 || "-"}</td>
-                                <td>{data?.reference?.reference_address_3 || "-"}</td>
-                                <td>{data?.reference?.reference_phone_3 || "-"}</td>
-                                <td>{data?.reference?.reference_years_acquainted_3 || "-"}</td>
+                                <td>
+                                  {data?.reference?.reference_name_3 || "-"}
+                                </td>
+                                <td>
+                                  {data?.reference?.reference_address_3 || "-"}
+                                </td>
+                                <td>
+                                  {data?.reference?.reference_phone_3 || "-"}
+                                </td>
+                                <td>
+                                  {data?.reference
+                                    ?.reference_years_acquainted_3 || "-"}
+                                </td>
                               </tr>
                             </tbody>
                           </table>
@@ -343,7 +627,15 @@ export default function SignedMainForms() {
 
                         {/* Languages */}
                         <section style={{ marginBottom: "30px" }}>
-                          <h5 style={{ fontSize: "12pt", fontWeight: "bold", borderBottom: "1px solid #000", paddingBottom: "5px", marginBottom: "15px" }}>
+                          <h5
+                            style={{
+                              fontSize: "12pt",
+                              fontWeight: "bold",
+                              borderBottom: "1px solid #000",
+                              paddingBottom: "5px",
+                              marginBottom: "15px",
+                            }}
+                          >
                             Languages
                           </h5>
                           <table className="word-table">
@@ -376,7 +668,15 @@ export default function SignedMainForms() {
 
                         {/* Emergency Address */}
                         <section style={{ marginBottom: "30px" }}>
-                          <h5 style={{ fontSize: "12pt", fontWeight: "bold", borderBottom: "1px solid #000", paddingBottom: "5px", marginBottom: "15px" }}>
+                          <h5
+                            style={{
+                              fontSize: "12pt",
+                              fontWeight: "bold",
+                              borderBottom: "1px solid #000",
+                              paddingBottom: "5px",
+                              marginBottom: "15px",
+                            }}
+                          >
                             Emergency Address
                           </h5>
                           <p>
@@ -385,28 +685,77 @@ export default function SignedMainForms() {
                         </section>
 
                         {/* Signature Block */}
-                        <div style={{ marginTop: "60px", pageBreakInside: "avoid" }}>
-                          <h5 style={{ fontSize: "12pt", fontWeight: "bold", marginBottom: "15px" }}>
+                        <div
+                          style={{
+                            marginTop: "60px",
+                            pageBreakInside: "avoid",
+                          }}
+                        >
+                          <h5
+                            style={{
+                              fontSize: "12pt",
+                              fontWeight: "bold",
+                              marginBottom: "15px",
+                            }}
+                          >
                             Acknowledgement
                           </h5>
-                          <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                          <table
+                            style={{
+                              width: "100%",
+                              borderCollapse: "collapse",
+                            }}
+                          >
                             <tbody>
                               <tr>
-                                <td style={{ width: "50%", paddingBottom: "40px", verticalAlign: "bottom" }}>
+                                <td
+                                  style={{
+                                    width: "50%",
+                                    paddingBottom: "40px",
+                                    verticalAlign: "bottom",
+                                  }}
+                                >
                                   <p style={{ margin: 0 }}>Employee Name:</p>
-                                  <div style={{ borderBottom: "1px solid #000", paddingBottom: "5px", marginTop: "5px" }}>
+                                  <div
+                                    style={{
+                                      borderBottom: "1px solid #000",
+                                      paddingBottom: "5px",
+                                      marginTop: "5px",
+                                    }}
+                                  >
                                     <strong>{fullname ?? "N/A"}</strong>
                                   </div>
                                 </td>
-                                <td style={{ width: "50%", paddingBottom: "40px", paddingLeft: "20px", verticalAlign: "bottom" }}>
-                                  <p style={{ margin: 0 }}>Employee Signature:</p>
-                                  <div style={{ borderBottom: "1px solid #000", paddingBottom: "5px", marginTop: "5px", height: "40px", display: "flex", alignItems: "flex-end" }}>
+                                <td
+                                  style={{
+                                    width: "50%",
+                                    paddingBottom: "40px",
+                                    paddingLeft: "20px",
+                                    verticalAlign: "bottom",
+                                  }}
+                                >
+                                  <p style={{ margin: 0 }}>
+                                    Employee Signature:
+                                  </p>
+                                  <div
+                                    style={{
+                                      borderBottom: "1px solid #000",
+                                      paddingBottom: "5px",
+                                      marginTop: "5px",
+                                      height: "40px",
+                                      display: "flex",
+                                      alignItems: "flex-end",
+                                    }}
+                                  >
                                     {signature ? (
                                       <img
                                         className="signature"
                                         src={`${apiBase}/storage/signature/${signature}`}
                                         alt="Signature"
-                                        style={{ maxHeight: "50px", maxWidth: "100%" }}
+                                        style={{
+                                          maxHeight: "50px",
+                                          maxWidth: "100%",
+                                        }}
                                       />
                                     ) : (
                                       <em>No signature provided</em>
@@ -417,13 +766,37 @@ export default function SignedMainForms() {
                               <tr>
                                 <td style={{ paddingTop: "20px" }}>
                                   <p style={{ margin: 0 }}>Date:</p>
-                                  <div style={{ borderBottom: "1px solid #000", paddingBottom: "5px", marginTop: "5px", display: "inline-block", minWidth: "150px" }}>
-                                    <strong>{formatDate(data?.created_at)}</strong>
+                                  <div
+                                    style={{
+                                      borderBottom: "1px solid #000",
+                                      paddingBottom: "5px",
+                                      marginTop: "5px",
+                                      display: "inline-block",
+                                      minWidth: "150px",
+                                    }}
+                                  >
+                                    <strong>
+                                      {formatDate(data?.created_at)}
+                                    </strong>
                                   </div>
                                 </td>
-                                <td style={{ paddingTop: "20px", paddingLeft: "20px" }}>
-                                  <p style={{ margin: 0 }}>Administrator/Designee Signature:</p>
-                                  <div style={{ borderBottom: "1px solid #000", paddingBottom: "5px", marginTop: "5px", height: "40px" }}>
+                                <td
+                                  style={{
+                                    paddingTop: "20px",
+                                    paddingLeft: "20px",
+                                  }}
+                                >
+                                  <p style={{ margin: 0 }}>
+                                    Administrator/Designee Signature:
+                                  </p>
+                                  <div
+                                    style={{
+                                      borderBottom: "1px solid #000",
+                                      paddingBottom: "5px",
+                                      marginTop: "5px",
+                                      height: "40px",
+                                    }}
+                                  >
                                     &nbsp;
                                   </div>
                                 </td>
@@ -431,10 +804,9 @@ export default function SignedMainForms() {
                             </tbody>
                           </table>
                         </div>
-
                       </div>
                     </div>
-                    
+
                     {/* Action Buttons (Outside the Word Document style) */}
                     <div className="card-footer bg-white border-top-0 pt-0 pb-3 px-3">
                       <button
@@ -450,7 +822,6 @@ export default function SignedMainForms() {
                         Back
                       </Link>
                     </div>
-
                   </div>
                 </div>
               )}
@@ -465,7 +836,7 @@ export default function SignedMainForms() {
           background-color: #f4f4f4; /* Grayish backdrop to highlight the "paper" */
         }
         .word-doc {
-          font-family: 'Times New Roman', Times, serif;
+          font-family: "Times New Roman", Times, serif;
           font-size: 12pt;
           line-height: 1.5;
           color: #000;
@@ -473,21 +844,30 @@ export default function SignedMainForms() {
           max-width: 850px; /* Simulates A4/Letter width */
           margin: 0 auto;
           padding: 1in; /* Standard Word margins */
-          box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
           min-height: 1100px; /* Gives it a paper-like appearance */
         }
-        .word-doc h1, .word-doc h2, .word-doc h3, .word-doc h4, .word-doc h5, .word-doc h6 {
+        .word-doc h1,
+        .word-doc h2,
+        .word-doc h3,
+        .word-doc h4,
+        .word-doc h5,
+        .word-doc h6 {
           color: #000;
-          font-family: 'Times New Roman', Times, serif;
+          font-family: "Times New Roman", Times, serif;
         }
-          .word-doc p, .word-doc li, .word-doc td, .word-doc strong, .word-doc u {
-          font-family: 'Times New Roman', Times, serif !important;
+        .word-doc p,
+        .word-doc li,
+        .word-doc td,
+        .word-doc strong,
+        .word-doc u {
+          font-family: "Times New Roman", Times, serif !important;
         }
         .word-doc p {
           text-align: justify;
           margin-bottom: 12px;
         }
-        
+
         /* MS Word Table Styling */
         .word-table {
           width: 100%;
@@ -495,7 +875,8 @@ export default function SignedMainForms() {
           margin-bottom: 20px;
           font-size: 11pt; /* Tables are usually slightly smaller */
         }
-        .word-table th, .word-table td {
+        .word-table th,
+        .word-table td {
           border: 1px solid #000;
           padding: 8px;
           text-align: left;
@@ -505,12 +886,13 @@ export default function SignedMainForms() {
           background-color: #f2f2f2;
           font-weight: bold;
         }
-        
+
         @media print {
           body * {
             visibility: hidden;
           }
-          .word-doc, .word-doc * {
+          .word-doc,
+          .word-doc * {
             visibility: visible;
           }
           .word-doc {
