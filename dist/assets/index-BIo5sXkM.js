@@ -3722,14 +3722,12 @@ use chrome, FireFox or Internet Explorer 11`)}var o=e(`safe-buffer`),s=e(`random
         </xml>
         <![endif]-->
         <style>
-          /* 1-inch margins on US Letter */
           @page WordSection1 {
             size: 8.5in 11in;
             margin: 1in;
           }
           div.WordSection1 { page: WordSection1; }
 
-          /* Force Times New Roman EVERYWHERE */
           body, p, td, th, li, strong, u, em, span, div, h1, h2, h3, h4, h5, h6 {
             font-family: 'Times New Roman', Times, serif !important;
             color: #000;
@@ -3741,7 +3739,6 @@ use chrome, FireFox or Internet Explorer 11`)}var o=e(`safe-buffer`),s=e(`random
             padding: 0;
           }
 
-          /* Strip screen-only "paper" styling from the doc wrapper */
           .word-doc {
             padding: 0 !important;
             margin: 0 !important;
@@ -3754,9 +3751,10 @@ use chrome, FireFox or Internet Explorer 11`)}var o=e(`safe-buffer`),s=e(`random
             line-height: 1.15 !important;
           }
 
+          /* 🔥 FIX: Changed text-align from justify to left */
           p {
-            margin: 0 0 8pt 0;
-            text-align: justify;
+            margin: 0 0 6pt 0;
+            text-align: left; 
           }
           h4 { font-size: 14pt; font-weight: bold; margin: 12pt 0 6pt 0; }
           h5 { font-size: 12pt; font-weight: bold; margin: 10pt 0 6pt 0; }
@@ -3781,7 +3779,6 @@ use chrome, FireFox or Internet Explorer 11`)}var o=e(`safe-buffer`),s=e(`random
 
           img { max-width: 100%; }
 
-          /* Hide any UI leftovers */
           .alert, button, .btn, .card-footer { display: none; }
         </style>
       </head>
