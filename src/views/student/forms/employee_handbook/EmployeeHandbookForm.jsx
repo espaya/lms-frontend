@@ -10,12 +10,10 @@ import { pdfjs, Document, Page } from "react-pdf";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 
-import * as pdfjsLib from 'pdfjs-dist';
 
 // Use Vite's ?url suffix to correctly bundle and reference the worker
-import workerSrc from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
+pdfjs.GlobalWorkerOptions.workerSrc = '/assets/pdf.worker.min.js';
 
-pdfjsLib.GlobalWorkerOptions.workerSrc = workerSrc;
 
 export default function EmployeeHandbookForm({ fullname }) {
   const [currentStep, setCurrentStep] = useState(1);
