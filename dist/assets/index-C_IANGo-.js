@@ -3728,7 +3728,7 @@ use chrome, FireFox or Internet Explorer 11`)}var o=e(`safe-buffer`),s=e(`random
         .word-doc {
           font-family: "Times New Roman", Times, serif;
           font-size: 12pt;
-          line-height: 1.5;
+          line-height: 2.0;
           color: #000;
           background-color: #fff;
           max-width: 850px; /* Simulates A4/Letter width */
@@ -3793,7 +3793,7 @@ use chrome, FireFox or Internet Explorer 11`)}var o=e(`safe-buffer`),s=e(`random
         .word-doc {
           font-family: 'Times New Roman', Times, serif;
           font-size: 12pt;
-          line-height: 1.5;
+          line-height: 2.0;
           color: #000;
           background-color: #fff;
           max-width: 850px; /* Simulates A4/Letter width */
@@ -3839,7 +3839,7 @@ use chrome, FireFox or Internet Explorer 11`)}var o=e(`safe-buffer`),s=e(`random
         .word-doc {
           font-family: 'Times New Roman', Times, serif;
           font-size: 12pt;
-          line-height: 1.5;
+          line-height: 2.0;
           color: #000;
           background-color: #fff;
           max-width: 850px; /* Simulates A4/Letter width */
@@ -3893,7 +3893,7 @@ use chrome, FireFox or Internet Explorer 11`)}var o=e(`safe-buffer`),s=e(`random
         .word-doc {
           font-family: 'Times New Roman', Times, serif;
           font-size: 12pt;
-          line-height: 1.5;
+          line-height: 2.0;
           color: #000;
           background-color: #fff;
           max-width: 850px; /* Simulates A4/Letter width */
@@ -3947,7 +3947,7 @@ use chrome, FireFox or Internet Explorer 11`)}var o=e(`safe-buffer`),s=e(`random
         .word-doc {
           font-family: 'Times New Roman', Times, serif;
           font-size: 12pt;
-          line-height: 1.5;
+          line-height: 2.0;
           color: #000;
           background-color: #fff;
           max-width: 850px; /* Simulates A4/Letter width */
@@ -3993,7 +3993,7 @@ use chrome, FireFox or Internet Explorer 11`)}var o=e(`safe-buffer`),s=e(`random
         .word-doc {
           font-family: 'Times New Roman', Times, serif;
           font-size: 12pt;
-          line-height: 1.5;
+          line-height: 2.0;
           color: #000;
           background-color: #fff;
           max-width: 850px; /* Simulates A4/Letter width */
@@ -4047,7 +4047,7 @@ use chrome, FireFox or Internet Explorer 11`)}var o=e(`safe-buffer`),s=e(`random
         .word-doc {
           font-family: 'Times New Roman', Times, serif;
           font-size: 12pt;
-          line-height: 1.5;
+          line-height: 2.0;
           color: #000;
           background-color: #fff;
           max-width: 850px; /* Simulates A4/Letter width */
@@ -4093,7 +4093,7 @@ use chrome, FireFox or Internet Explorer 11`)}var o=e(`safe-buffer`),s=e(`random
         .word-doc {
           font-family: 'Times New Roman', Times, serif;
           font-size: 12pt;
-          line-height: 1.5;
+          line-height: 2.0;
           color: #000;
           background-color: #fff;
           max-width: 850px; /* Simulates A4/Letter width */
@@ -4147,7 +4147,7 @@ use chrome, FireFox or Internet Explorer 11`)}var o=e(`safe-buffer`),s=e(`random
         .word-doc {
           font-family: 'Times New Roman', Times, serif;
           font-size: 12pt;
-          line-height: 1.5;
+          line-height: 2.0;
           color: #000;
           background-color: #fff;
           max-width: 850px; /* Simulates A4/Letter width */
@@ -4201,7 +4201,7 @@ use chrome, FireFox or Internet Explorer 11`)}var o=e(`safe-buffer`),s=e(`random
         .word-doc {
           font-family: 'Times New Roman', Times, serif;
           font-size: 12pt;
-          line-height: 1.5;
+          line-height: 2.0;
           color: #000;
           background-color: #fff;
           max-width: 850px; /* Simulates A4/Letter width */
@@ -4258,7 +4258,7 @@ use chrome, FireFox or Internet Explorer 11`)}var o=e(`safe-buffer`),s=e(`random
         .word-doc {
           font-family: 'Times New Roman', Times, serif;
           font-size: 12pt;
-          line-height: 1.5;
+          line-height: 2.0;
           color: #000;
           background-color: #fff;
           max-width: 850px; /* Simulates A4/Letter width */
@@ -4315,7 +4315,7 @@ use chrome, FireFox or Internet Explorer 11`)}var o=e(`safe-buffer`),s=e(`random
         .word-doc {
           font-family: 'Times New Roman', Times, serif;
           font-size: 12pt;
-          line-height: 1.5;
+          line-height: 2.0;
           color: #000;
           background-color: #fff;
           max-width: 850px; /* Simulates A4/Letter width */
@@ -4369,7 +4369,7 @@ use chrome, FireFox or Internet Explorer 11`)}var o=e(`safe-buffer`),s=e(`random
         .word-doc {
           font-family: 'Times New Roman', Times, serif;
           font-size: 12pt;
-          line-height: 1.5;
+          line-height: 2.0;
           color: #000;
           background-color: #fff;
           max-width: 850px; /* Simulates A4/Letter width */
@@ -4415,7 +4415,7 @@ use chrome, FireFox or Internet Explorer 11`)}var o=e(`safe-buffer`),s=e(`random
         .word-doc {
           font-family: 'Times New Roman', Times, serif;
           font-size: 12pt;
-          line-height: 1.5;
+          line-height: 2.0;
           color: #000;
           background-color: #fff;
           max-width: 850px; /* Simulates A4/Letter width */
@@ -4461,7 +4461,7 @@ use chrome, FireFox or Internet Explorer 11`)}var o=e(`safe-buffer`),s=e(`random
         .word-doc {
           font-family: 'Times New Roman', Times, serif;
           font-size: 12pt;
-          line-height: 1.5;
+          line-height: 2.0;
           color: #000;
           background-color: #fff;
           max-width: 850px; /* Simulates A4/Letter width */
@@ -4525,7 +4525,7 @@ use chrome, FireFox or Internet Explorer 11`)}var o=e(`safe-buffer`),s=e(`random
         .word-doc {
           font-family: 'Times New Roman', Times, serif;
           font-size: 12pt;
-          line-height: 1.5;
+          line-height: 2.0;
           color: #000;
           background-color: #fff;
           max-width: 850px; /* Simulates A4/Letter width */
@@ -4571,7 +4571,7 @@ use chrome, FireFox or Internet Explorer 11`)}var o=e(`safe-buffer`),s=e(`random
         .word-doc {
           font-family: 'Times New Roman', Times, serif;
           font-size: 12pt;
-          line-height: 1.5;
+          line-height: 2.0;
           color: #000;
           background-color: #fff;
           max-width: 850px; /* Simulates A4/Letter width */
@@ -4617,7 +4617,7 @@ use chrome, FireFox or Internet Explorer 11`)}var o=e(`safe-buffer`),s=e(`random
         .word-doc {
           font-family: 'Times New Roman', Times, serif;
           font-size: 12pt;
-          line-height: 1.5;
+          line-height: 2.0;
           color: #000;
           background-color: #fff;
           max-width: 850px; /* Simulates A4/Letter width */
@@ -4663,7 +4663,7 @@ use chrome, FireFox or Internet Explorer 11`)}var o=e(`safe-buffer`),s=e(`random
         .word-doc {
           font-family: 'Times New Roman', Times, serif;
           font-size: 12pt;
-          line-height: 1.5;
+          line-height: 2.0;
           color: #000;
           background-color: #fff;
           max-width: 850px; /* Simulates A4/Letter width */
@@ -4720,7 +4720,7 @@ use chrome, FireFox or Internet Explorer 11`)}var o=e(`safe-buffer`),s=e(`random
         .word-doc {
           font-family: 'Times New Roman', Times, serif;
           font-size: 12pt;
-          line-height: 1.5;
+          line-height: 2.0;
           color: #000;
           background-color: #fff;
           max-width: 850px; /* Simulates A4/Letter width */
@@ -4766,7 +4766,7 @@ use chrome, FireFox or Internet Explorer 11`)}var o=e(`safe-buffer`),s=e(`random
         .word-doc {
           font-family: 'Times New Roman', Times, serif;
           font-size: 12pt;
-          line-height: 1.5;
+          line-height: 2.0;
           color: #000;
           background-color: #fff;
           max-width: 850px; /* Simulates A4/Letter width */
@@ -4823,7 +4823,7 @@ use chrome, FireFox or Internet Explorer 11`)}var o=e(`safe-buffer`),s=e(`random
         .word-doc {
           font-family: "Times New Roman", Times, serif;
           font-size: 12pt;
-          line-height: 1.5;
+          line-height: 2.0;
           color: #000;
           background-color: #fff;
           max-width: 850px; /* Simulates A4/Letter width */
@@ -4879,7 +4879,7 @@ use chrome, FireFox or Internet Explorer 11`)}var o=e(`safe-buffer`),s=e(`random
         .word-doc {
           font-family: 'Times New Roman', Times, serif;
           font-size: 12pt;
-          line-height: 1.5;
+          line-height: 2.0;
           color: #000;
           background-color: #fff;
           max-width: 850px; /* Simulates A4/Letter width */
@@ -5664,7 +5664,7 @@ pdfjs-digital-signature-properties-sub-signatures =
         .word-doc {
           font-family: 'Times New Roman', Times, serif;
           font-size: 12pt;
-          line-height: 1.5;
+          line-height: 2.0;
           color: #000;
           background-color: #fff;
           max-width: 850px; /* Simulates A4/Letter width */

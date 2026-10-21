@@ -243,7 +243,7 @@ export default function SignedSexualHarassmentForms() {
         .word-doc {
           font-family: 'Times New Roman', Times, serif;
           font-size: 12pt;
-          line-height: 1.5;
+          line-height: 2.0;
           color: #000;
           background-color: #fff;
           max-width: 850px; /* Simulates A4/Letter width */
