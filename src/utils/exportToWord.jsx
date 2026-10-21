@@ -165,7 +165,7 @@ const exportToWord = async ({ fullname, title }) => {
           /* 🔥 FIX: Changed text-align from justify to left */
           p {
             margin: 0 0 6pt 0;
-            text-align: left; 
+            // text-align: left; 
           }
           h4 { font-size: 14pt; font-weight: bold; margin: 12pt 0 6pt 0; }
           h5 { font-size: 12pt; font-weight: bold; margin: 10pt 0 6pt 0; }
