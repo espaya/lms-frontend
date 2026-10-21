@@ -1,23 +1,20 @@
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import MyHeader from "../../../../components/MyHeader";
 import Sidebar from "../../../../components/Sidebar";
 import Nav from "../../single_user/Nav";
 import { Link } from "react-router-dom";
-import { PATHS } from "../../../../router";
 import { formatDate } from "../../../../utils/DateFormatter";
-import printContent from "../../../../utils/printContent";
 import FetchAllEmployeeForms from "../../../../controller/admin/AllFormsController";
 import Spinner from "../../../../components/Spinner";
 import exportToWord from "../../../../utils/exportToWord";
 
 export default function SignedVerificationForms() {
-  const location = useLocation();
   const { username } = useParams();
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const apiBase = import.meta.env.VITE_API_URL;
-  const [allForms, setAllForms] = useState([]);
+  const [allForms, setAllForms] = useState({});
 
   useEffect(() => {
     FetchAllEmployeeForms(
@@ -27,7 +24,7 @@ export default function SignedVerificationForms() {
       apiBase,
       username
     );
-  }, []);
+  }, [username, apiBase]);
 
   const fullname = allForms?.application_form?.profile?.full_name;
   const data = allForms?.verification;
@@ -68,146 +65,150 @@ export default function SignedVerificationForms() {
               ) : (
                 <div className="col-md-9">
                   <div className="card">
-                    <div id="printArea" className="card-body">
-                      <div style={{ textAlign: "center" }}>
-                        <img
-                          src="/assets/images/main_logo.png"
-                          width={200}
-                          alt="Company Logo"
-                        />
-                        <h5 className="mt-10">
-                          1st Access Home Care Incorporated
-                        </h5>
-                        <p>
-                          6600 Fieldtan Trail, Moseley, VA, 23120 <br />
-                          Agency Phone: (+1) 804-818-3216
-                        </p>
-                        <h5 className="mt-4 mb-3">
-                          Verification of Professional License
-                        </h5>
-                      </div>
-                      <div className="step-content">
-                        <div className="row">
-                          <div className="col-md-12">
-                            <p>
-                              Employee Name: <b> {fullname ?? "N/A"} </b>
-                            </p>
-                            <p>
-                              {" "}
-                              Check Off Discipline Needing Verification:{" "}
-                              <b>{data?.disciplines}</b>{" "}
-                            </p>
-                            <p>
-                              {" "}
-                              License Number: <b>{data?.licenseNumber}</b>
-                            </p>
-                            <p>
-                              Expiration Date Of License:{" "}
-                              <b>{formatDate(data?.expirationDate)}</b>
-                            </p>
-                            <p>
-                              {" "}
-                              Date Verified:{" "}
-                              <b>{formatDate(data?.dateVerified)}</b>
-                            </p>
-                            <p>
-                              {" "}
-                              License Verified By:{" "}
-                              <b>{data?.licenseVerifiedBy}</b>
-                            </p>
-                            <p>
-                              {" "}
-                              Action Outstanding:{" "}
-                              <b>{data?.actionOutstanding}</b>
-                            </p>
-                            <p>
-                              {" "}
-                              Comments: <b>comments</b>
-                            </p>
+                    
+                    {/* MS Word Style Container */}
+                    <div id="printArea" className="card-body p-0 bg-secondary-light">
+                      <div className="word-doc">
+                        
+                        {/* Header */}
+                        <div style={{ textAlign: "center", marginBottom: "40px" }}>
+                          <img
+                            src="/assets/images/main_logo.png"
+                            width={150}
+                            alt="Company Logo"
+                            style={{ marginBottom: "20px" }}
+                          />
+                          <h5 style={{ fontSize: "14pt", margin: "0 0 10px 0", fontWeight: "bold" }}>
+                            1st Access Home Care Incorporated
+                          </h5>
+                          <p style={{ margin: "5px 0", fontSize: "12pt" }}>
+                            6600 Fieldtan Trail, Moseley, VA, 23120<br />
+                            Agency Phone: (+1) 804-818-3216
+                          </p>
+                          <h4 style={{ fontSize: "14pt", margin: "20px 0", fontWeight: "bold" }}>
+                            Verification of Professional License
+                          </h4>
+                        </div>
+
+                        {/* Body */}
+                        <div className="col-12" style={{ padding: 0 }}>
+                          <p style={{ marginBottom: "30px" }}>
+                            Employee Name: <strong><u>{fullname ?? "N/A"}</u></strong>
+                          </p>
+
+                          <div className="row" style={{ marginBottom: "20px" }}>
+                            <div className="col-md-6 mb-3">
+                              <p style={{ margin: 0 }}>Check Off Discipline Needing Verification:</p>
+                              <div style={{ borderBottom: "1px solid #000", paddingBottom: "5px", marginTop: "5px" }}>
+                                <strong>{data?.disciplines || "N/A"}</strong>
+                              </div>
+                            </div>
+                            <div className="col-md-6 mb-3">
+                              <p style={{ margin: 0 }}>License Number:</p>
+                              <div style={{ borderBottom: "1px solid #000", paddingBottom: "5px", marginTop: "5px" }}>
+                                <strong>{data?.licenseNumber || "N/A"}</strong>
+                              </div>
+                            </div>
+                            
+                            <div className="col-md-6 mb-3">
+                              <p style={{ margin: 0 }}>Expiration Date Of License:</p>
+                              <div style={{ borderBottom: "1px solid #000", paddingBottom: "5px", marginTop: "5px" }}>
+                                <strong>{formatDate(data?.expirationDate)}</strong>
+                              </div>
+                            </div>
+                            <div className="col-md-6 mb-3">
+                              <p style={{ margin: 0 }}>Date Verified:</p>
+                              <div style={{ borderBottom: "1px solid #000", paddingBottom: "5px", marginTop: "5px" }}>
+                                <strong>{formatDate(data?.dateVerified)}</strong>
+                              </div>
+                            </div>
+
+                            <div className="col-md-6 mb-3">
+                              <p style={{ margin: 0 }}>License Verified By:</p>
+                              <div style={{ borderBottom: "1px solid #000", paddingBottom: "5px", marginTop: "5px" }}>
+                                <strong>{data?.licenseVerifiedBy || "N/A"}</strong>
+                              </div>
+                            </div>
+                            <div className="col-md-6 mb-3">
+                              <p style={{ margin: 0 }}>Action Outstanding:</p>
+                              <div style={{ borderBottom: "1px solid #000", paddingBottom: "5px", marginTop: "5px" }}>
+                                <strong>{data?.actionOutstanding || "N/A"}</strong>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div style={{ marginBottom: "20px" }}>
+                            <p style={{ margin: 0 }}>Comments:</p>
+                            <div style={{ borderBottom: "1px solid #000", paddingBottom: "5px", marginTop: "5px", minHeight: "30px" }}>
+                              <strong>{data?.comments || "N/A"}</strong>
+                            </div>
                           </div>
                         </div>
-                      </div>
 
-                      <div id="signature-wrapper" className="no-break">
-                        <div id="signature-row" className="row">
-                          {/* Normal layout for screen */}
-                          <div className="col-md-6 d-print-none">
-                            <p>Signature:</p>
-                            {data?.signature ? (
-                              <img
-                                src={`${apiBase}/storage/signature/${data?.signature}`}
-                                alt="Signature"
-                                style={{ width: "100px" }}
-                              />
-                            ) : (
-                              <p>
-                                <em>No signature provided</em>
-                              </p>
-                            )}
-                          </div>
-                          <div className="col-md-6 d-print-none">
-                            <p>Date Signed: </p>
-                            <p>{formatDate(data?.created_at)}</p>
-                          </div>
-
-                          {/* Print-only layout */}
-                          {/* <div
-                            className="d-none d-print-block"
-                            style={{ width: "100%" }}
-                          >
-                            <table style={{ width: "100%", border: "none" }}>
+                        {/* Signature Block */}
+                        <div style={{ marginTop: "60px", pageBreakInside: "avoid" }}>
+                          <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                            <tbody>
                               <tr>
-                                <td
-                                  style={{
-                                    width: "50%",
-                                    verticalAlign: "top",
-                                    padding: "10px",
-                                  }}
-                                >
-                                  <p>Signature:</p>
-                                  {data?.signature ? (
-                                    <img
-                                      src={`${apiBase}/storage/signature/${data.signature}`}
-                                      alt="Signature"
-                                      style={{ width: "100px" }}
-                                    />
-                                  ) : (
-                                    <p>
-                                      <em>No signature provided</em>
-                                    </p>
-                                  )}
+                                <td style={{ width: "50%", paddingBottom: "40px", verticalAlign: "bottom" }}>
+                                  <p style={{ margin: 0 }}>Employee Name:</p>
+                                  <div style={{ borderBottom: "1px solid #000", paddingBottom: "5px", marginTop: "5px" }}>
+                                    <strong>{fullname ?? "N/A"}</strong>
+                                  </div>
                                 </td>
-                                <td
-                                  style={{
-                                    width: "50%",
-                                    verticalAlign: "top",
-                                    padding: "10px",
-                                  }}
-                                >
-                                  <p>Date Signed: </p>
-                                  <p>{formatDate(data?.created_at)}</p>
+                                <td style={{ width: "50%", paddingBottom: "40px", paddingLeft: "20px", verticalAlign: "bottom" }}>
+                                  <p style={{ margin: 0 }}>Employee Signature:</p>
+                                  <div style={{ borderBottom: "1px solid #000", paddingBottom: "5px", marginTop: "5px", height: "40px", display: "flex", alignItems: "flex-end" }}>
+                                    {data?.signature ? (
+                                      <img
+                                        className="signature"
+                                        src={`${apiBase}/storage/signature/${data.signature}`}
+                                        alt="Signature"
+                                        style={{ maxHeight: "50px", maxWidth: "100%" }}
+                                      />
+                                    ) : (
+                                      <em>No signature provided</em>
+                                    )}
+                                  </div>
                                 </td>
                               </tr>
-                            </table>
-                          </div> */}
+                              <tr>
+                                <td style={{ paddingTop: "20px" }}>
+                                  <p style={{ margin: 0 }}>Date:</p>
+                                  <div style={{ borderBottom: "1px solid #000", paddingBottom: "5px", marginTop: "5px", display: "inline-block", minWidth: "150px" }}>
+                                    <strong>{formatDate(data?.created_at)}</strong>
+                                  </div>
+                                </td>
+                                <td style={{ paddingTop: "20px", paddingLeft: "20px" }}>
+                                  <p style={{ margin: 0 }}>Administrator/Designee Signature:</p>
+                                  <div style={{ borderBottom: "1px solid #000", paddingBottom: "5px", marginTop: "5px", height: "40px" }}>
+                                    &nbsp;
+                                  </div>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
                         </div>
+                        
                       </div>
                     </div>
-                    <div className="col-md-3 mt-20">
+                    
+                    {/* Action Buttons (Outside the Word Document style) */}
+                    <div className="card-footer bg-white border-top-0 pt-0 pb-3 px-3">
                       <button
                         onClick={() => exportToWord({ fullname, title })}
-                        className="btn btn-primary btn-lg"
+                        className="btn btn-primary btn-lg me-2"
                       >
-                        Print
+                        Print / Export to Word
                       </button>
                       <Link
                         onClick={() => window.history.back()}
-                        style={{ marginLeft: "10px" }}
                         className="btn btn-info btn-lg"
                       >
                         Back
                       </Link>
                     </div>
+
                   </div>
                 </div>
               )}
@@ -215,6 +216,52 @@ export default function SignedVerificationForms() {
           </div>
         </div>
       </div>
+
+      {/* CSS specific to rendering the MS Word Document look */}
+      <style jsx="true">{`
+        .bg-secondary-light {
+          background-color: #f4f4f4; /* Grayish backdrop to highlight the "paper" */
+        }
+        .word-doc {
+          font-family: 'Times New Roman', Times, serif;
+          font-size: 12pt;
+          line-height: 1.5;
+          color: #000;
+          background-color: #fff;
+          max-width: 850px; /* Simulates A4/Letter width */
+          margin: 0 auto;
+          padding: 1in; /* Standard Word margins */
+          box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+          min-height: 1100px; /* Gives it a paper-like appearance */
+        }
+        .word-doc h1, .word-doc h2, .word-doc h3, .word-doc h4, .word-doc h5, .word-doc h6 {
+          color: #000;
+          font-family: 'Times New Roman', Times, serif;
+        }
+        .word-doc p {
+          text-align: justify;
+          margin-bottom: 12px;
+        }
+        
+        @media print {
+          body * {
+            visibility: hidden;
+          }
+          .word-doc, .word-doc * {
+            visibility: visible;
+          }
+          .word-doc {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            box-shadow: none;
+            max-width: 100%;
+          }
+        }
+      `}</style>
     </>
   );
 }
