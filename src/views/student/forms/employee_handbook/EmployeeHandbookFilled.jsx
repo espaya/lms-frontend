@@ -9,10 +9,12 @@ import { pdfjs, Document, Page } from "react-pdf";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
 
+import * as pdfjsLib from 'pdfjs-dist';
+
 // Use Vite's ?url suffix to correctly bundle and reference the worker
 import workerSrc from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
 
-pdfjs.GlobalWorkerOptions.workerSrc = workerSrc;
+pdfjsLib.GlobalWorkerOptions.workerSrc = workerSrc;
 
 
 export default function EmployeeHandbookFilled({ data, fullname }) {
