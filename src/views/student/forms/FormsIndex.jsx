@@ -26,6 +26,7 @@ import FetchEmployeeSexualHarassment from "../../../controller/user/forms/Sexual
 import FetchEmployeeSmoking from "../../../controller/user/forms/SmokingController";
 import FetchEmployeeUniversalPrecautions from "../../../controller/user/forms/UniversalPrecautionsController";
 import FetchEmployeeVerification from "../../../controller/user/forms/VerificationController";
+import FetechEmployeeHandbook from "../../../controller/user/forms/EmployeeHandbookController";
 import { formatDate } from "../../../utils/DateFormatter";
 
 export default function FormsIndex() {
@@ -55,7 +56,7 @@ export default function FormsIndex() {
   const [smoking, setSmoking] = useState([]);
   const [precautions, setPrecautions] = useState([]);
   const [verification, setVerification] = useState([]);
-
+  const [handbook, setHandbook] = useState([]);
   useEffect(() => {
     fetchApplicationForms(setDocument, setLoading, apiBase, setErrors);
     FetchAttendance(apiBase, setLoading, setErrors, getAttendance);
@@ -85,6 +86,7 @@ export default function FormsIndex() {
       apiBase
     );
     FetchEmployeeVerification(setVerification, setLoading, setErrors, apiBase);
+    FetechEmployeeHandbook(setLoading, setErrors, setHandbook, apiBase);
   }, []);
 
 
@@ -165,6 +167,13 @@ export default function FormsIndex() {
         url: PATHS.USER_EMPLOYEE_CONDUCT_FORM,
         form: conduct?.empConduct,
         created_at: conduct?.empConduct?.created_at,
+      },
+
+      employee_handbook: {
+        name: "Employee Handbook",
+        url: PATHS.USER_EMPLOYEE_HANDBOOK_FORM,
+        form: handbook?.handbook,
+        created_at: handbook?.handbook?.created_at,
       },
 
       employee_orientation: {

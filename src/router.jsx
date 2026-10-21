@@ -71,6 +71,8 @@ import SignedVerification from "./views/admin/forms/verification/SignedVerificat
 import SignedDisclaimer from "./views/admin/forms/disclaimer/SignedDisclaimer";
 import ForgotPassword from "./views/ForgotPassword";
 import ResetPassword from "./views/ResetPassword";
+import EmployeeHandbook from "./views/student/forms/EmployeeHandbook";
+import SignedEmployeeHandbook from "./views/admin/forms/employee_handbook/SignedEmployeeHandbook";
 
 // Centralized route configuration with metadata
 export const ROUTE_CONFIG = {
@@ -97,7 +99,7 @@ export const ROUTE_CONFIG = {
     isProtected: false,
   },
 
-    RESET_PASSWORD: {
+  RESET_PASSWORD: {
     path: "/reset-password",
     element: (
       <GuestRoute>
@@ -107,8 +109,6 @@ export const ROUTE_CONFIG = {
     name: "Home",
     isProtected: false,
   },
-
-
 
   ACCOUNT: {
     path: "/account",
@@ -406,6 +406,14 @@ export const ROUTE_CONFIG = {
     isProtected: true,
     roles: ["ADMIN"], // ✅ restrict to ADMIN only
   },
+
+  SIGNED_EMPLOYEE_HANDBOOK: {
+    path: "/admin/dashboard/users/:username/forms/employee-handbook",
+    element: <SignedEmployeeHandbook/>,
+    name: "Employee Handbook",
+    isProtected: true,
+    roles: ["ADMIN"]
+  },
   // End signed forms for admin
 
   // users dashboard route
@@ -454,6 +462,14 @@ export const ROUTE_CONFIG = {
     path: "/user/dashboard/forms/application-forms",
     element: <MainApplication />,
     name: "Application Form",
+    isProtected: true,
+    roles: ["USER"],
+  },
+
+  USER_EMPLOYEE_HANDBOOK_FORM: {
+    path: "/user/dashboard/forms/employee-handbook-forms",
+    element: <EmployeeHandbook />,
+    name: "Handbook",
     isProtected: true,
     roles: ["USER"],
   },
@@ -667,16 +683,16 @@ const router = createBrowserRouter(
       ) : (
         element
       ),
-    })
+    }),
   ),
   {
     basename: "/", // Add this if your app is at root, or "/subfolder" if applicable
-  }
+  },
 );
 
 export default router;
 
 // Path constants for direct usage
 export const PATHS = Object.fromEntries(
-  Object.entries(ROUTE_CONFIG).map(([key, value]) => [key, value.path])
+  Object.entries(ROUTE_CONFIG).map(([key, value]) => [key, value.path]),
 );

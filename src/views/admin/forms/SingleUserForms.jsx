@@ -24,7 +24,7 @@ export default function SingleUserForms() {
       setErrors,
       setAllForms,
       apiBase,
-      username
+      username,
     );
   }, [username, apiBase]);
 
@@ -108,6 +108,12 @@ export default function SingleUserForms() {
       name: "Employee Dress Code",
       dateField: "created_at",
       path: PATHS.SIGNED_DRESS_CODE,
+    },
+    {
+      key: "employee_handbook",
+      name: "Employee Handbook",
+      dateField: "created_at",
+      path: PATHS.SIGNED_EMPLOYEE_HANDBOOK,
     },
     {
       key: "employee_orientation",
@@ -236,7 +242,7 @@ export default function SingleUserForms() {
                         Total completed:{" "}
                         {
                           Object.values(allForms).filter(
-                            (form) => form !== null
+                            (form) => form !== null,
                           ).length
                         }
                         /{formDefinitions.length}
