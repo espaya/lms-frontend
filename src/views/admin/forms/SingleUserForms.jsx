@@ -2,11 +2,11 @@ import MyHeader from "../../../components/MyHeader";
 import Sidebar from "../../../components/Sidebar";
 import Nav from "../single_user/Nav";
 import { PATHS } from "../../../router";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Spinner from "../../../components/Spinner";
 import FetchAllEmployeeForms from "../../../controller/admin/AllFormsController";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { formatDate } from "../../../utils/DateFormatter";
 import timeAgo from "../../../utils/TimeAgo";
 
@@ -28,32 +28,24 @@ export default function SingleUserForms() {
     );
   }, [username, apiBase]);
 
-  // Safe function to get form URL
   const getFormUrl = (pathObj) => {
-    if (!pathObj) return "#"; // Fallback if path object is undefined
-    const path = pathObj.path || pathObj; // Handle both object and string cases
-    if (typeof path === "string") {
-      return path.replace(":username", username);
-    }
-    return "#"; // Fallback if path is not a string
+    if (!pathObj) return "#";
+    const path = pathObj.path || pathObj;
+    return typeof path === "string" ? path.replace(":username", username) : "#";
   };
 
-  // Function to handle navigation with form data
   const handleViewForm = (formDef, formData) => {
     const formUrl = getFormUrl(formDef.path);
-
-    // Pass the specific form data via state
     navigate(formUrl, {
       state: {
         formData: formData,
         formType: formDef.key,
         username: username,
-        allForms: allForms, // Pass the entire allForms object if needed
+        allForms: allForms,
       },
     });
   };
 
-  // Define all possible forms with their display names
   const formDefinitions = [
     {
       key: "application_form",
@@ -201,6 +193,14 @@ export default function SingleUserForms() {
     },
   ];
 
+  // Check if form is signed
+  const isFormSigned = (formDef) => {
+    const formData = allForms?.[formDef.key];
+    return formData && (formData[formDef.dateField] || formData.signed_at);
+  };
+
+  const completedCount = formDefinitions.filter(isFormSigned).length;
+
   return (
     <>
       <title>Forms - 1staccess Home Care</title>
@@ -239,16 +239,16 @@ export default function SingleUserForms() {
                     <div className="card-header">
                       <h4 className="card-title">User Forms</h4>
                       <p className="mb-0">
-                        Total completed:{" "}
-                        {
-                          Object.values(allForms).filter(
-                            (form) => form !== null,
-                          ).length
-                        }
-                        /{formDefinitions.length}
+                        Total completed: {completedCount}/
+                        {formDefinitions.length}
                       </p>
                     </div>
                     <div className="card-body">
+                      {errors.general && (
+                        <div className="alert alert-danger">
+                          {errors.general}
+                        </div>
+                      )}
                       <div className="table-responsive table-icon">
                         <table className="table table-hover">
                           <thead>
@@ -261,28 +261,17 @@ export default function SingleUserForms() {
                           </thead>
                           <tbody>
                             {formDefinitions.map((formDef) => {
-                              const formData = allForms[formDef.key];
-                              const isSigned =
-                                formData &&
-                                typeof formData === "object" &&
-                                Object.keys(formData).length > 0 &&
-                                (formData[formDef.dateField] ||
-                                  formData.signed_at);
-
+                              const formData = allForms?.[formDef.key];
+                              const isSigned = isFormSigned(formDef);
                               const signedDate = isSigned
                                 ? formData[formDef.dateField] ||
                                   formData.signed_at
                                 : null;
-                              const formUrl = getFormUrl(formDef.path);
 
                               return (
                                 <tr key={formDef.key}>
                                   <td>
-                                    <div className="d-flex align-items-center">
-                                      <div>
-                                        <h6 className="mb-0">{formDef.name}</h6>
-                                      </div>
-                                    </div>
+                                    <h6 className="mb-0">{formDef.name}</h6>
                                   </td>
                                   <td>
                                     {isSigned ? (
