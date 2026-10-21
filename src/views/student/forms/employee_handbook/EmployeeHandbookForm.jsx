@@ -12,7 +12,7 @@ import "react-pdf/dist/Page/TextLayer.css";
 
 
 // Use Vite's ?url suffix to correctly bundle and reference the worker
-pdfjs.GlobalWorkerOptions.workerSrc = '/assets/pdf.worker.min.js';
+pdfjs.GlobalWorkerOptions.workerSrc = '/pdf-worker/pdf.worker.min.js';
 
 
 export default function EmployeeHandbookForm({ fullname }) {
