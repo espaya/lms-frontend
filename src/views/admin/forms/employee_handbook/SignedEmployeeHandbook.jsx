@@ -650,6 +650,9 @@ export default function SignedEmployeeHandbook() {
           color: #000;
           font-family: 'Times New Roman', Times, serif;
         }
+          .word-doc p, .word-doc li, .word-doc td, .word-doc strong, .word-doc u {
+          font-family: 'Times New Roman', Times, serif !important;
+        }
         .word-doc h3 {
           font-size: 14pt;
           font-weight: bold;

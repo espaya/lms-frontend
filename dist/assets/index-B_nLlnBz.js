@@ -3721,12 +3721,12 @@ use chrome, FireFox or Internet Explorer 11`)}var o=e(`safe-buffer`),s=e(`random
         ${n.innerHTML}
       </body>
     </html>
-  `,s=new Blob([`﻿`,o],{type:`application/msword`}),c=URL.createObjectURL(s),u=document.createElement(`a`);u.href=c,u.download=`${e} - ${t}.doc`,document.body.appendChild(u),u.click(),document.body.removeChild(u),URL.revokeObjectURL(c)};function SignedAttendanceForms(){let{username:e}=useParams(),[t,n]=(0,import_react.useState)(!1),i=`https://lmsapi.1staccesshomecareinc.com`,[a,o]=(0,import_react.useState)({}),[s,c]=(0,import_react.useState)({});(0,import_react.useEffect)(()=>{FetchAllEmployeeForms(n,o,c,i,e)},[e,i]);let u=s?.application_form?.profile?.full_name,p=s?.attendance_tardiness,m=`Employee Notification of Policy - Attendance, Tardiness, Absenteeism and Leave`;return(0,import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment,{children:[(0,import_jsx_runtime.jsx)(`title`,{children:`Employee Notification of Policy: Attendance, Tardiness, Absenteeism and Leave - 1staccess Home Care`}),(0,import_jsx_runtime.jsxs)(`div`,{id:`main-wrapper`,children:[(0,import_jsx_runtime.jsx)(MyHeader,{}),(0,import_jsx_runtime.jsx)(Sidebar,{}),(0,import_jsx_runtime.jsx)(`div`,{className:`content-body`,children:(0,import_jsx_runtime.jsxs)(`div`,{className:`container`,children:[(0,import_jsx_runtime.jsx)(`div`,{className:`page-title`,children:(0,import_jsx_runtime.jsxs)(`div`,{className:`row align-items-center justify-content-between`,children:[(0,import_jsx_runtime.jsx)(`div`,{className:`col-md-6`,children:(0,import_jsx_runtime.jsxs)(`div`,{className:`page-title-content`,children:[(0,import_jsx_runtime.jsx)(`h3`,{children:e}),(0,import_jsx_runtime.jsx)(`p`,{className:`mb-2`,children:`Manage all forms signed by user`})]})}),(0,import_jsx_runtime.jsx)(`div`,{className:`col-auto`,children:(0,import_jsx_runtime.jsxs)(`div`,{className:`breadcrumbs`,children:[(0,import_jsx_runtime.jsx)(`a`,{href:`#`,children:`Profile `}),(0,import_jsx_runtime.jsx)(`span`,{children:(0,import_jsx_runtime.jsx)(`i`,{className:`ri-arrow-right-s-line`})}),(0,import_jsx_runtime.jsx)(`a`,{href:`#`,children:`Forms`})]})})]})}),(0,import_jsx_runtime.jsxs)(`div`,{className:`row`,children:[(0,import_jsx_runtime.jsx)(Nav,{username:e}),t?(0,import_jsx_runtime.jsx)(Spinner,{}):(0,import_jsx_runtime.jsx)(`div`,{className:`col-md-9`,children:(0,import_jsx_runtime.jsxs)(`div`,{className:`card`,children:[(0,import_jsx_runtime.jsx)(`div`,{id:`printArea`,className:`card-body p-0 bg-secondary-light`,children:(0,import_jsx_runtime.jsxs)(`div`,{className:`word-doc`,children:[(0,import_jsx_runtime.jsxs)(`div`,{style:{textAlign:`center`,marginBottom:`40px`},children:[(0,import_jsx_runtime.jsx)(`img`,{src:`/assets/images/main_logo.png`,width:150,alt:`Company Logo`,style:{marginBottom:`20px`}}),(0,import_jsx_runtime.jsx)(`h5`,{style:{fontSize:`14pt`,margin:`0 0 10px 0`,fontWeight:`bold`},children:`1st Access Home Care Incorporated`}),(0,import_jsx_runtime.jsx)(`p`,{style:{margin:`5px 0`,fontSize:`12pt`},children:`6600 Fieldtan Trail, Moseley, VA, 23120 | Agency Phone: (+1) 804-818-3216`}),(0,import_jsx_runtime.jsxs)(`h5`,{style:{fontSize:`14pt`,margin:`20px 0`,fontWeight:`bold`,lineHeight:`1.4`},children:[`Employee Notification of Policy:`,(0,import_jsx_runtime.jsx)(`br`,{}),`Attendance, Tardiness, Absenteeism and Leave`]})]}),(0,import_jsx_runtime.jsxs)(`div`,{className:`col-12`,style:{padding:0},children:[(0,import_jsx_runtime.jsxs)(`p`,{style:{marginBottom:`20px`},children:[`Employee Name: `,(0,import_jsx_runtime.jsx)(`strong`,{children:(0,import_jsx_runtime.jsx)(`u`,{children:u??`N/A`})})]}),(0,import_jsx_runtime.jsx)(`p`,{children:`Exempt employees are owners, officers, management and supervisors. All full time employees are required to put in a full day's work and a full 40 hour work week. All employees regardless of classification, are required to arrive on time and appropriately complete their designated hours and tasks as assigned.`}),(0,import_jsx_runtime.jsx)(`h6`,{style:{fontSize:`12pt`,fontWeight:`bold`,marginTop:`20px`,marginBottom:`10px`},children:`ATTENDANCE:`}),(0,import_jsx_runtime.jsxs)(`ol`,{style:{paddingLeft:`40px`,marginBottom:`20px`},children:[(0,import_jsx_runtime.jsx)(`li`,{children:`The employee must notify the Supervisor in all events of tardiness. If the office is closed, call the answering service to have on-call Supervisor paged and relay information to him or her. Only 3 tardiness in a calendar month will be accepted unless very extenuating circumstances are present and approved by the Supervisor. More than 3 tardiness within a given month may result in counselling with Supervisor and every effort made to avoid further tardiness. A copy of counselling will be placed in the personnel file. Two consecutive months of written warnings for excessive tardiness may result in dismissal or termination.`}),(0,import_jsx_runtime.jsx)(`li`,{children:`No show/no call situations are not tolerated and may result in termination.`}),(0,import_jsx_runtime.jsx)(`li`,{children:`Perfect attendance throughout the year may be rewarded at year-end at the discretion of supervisor and/or administrator.`})]}),(0,import_jsx_runtime.jsx)(`h6`,{style:{fontSize:`12pt`,fontWeight:`bold`,marginTop:`20px`,marginBottom:`10px`},children:`ABSENTEEISM:`}),(0,import_jsx_runtime.jsxs)(`ol`,{style:{paddingLeft:`40px`,marginBottom:`20px`},children:[(0,import_jsx_runtime.jsx)(`li`,{children:`Employees are required to inform the Supervisor as soon as possible when absenteeism is known, to allow the Agency time to cover assignments. The employee is not excused from work until the Supervisor approves the absence or verified he/she is aware.`}),(0,import_jsx_runtime.jsx)(`li`,{children:`Illness and or injury that requires a physician's treatment and that may take more than a day for recovery will need to be called in and discussed with the Supervisor. When the office is closed, request the answering service to contact the person on call with the information and give your phone number for follow-up.`}),(0,import_jsx_runtime.jsx)(`li`,{children:`If an employee needs to be absent for reasons other than illness, he/she must submit a Leave Request Form at least 14 days prior to time requested.`}),(0,import_jsx_runtime.jsx)(`li`,{children:`More than 3 consecutive days of absenteeism requires a physician's note for illness or injury sustained. Medically verified illness may be excused. Failure to provide proper notice will result in counselling and a written warning will be placed in the personnel file.`}),(0,import_jsx_runtime.jsx)(`li`,{children:`Excessive absenteeism without just cause or physician's excuse is reason for dismissal.`}),(0,import_jsx_runtime.jsxs)(`li`,{children:[(0,import_jsx_runtime.jsx)(`strong`,{children:`No shows / no calls are not tolerated.`}),` `,`The need to follow policy and procedure is a courtesy to other employees. Disciplinary action may be supervised in an effort to avoid any further complications.`]}),(0,import_jsx_runtime.jsx)(`li`,{children:`Notice to your Supervisor in writing for consideration on a requested leave of absence must be submitted at least 14 days to leave, unless there is a cause of emergency or illness.`})]}),(0,import_jsx_runtime.jsxs)(`p`,{style:{marginTop:`30px`},children:[(0,import_jsx_runtime.jsx)(`strong`,{children:`I`}),` acknowledge that I have been oriented to the Agency's policy regarding`,` `,(0,import_jsx_runtime.jsx)(`strong`,{children:`ATTENDANCE`}),` and`,` `,(0,import_jsx_runtime.jsx)(`strong`,{children:`ABSENTEEISM,`}),` and I agree to follow all guidelines, both written and verbal. I understand that, if the guidelines, policies and procedures are not followed, that I may be immediately terminated. I also had the opportunity to ask questions regarding this policy and I know where it's located for future reference.`]})]}),(0,import_jsx_runtime.jsx)(`div`,{style:{marginTop:`60px`,pageBreakInside:`avoid`},children:(0,import_jsx_runtime.jsx)(`table`,{style:{width:`100%`,borderCollapse:`collapse`},children:(0,import_jsx_runtime.jsxs)(`tbody`,{children:[(0,import_jsx_runtime.jsxs)(`tr`,{children:[(0,import_jsx_runtime.jsxs)(`td`,{style:{width:`50%`,paddingBottom:`40px`,verticalAlign:`bottom`},children:[(0,import_jsx_runtime.jsx)(`p`,{style:{margin:0},children:`Employee Name:`}),(0,import_jsx_runtime.jsx)(`div`,{style:{borderBottom:`1px solid #000`,paddingBottom:`5px`,marginTop:`5px`},children:(0,import_jsx_runtime.jsx)(`strong`,{children:u??`N/A`})})]}),(0,import_jsx_runtime.jsxs)(`td`,{style:{width:`50%`,paddingBottom:`40px`,paddingLeft:`20px`,verticalAlign:`bottom`},children:[(0,import_jsx_runtime.jsx)(`p`,{style:{margin:0},children:`Employee Signature:`}),(0,import_jsx_runtime.jsx)(`div`,{style:{borderBottom:`1px solid #000`,paddingBottom:`5px`,marginTop:`5px`,height:`40px`,display:`flex`,alignItems:`flex-end`},children:p?.signature?(0,import_jsx_runtime.jsx)(`img`,{className:`signature`,src:`${i}/storage/signature/${p.signature}`,alt:`Signature`,style:{maxHeight:`50px`,maxWidth:`100%`}}):(0,import_jsx_runtime.jsx)(`em`,{children:`No signature provided`})})]})]}),(0,import_jsx_runtime.jsxs)(`tr`,{children:[(0,import_jsx_runtime.jsxs)(`td`,{style:{paddingTop:`20px`},children:[(0,import_jsx_runtime.jsx)(`p`,{style:{margin:0},children:`Date:`}),(0,import_jsx_runtime.jsx)(`div`,{style:{borderBottom:`1px solid #000`,paddingBottom:`5px`,marginTop:`5px`,display:`inline-block`,minWidth:`150px`},children:(0,import_jsx_runtime.jsx)(`strong`,{children:formatDate(p?.created_at)})})]}),(0,import_jsx_runtime.jsxs)(`td`,{style:{paddingTop:`20px`,paddingLeft:`20px`},children:[(0,import_jsx_runtime.jsx)(`p`,{style:{margin:0},children:`Administrator/Designee Signature:`}),(0,import_jsx_runtime.jsx)(`div`,{style:{borderBottom:`1px solid #000`,paddingBottom:`5px`,marginTop:`5px`,height:`40px`},children:`\xA0`})]})]})]})})})]})}),(0,import_jsx_runtime.jsxs)(`div`,{className:`card-footer bg-white border-top-0 pt-0 pb-3 px-3`,children:[(0,import_jsx_runtime.jsx)(`button`,{onClick:()=>exportToWord({fullname:u,title:`Employee Notification of Policy - Attendance, Tardiness, Absenteeism and Leave`}),className:`btn btn-primary btn-lg me-2`,children:`Print / Export to Word`}),(0,import_jsx_runtime.jsx)(Link,{onClick:()=>window.history.back(),className:`btn btn-info btn-lg`,children:`Back`})]})]})})]})]})})]}),(0,import_jsx_runtime.jsx)(`style`,{jsx:`true`,children:`
+  `,s=new Blob([`﻿`,o],{type:`application/msword`}),c=URL.createObjectURL(s),u=document.createElement(`a`);u.href=c,u.download=`${e} - ${t}.doc`,document.body.appendChild(u),u.click(),document.body.removeChild(u),URL.revokeObjectURL(c)};function SignedAttendanceForms(){let{username:e}=useParams(),[t,n]=(0,import_react.useState)(!1),i=`https://lmsapi.1staccesshomecareinc.com`,[a,o]=(0,import_react.useState)({}),[s,c]=(0,import_react.useState)({});(0,import_react.useEffect)(()=>{FetchAllEmployeeForms(n,o,c,i,e)},[e,i]);let u=s?.application_form?.profile?.full_name,p=s?.attendance_tardiness,m=`Employee Notification of Policy - Attendance, Tardiness, Absenteeism and Leave`;return(0,import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment,{children:[(0,import_jsx_runtime.jsx)(`title`,{children:`Employee Notification of Policy: Attendance, Tardiness, Absenteeism and Leave - 1staccess Home Care`}),(0,import_jsx_runtime.jsxs)(`div`,{id:`main-wrapper`,children:[(0,import_jsx_runtime.jsx)(MyHeader,{}),(0,import_jsx_runtime.jsx)(Sidebar,{}),(0,import_jsx_runtime.jsx)(`div`,{className:`content-body`,children:(0,import_jsx_runtime.jsxs)(`div`,{className:`container`,children:[(0,import_jsx_runtime.jsx)(`div`,{className:`page-title`,children:(0,import_jsx_runtime.jsxs)(`div`,{className:`row align-items-center justify-content-between`,children:[(0,import_jsx_runtime.jsx)(`div`,{className:`col-md-6`,children:(0,import_jsx_runtime.jsxs)(`div`,{className:`page-title-content`,children:[(0,import_jsx_runtime.jsx)(`h3`,{children:e}),(0,import_jsx_runtime.jsx)(`p`,{className:`mb-2`,children:`Manage all forms signed by user`})]})}),(0,import_jsx_runtime.jsx)(`div`,{className:`col-auto`,children:(0,import_jsx_runtime.jsxs)(`div`,{className:`breadcrumbs`,children:[(0,import_jsx_runtime.jsx)(`a`,{href:`#`,children:`Profile `}),(0,import_jsx_runtime.jsx)(`span`,{children:(0,import_jsx_runtime.jsx)(`i`,{className:`ri-arrow-right-s-line`})}),(0,import_jsx_runtime.jsx)(`a`,{href:`#`,children:`Forms`})]})})]})}),(0,import_jsx_runtime.jsxs)(`div`,{className:`row`,children:[(0,import_jsx_runtime.jsx)(Nav,{username:e}),t?(0,import_jsx_runtime.jsx)(Spinner,{}):(0,import_jsx_runtime.jsx)(`div`,{className:`col-md-9`,children:(0,import_jsx_runtime.jsxs)(`div`,{className:`card`,children:[(0,import_jsx_runtime.jsx)(`div`,{id:`printArea`,className:`card-body p-0 bg-secondary-light`,children:(0,import_jsx_runtime.jsxs)(`div`,{className:`word-doc`,children:[(0,import_jsx_runtime.jsxs)(`div`,{style:{textAlign:`center`,marginBottom:`40px`},children:[(0,import_jsx_runtime.jsx)(`img`,{src:`/assets/images/main_logo.png`,width:150,alt:`Company Logo`,style:{marginBottom:`20px`}}),(0,import_jsx_runtime.jsx)(`h5`,{style:{fontSize:`14pt`,margin:`0 0 10px 0`,fontWeight:`bold`},children:`1st Access Home Care Incorporated`}),(0,import_jsx_runtime.jsx)(`p`,{style:{margin:`5px 0`,fontSize:`12pt`},children:`6600 Fieldtan Trail, Moseley, VA, 23120 | Agency Phone: (+1) 804-818-3216`}),(0,import_jsx_runtime.jsxs)(`h5`,{style:{fontSize:`14pt`,margin:`20px 0`,fontWeight:`bold`,lineHeight:`1.4`},children:[`Employee Notification of Policy:`,(0,import_jsx_runtime.jsx)(`br`,{}),`Attendance, Tardiness, Absenteeism and Leave`]})]}),(0,import_jsx_runtime.jsxs)(`div`,{className:`col-12`,style:{padding:0},children:[(0,import_jsx_runtime.jsxs)(`p`,{style:{marginBottom:`20px`},children:[`Employee Name:`,` `,(0,import_jsx_runtime.jsx)(`strong`,{children:(0,import_jsx_runtime.jsx)(`u`,{children:u??`N/A`})})]}),(0,import_jsx_runtime.jsx)(`p`,{children:`Exempt employees are owners, officers, management and supervisors. All full time employees are required to put in a full day's work and a full 40 hour work week. All employees regardless of classification, are required to arrive on time and appropriately complete their designated hours and tasks as assigned.`}),(0,import_jsx_runtime.jsx)(`h6`,{style:{fontSize:`12pt`,fontWeight:`bold`,marginTop:`20px`,marginBottom:`10px`},children:`ATTENDANCE:`}),(0,import_jsx_runtime.jsxs)(`ol`,{style:{paddingLeft:`40px`,marginBottom:`20px`},children:[(0,import_jsx_runtime.jsx)(`li`,{children:`The employee must notify the Supervisor in all events of tardiness. If the office is closed, call the answering service to have on-call Supervisor paged and relay information to him or her. Only 3 tardiness in a calendar month will be accepted unless very extenuating circumstances are present and approved by the Supervisor. More than 3 tardiness within a given month may result in counselling with Supervisor and every effort made to avoid further tardiness. A copy of counselling will be placed in the personnel file. Two consecutive months of written warnings for excessive tardiness may result in dismissal or termination.`}),(0,import_jsx_runtime.jsx)(`li`,{children:`No show/no call situations are not tolerated and may result in termination.`}),(0,import_jsx_runtime.jsx)(`li`,{children:`Perfect attendance throughout the year may be rewarded at year-end at the discretion of supervisor and/or administrator.`})]}),(0,import_jsx_runtime.jsx)(`h6`,{style:{fontSize:`12pt`,fontWeight:`bold`,marginTop:`20px`,marginBottom:`10px`},children:`ABSENTEEISM:`}),(0,import_jsx_runtime.jsxs)(`ol`,{style:{paddingLeft:`40px`,marginBottom:`20px`},children:[(0,import_jsx_runtime.jsx)(`li`,{children:`Employees are required to inform the Supervisor as soon as possible when absenteeism is known, to allow the Agency time to cover assignments. The employee is not excused from work until the Supervisor approves the absence or verified he/she is aware.`}),(0,import_jsx_runtime.jsx)(`li`,{children:`Illness and or injury that requires a physician's treatment and that may take more than a day for recovery will need to be called in and discussed with the Supervisor. When the office is closed, request the answering service to contact the person on call with the information and give your phone number for follow-up.`}),(0,import_jsx_runtime.jsx)(`li`,{children:`If an employee needs to be absent for reasons other than illness, he/she must submit a Leave Request Form at least 14 days prior to time requested.`}),(0,import_jsx_runtime.jsx)(`li`,{children:`More than 3 consecutive days of absenteeism requires a physician's note for illness or injury sustained. Medically verified illness may be excused. Failure to provide proper notice will result in counselling and a written warning will be placed in the personnel file.`}),(0,import_jsx_runtime.jsx)(`li`,{children:`Excessive absenteeism without just cause or physician's excuse is reason for dismissal.`}),(0,import_jsx_runtime.jsxs)(`li`,{children:[(0,import_jsx_runtime.jsx)(`strong`,{children:`No shows / no calls are not tolerated.`}),` `,`The need to follow policy and procedure is a courtesy to other employees. Disciplinary action may be supervised in an effort to avoid any further complications.`]}),(0,import_jsx_runtime.jsx)(`li`,{children:`Notice to your Supervisor in writing for consideration on a requested leave of absence must be submitted at least 14 days to leave, unless there is a cause of emergency or illness.`})]}),(0,import_jsx_runtime.jsxs)(`p`,{style:{marginTop:`30px`},children:[(0,import_jsx_runtime.jsx)(`strong`,{children:`I`}),` acknowledge that I have been oriented to the Agency's policy regarding`,` `,(0,import_jsx_runtime.jsx)(`strong`,{children:`ATTENDANCE`}),` and`,` `,(0,import_jsx_runtime.jsx)(`strong`,{children:`ABSENTEEISM,`}),` and I agree to follow all guidelines, both written and verbal. I understand that, if the guidelines, policies and procedures are not followed, that I may be immediately terminated. I also had the opportunity to ask questions regarding this policy and I know where it's located for future reference.`]})]}),(0,import_jsx_runtime.jsx)(`div`,{style:{marginTop:`60px`,pageBreakInside:`avoid`},children:(0,import_jsx_runtime.jsx)(`table`,{style:{width:`100%`,borderCollapse:`collapse`},children:(0,import_jsx_runtime.jsxs)(`tbody`,{children:[(0,import_jsx_runtime.jsxs)(`tr`,{children:[(0,import_jsx_runtime.jsxs)(`td`,{style:{width:`50%`,paddingBottom:`40px`,verticalAlign:`bottom`},children:[(0,import_jsx_runtime.jsx)(`p`,{style:{margin:0},children:`Employee Name:`}),(0,import_jsx_runtime.jsx)(`div`,{style:{borderBottom:`1px solid #000`,paddingBottom:`5px`,marginTop:`5px`},children:(0,import_jsx_runtime.jsx)(`strong`,{children:u??`N/A`})})]}),(0,import_jsx_runtime.jsxs)(`td`,{style:{width:`50%`,paddingBottom:`40px`,paddingLeft:`20px`,verticalAlign:`bottom`},children:[(0,import_jsx_runtime.jsx)(`p`,{style:{margin:0},children:`Employee Signature:`}),(0,import_jsx_runtime.jsx)(`div`,{style:{borderBottom:`1px solid #000`,paddingBottom:`5px`,marginTop:`5px`,height:`40px`,display:`flex`,alignItems:`flex-end`},children:p?.signature?(0,import_jsx_runtime.jsx)(`img`,{className:`signature`,src:`${i}/storage/signature/${p.signature}`,alt:`Signature`,style:{maxHeight:`50px`,maxWidth:`100%`}}):(0,import_jsx_runtime.jsx)(`em`,{children:`No signature provided`})})]})]}),(0,import_jsx_runtime.jsxs)(`tr`,{children:[(0,import_jsx_runtime.jsxs)(`td`,{style:{paddingTop:`20px`},children:[(0,import_jsx_runtime.jsx)(`p`,{style:{margin:0},children:`Date:`}),(0,import_jsx_runtime.jsx)(`div`,{style:{borderBottom:`1px solid #000`,paddingBottom:`5px`,marginTop:`5px`,display:`inline-block`,minWidth:`150px`},children:(0,import_jsx_runtime.jsx)(`strong`,{children:formatDate(p?.created_at)})})]}),(0,import_jsx_runtime.jsxs)(`td`,{style:{paddingTop:`20px`,paddingLeft:`20px`},children:[(0,import_jsx_runtime.jsx)(`p`,{style:{margin:0},children:`Administrator/Designee Signature:`}),(0,import_jsx_runtime.jsx)(`div`,{style:{borderBottom:`1px solid #000`,paddingBottom:`5px`,marginTop:`5px`,height:`40px`},children:`\xA0`})]})]})]})})})]})}),(0,import_jsx_runtime.jsxs)(`div`,{className:`card-footer bg-white border-top-0 pt-0 pb-3 px-3`,children:[(0,import_jsx_runtime.jsx)(`button`,{onClick:()=>exportToWord({fullname:u,title:`Employee Notification of Policy - Attendance, Tardiness, Absenteeism and Leave`}),className:`btn btn-primary btn-lg me-2`,children:`Print / Export to Word`}),(0,import_jsx_runtime.jsx)(Link,{onClick:()=>window.history.back(),className:`btn btn-info btn-lg`,children:`Back`})]})]})})]})]})})]}),(0,import_jsx_runtime.jsx)(`style`,{jsx:`true`,children:`
         .bg-secondary-light {
           background-color: #f4f4f4; /* Grayish backdrop to highlight the "paper" */
         }
         .word-doc {
-          font-family: 'Times New Roman', Times, serif;
+          font-family: "Times New Roman", Times, serif;
           font-size: 12pt;
           line-height: 1.5;
           color: #000;
@@ -3734,18 +3734,31 @@ use chrome, FireFox or Internet Explorer 11`)}var o=e(`safe-buffer`),s=e(`random
           max-width: 850px; /* Simulates A4/Letter width */
           margin: 0 auto;
           padding: 1in; /* Standard Word margins */
-          box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
           min-height: 1100px; /* Gives it a paper-like appearance */
         }
-        .word-doc h1, .word-doc h2, .word-doc h3, .word-doc h4, .word-doc h5, .word-doc h6 {
+        .word-doc h1,
+        .word-doc h2,
+        .word-doc h3,
+        .word-doc h4,
+        .word-doc h5,
+        .word-doc h6 {
           color: #000;
-          font-family: 'Times New Roman', Times, serif;
+          font-family: "Times New Roman", Times, serif;
+        }
+        .word-doc p,
+        .word-doc li,
+        .word-doc td,
+        .word-doc strong,
+        .word-doc u {
+          font-family: "Times New Roman", Times, serif !important;
         }
         .word-doc p {
           text-align: justify;
           margin-bottom: 12px;
         }
-        .word-doc ul, .word-doc ol {
+        .word-doc ul,
+        .word-doc ol {
           margin-bottom: 16px;
           padding-left: 40px;
         }
@@ -3753,12 +3766,13 @@ use chrome, FireFox or Internet Explorer 11`)}var o=e(`safe-buffer`),s=e(`random
           margin-bottom: 8px;
           text-align: justify;
         }
-        
+
         @media print {
           body * {
             visibility: hidden;
           }
-          .word-doc, .word-doc * {
+          .word-doc,
+          .word-doc * {
             visibility: visible;
           }
           .word-doc {
@@ -3791,6 +3805,9 @@ use chrome, FireFox or Internet Explorer 11`)}var o=e(`safe-buffer`),s=e(`random
         .word-doc h1, .word-doc h2, .word-doc h3, .word-doc h4, .word-doc h5, .word-doc h6 {
           color: #000;
           font-family: 'Times New Roman', Times, serif;
+        }
+          .word-doc p, .word-doc li, .word-doc td, .word-doc strong, .word-doc u {
+          font-family: 'Times New Roman', Times, serif !important;
         }
         .word-doc p {
           text-align: justify;
@@ -3834,6 +3851,9 @@ use chrome, FireFox or Internet Explorer 11`)}var o=e(`safe-buffer`),s=e(`random
         .word-doc h1, .word-doc h2, .word-doc h3, .word-doc h4, .word-doc h5, .word-doc h6 {
           color: #000;
           font-family: 'Times New Roman', Times, serif;
+        }
+          .word-doc p, .word-doc li, .word-doc td, .word-doc strong, .word-doc u {
+          font-family: 'Times New Roman', Times, serif !important;
         }
         .word-doc p {
           text-align: justify;
@@ -3886,6 +3906,9 @@ use chrome, FireFox or Internet Explorer 11`)}var o=e(`safe-buffer`),s=e(`random
           color: #000;
           font-family: 'Times New Roman', Times, serif;
         }
+          .word-doc p, .word-doc li, .word-doc td, .word-doc strong, .word-doc u {
+          font-family: 'Times New Roman', Times, serif !important;
+        }
         .word-doc p {
           text-align: justify;
           margin-bottom: 12px;
@@ -3937,6 +3960,9 @@ use chrome, FireFox or Internet Explorer 11`)}var o=e(`safe-buffer`),s=e(`random
           color: #000;
           font-family: 'Times New Roman', Times, serif;
         }
+          .word-doc p, .word-doc li, .word-doc td, .word-doc strong, .word-doc u {
+          font-family: 'Times New Roman', Times, serif !important;
+        }
         .word-doc p {
           text-align: justify;
           margin-bottom: 12px;
@@ -3979,6 +4005,9 @@ use chrome, FireFox or Internet Explorer 11`)}var o=e(`safe-buffer`),s=e(`random
         .word-doc h1, .word-doc h2, .word-doc h3, .word-doc h4, .word-doc h5, .word-doc h6 {
           color: #000;
           font-family: 'Times New Roman', Times, serif;
+        }
+          .word-doc p, .word-doc li, .word-doc td, .word-doc strong, .word-doc u {
+          font-family: 'Times New Roman', Times, serif !important;
         }
         .word-doc p {
           text-align: justify;
@@ -4031,6 +4060,9 @@ use chrome, FireFox or Internet Explorer 11`)}var o=e(`safe-buffer`),s=e(`random
           color: #000;
           font-family: 'Times New Roman', Times, serif;
         }
+          .word-doc p, .word-doc li, .word-doc td, .word-doc strong, .word-doc u {
+          font-family: 'Times New Roman', Times, serif !important;
+        }
         .word-doc p {
           text-align: justify;
           margin-bottom: 12px;
@@ -4073,6 +4105,9 @@ use chrome, FireFox or Internet Explorer 11`)}var o=e(`safe-buffer`),s=e(`random
         .word-doc h1, .word-doc h2, .word-doc h3, .word-doc h4, .word-doc h5, .word-doc h6 {
           color: #000;
           font-family: 'Times New Roman', Times, serif;
+        }
+          .word-doc p, .word-doc li, .word-doc td, .word-doc strong, .word-doc u {
+          font-family: 'Times New Roman', Times, serif !important;
         }
         .word-doc p {
           text-align: justify;
@@ -4125,6 +4160,9 @@ use chrome, FireFox or Internet Explorer 11`)}var o=e(`safe-buffer`),s=e(`random
           color: #000;
           font-family: 'Times New Roman', Times, serif;
         }
+          .word-doc p, .word-doc li, .word-doc td, .word-doc strong, .word-doc u {
+          font-family: 'Times New Roman', Times, serif !important;
+        }
         .word-doc p {
           text-align: justify;
           margin-bottom: 12px;
@@ -4175,6 +4213,9 @@ use chrome, FireFox or Internet Explorer 11`)}var o=e(`safe-buffer`),s=e(`random
         .word-doc h1, .word-doc h2, .word-doc h3, .word-doc h4, .word-doc h5, .word-doc h6 {
           color: #000;
           font-family: 'Times New Roman', Times, serif;
+        }
+          .word-doc p, .word-doc li, .word-doc td, .word-doc strong, .word-doc u {
+          font-family: 'Times New Roman', Times, serif !important;
         }
         .word-doc p {
           text-align: justify;
@@ -4230,6 +4271,9 @@ use chrome, FireFox or Internet Explorer 11`)}var o=e(`safe-buffer`),s=e(`random
           color: #000;
           font-family: 'Times New Roman', Times, serif;
         }
+          .word-doc p, .word-doc li, .word-doc td, .word-doc strong, .word-doc u {
+          font-family: 'Times New Roman', Times, serif !important;
+        }
         .word-doc p {
           text-align: justify;
           margin-bottom: 12px;
@@ -4284,6 +4328,9 @@ use chrome, FireFox or Internet Explorer 11`)}var o=e(`safe-buffer`),s=e(`random
           color: #000;
           font-family: 'Times New Roman', Times, serif;
         }
+          .word-doc p, .word-doc li, .word-doc td, .word-doc strong, .word-doc u {
+          font-family: 'Times New Roman', Times, serif !important;
+        }
         .word-doc p {
           text-align: justify;
           margin-bottom: 12px;
@@ -4335,6 +4382,9 @@ use chrome, FireFox or Internet Explorer 11`)}var o=e(`safe-buffer`),s=e(`random
           color: #000;
           font-family: 'Times New Roman', Times, serif;
         }
+          .word-doc p, .word-doc li, .word-doc td, .word-doc strong, .word-doc u {
+          font-family: 'Times New Roman', Times, serif !important;
+        }
         .word-doc p {
           text-align: justify;
           margin-bottom: 12px;
@@ -4378,6 +4428,9 @@ use chrome, FireFox or Internet Explorer 11`)}var o=e(`safe-buffer`),s=e(`random
           color: #000;
           font-family: 'Times New Roman', Times, serif;
         }
+          .word-doc p, .word-doc li, .word-doc td, .word-doc strong, .word-doc u {
+          font-family: 'Times New Roman', Times, serif !important;
+        }
         .word-doc p {
           text-align: justify;
           margin-bottom: 12px;
@@ -4420,6 +4473,9 @@ use chrome, FireFox or Internet Explorer 11`)}var o=e(`safe-buffer`),s=e(`random
         .word-doc h1, .word-doc h2, .word-doc h3, .word-doc h4, .word-doc h5, .word-doc h6 {
           color: #000;
           font-family: 'Times New Roman', Times, serif;
+        }
+          .word-doc p, .word-doc li, .word-doc td, .word-doc strong, .word-doc u {
+          font-family: 'Times New Roman', Times, serif !important;
         }
         .word-doc p {
           text-align: justify;
@@ -4482,6 +4538,9 @@ use chrome, FireFox or Internet Explorer 11`)}var o=e(`safe-buffer`),s=e(`random
           color: #000;
           font-family: 'Times New Roman', Times, serif;
         }
+          .word-doc p, .word-doc li, .word-doc td, .word-doc strong, .word-doc u {
+          font-family: 'Times New Roman', Times, serif !important;
+        }
         .word-doc p {
           text-align: justify;
           margin-bottom: 12px;
@@ -4524,6 +4583,9 @@ use chrome, FireFox or Internet Explorer 11`)}var o=e(`safe-buffer`),s=e(`random
         .word-doc h1, .word-doc h2, .word-doc h3, .word-doc h4, .word-doc h5, .word-doc h6 {
           color: #000;
           font-family: 'Times New Roman', Times, serif;
+        }
+          .word-doc p, .word-doc li, .word-doc td, .word-doc strong, .word-doc u {
+          font-family: 'Times New Roman', Times, serif !important;
         }
         .word-doc p {
           text-align: justify;
@@ -4568,6 +4630,9 @@ use chrome, FireFox or Internet Explorer 11`)}var o=e(`safe-buffer`),s=e(`random
           color: #000;
           font-family: 'Times New Roman', Times, serif;
         }
+          .word-doc p, .word-doc li, .word-doc td, .word-doc strong, .word-doc u {
+          font-family: 'Times New Roman', Times, serif !important;
+        }
         .word-doc p {
           text-align: justify;
           margin-bottom: 12px;
@@ -4610,6 +4675,9 @@ use chrome, FireFox or Internet Explorer 11`)}var o=e(`safe-buffer`),s=e(`random
         .word-doc h1, .word-doc h2, .word-doc h3, .word-doc h4, .word-doc h5, .word-doc h6 {
           color: #000;
           font-family: 'Times New Roman', Times, serif;
+        }
+          .word-doc p, .word-doc li, .word-doc td, .word-doc strong, .word-doc u {
+          font-family: 'Times New Roman', Times, serif !important;
         }
         .word-doc p {
           text-align: justify;
@@ -4665,6 +4733,9 @@ use chrome, FireFox or Internet Explorer 11`)}var o=e(`safe-buffer`),s=e(`random
           color: #000;
           font-family: 'Times New Roman', Times, serif;
         }
+          .word-doc p, .word-doc li, .word-doc td, .word-doc strong, .word-doc u {
+          font-family: 'Times New Roman', Times, serif !important;
+        }
         .word-doc p {
           text-align: justify;
           margin-bottom: 12px;
@@ -4708,6 +4779,9 @@ use chrome, FireFox or Internet Explorer 11`)}var o=e(`safe-buffer`),s=e(`random
           color: #000;
           font-family: 'Times New Roman', Times, serif;
         }
+          .word-doc p, .word-doc li, .word-doc td, .word-doc strong, .word-doc u {
+          font-family: 'Times New Roman', Times, serif !important;
+        }
         .word-doc p {
           text-align: justify;
           margin-bottom: 12px;
@@ -4742,12 +4816,12 @@ use chrome, FireFox or Internet Explorer 11`)}var o=e(`safe-buffer`),s=e(`random
             max-width: 100%;
           }
         }
-      `})]})}function SignedVerificationForms(){let{username:e}=useParams(),[t,n]=(0,import_react.useState)(!1),[i,a]=(0,import_react.useState)({}),o=`https://lmsapi.1staccesshomecareinc.com`,[s,c]=(0,import_react.useState)({});(0,import_react.useEffect)(()=>{FetchAllEmployeeForms(n,a,c,o,e)},[e,o]);let u=s?.application_form?.profile?.full_name,p=s?.verification,m=`Verification of Professional License`;return(0,import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment,{children:[(0,import_jsx_runtime.jsx)(`title`,{children:`Verification of Professional License - 1staccess Home Care`}),(0,import_jsx_runtime.jsxs)(`div`,{id:`main-wrapper`,children:[(0,import_jsx_runtime.jsx)(MyHeader,{}),(0,import_jsx_runtime.jsx)(Sidebar,{}),(0,import_jsx_runtime.jsx)(`div`,{className:`content-body`,children:(0,import_jsx_runtime.jsxs)(`div`,{className:`container`,children:[(0,import_jsx_runtime.jsx)(`div`,{className:`page-title`,children:(0,import_jsx_runtime.jsxs)(`div`,{className:`row align-items-center justify-content-between`,children:[(0,import_jsx_runtime.jsx)(`div`,{className:`col-md-6`,children:(0,import_jsx_runtime.jsxs)(`div`,{className:`page-title-content`,children:[(0,import_jsx_runtime.jsx)(`h3`,{children:e}),(0,import_jsx_runtime.jsx)(`p`,{className:`mb-2`,children:`Manage all forms signed by user`})]})}),(0,import_jsx_runtime.jsx)(`div`,{className:`col-auto`,children:(0,import_jsx_runtime.jsxs)(`div`,{className:`breadcrumbs`,children:[(0,import_jsx_runtime.jsx)(`a`,{href:`#`,children:`Profile `}),(0,import_jsx_runtime.jsx)(`span`,{children:(0,import_jsx_runtime.jsx)(`i`,{className:`ri-arrow-right-s-line`})}),(0,import_jsx_runtime.jsx)(`a`,{href:`#`,children:`Forms`})]})})]})}),(0,import_jsx_runtime.jsxs)(`div`,{className:`row`,children:[(0,import_jsx_runtime.jsx)(Nav,{username:e}),t?(0,import_jsx_runtime.jsx)(Spinner,{}):(0,import_jsx_runtime.jsx)(`div`,{className:`col-md-9`,children:(0,import_jsx_runtime.jsxs)(`div`,{className:`card`,children:[(0,import_jsx_runtime.jsx)(`div`,{id:`printArea`,className:`card-body p-0 bg-secondary-light`,children:(0,import_jsx_runtime.jsxs)(`div`,{className:`word-doc`,children:[(0,import_jsx_runtime.jsxs)(`div`,{style:{textAlign:`center`,marginBottom:`40px`},children:[(0,import_jsx_runtime.jsx)(`img`,{src:`/assets/images/main_logo.png`,width:150,alt:`Company Logo`,style:{marginBottom:`20px`}}),(0,import_jsx_runtime.jsx)(`h5`,{style:{fontSize:`14pt`,margin:`0 0 10px 0`,fontWeight:`bold`},children:`1st Access Home Care Incorporated`}),(0,import_jsx_runtime.jsxs)(`p`,{style:{margin:`5px 0`,fontSize:`12pt`},children:[`6600 Fieldtan Trail, Moseley, VA, 23120`,(0,import_jsx_runtime.jsx)(`br`,{}),`Agency Phone: (+1) 804-818-3216`]}),(0,import_jsx_runtime.jsx)(`h4`,{style:{fontSize:`14pt`,margin:`20px 0`,fontWeight:`bold`},children:`Verification of Professional License`})]}),(0,import_jsx_runtime.jsxs)(`div`,{className:`col-12`,style:{padding:0},children:[(0,import_jsx_runtime.jsxs)(`p`,{style:{marginBottom:`30px`},children:[`Employee Name: `,(0,import_jsx_runtime.jsx)(`strong`,{children:(0,import_jsx_runtime.jsx)(`u`,{children:u??`N/A`})})]}),(0,import_jsx_runtime.jsxs)(`div`,{className:`row`,style:{marginBottom:`20px`},children:[(0,import_jsx_runtime.jsxs)(`div`,{className:`col-md-6 mb-3`,children:[(0,import_jsx_runtime.jsx)(`p`,{style:{margin:0},children:`Check Off Discipline Needing Verification:`}),(0,import_jsx_runtime.jsx)(`div`,{style:{borderBottom:`1px solid #000`,paddingBottom:`5px`,marginTop:`5px`},children:(0,import_jsx_runtime.jsx)(`strong`,{children:p?.disciplines||`N/A`})})]}),(0,import_jsx_runtime.jsxs)(`div`,{className:`col-md-6 mb-3`,children:[(0,import_jsx_runtime.jsx)(`p`,{style:{margin:0},children:`License Number:`}),(0,import_jsx_runtime.jsx)(`div`,{style:{borderBottom:`1px solid #000`,paddingBottom:`5px`,marginTop:`5px`},children:(0,import_jsx_runtime.jsx)(`strong`,{children:p?.licenseNumber||`N/A`})})]}),(0,import_jsx_runtime.jsxs)(`div`,{className:`col-md-6 mb-3`,children:[(0,import_jsx_runtime.jsx)(`p`,{style:{margin:0},children:`Expiration Date Of License:`}),(0,import_jsx_runtime.jsx)(`div`,{style:{borderBottom:`1px solid #000`,paddingBottom:`5px`,marginTop:`5px`},children:(0,import_jsx_runtime.jsx)(`strong`,{children:formatDate(p?.expirationDate)})})]}),(0,import_jsx_runtime.jsxs)(`div`,{className:`col-md-6 mb-3`,children:[(0,import_jsx_runtime.jsx)(`p`,{style:{margin:0},children:`Date Verified:`}),(0,import_jsx_runtime.jsx)(`div`,{style:{borderBottom:`1px solid #000`,paddingBottom:`5px`,marginTop:`5px`},children:(0,import_jsx_runtime.jsx)(`strong`,{children:formatDate(p?.dateVerified)})})]}),(0,import_jsx_runtime.jsxs)(`div`,{className:`col-md-6 mb-3`,children:[(0,import_jsx_runtime.jsx)(`p`,{style:{margin:0},children:`License Verified By:`}),(0,import_jsx_runtime.jsx)(`div`,{style:{borderBottom:`1px solid #000`,paddingBottom:`5px`,marginTop:`5px`},children:(0,import_jsx_runtime.jsx)(`strong`,{children:p?.licenseVerifiedBy||`N/A`})})]}),(0,import_jsx_runtime.jsxs)(`div`,{className:`col-md-6 mb-3`,children:[(0,import_jsx_runtime.jsx)(`p`,{style:{margin:0},children:`Action Outstanding:`}),(0,import_jsx_runtime.jsx)(`div`,{style:{borderBottom:`1px solid #000`,paddingBottom:`5px`,marginTop:`5px`},children:(0,import_jsx_runtime.jsx)(`strong`,{children:p?.actionOutstanding||`N/A`})})]})]}),(0,import_jsx_runtime.jsxs)(`div`,{style:{marginBottom:`20px`},children:[(0,import_jsx_runtime.jsx)(`p`,{style:{margin:0},children:`Comments:`}),(0,import_jsx_runtime.jsx)(`div`,{style:{borderBottom:`1px solid #000`,paddingBottom:`5px`,marginTop:`5px`,minHeight:`30px`},children:(0,import_jsx_runtime.jsx)(`strong`,{children:p?.comments||`N/A`})})]})]}),(0,import_jsx_runtime.jsx)(`div`,{style:{marginTop:`60px`,pageBreakInside:`avoid`},children:(0,import_jsx_runtime.jsx)(`table`,{style:{width:`100%`,borderCollapse:`collapse`},children:(0,import_jsx_runtime.jsxs)(`tbody`,{children:[(0,import_jsx_runtime.jsxs)(`tr`,{children:[(0,import_jsx_runtime.jsxs)(`td`,{style:{width:`50%`,paddingBottom:`40px`,verticalAlign:`bottom`},children:[(0,import_jsx_runtime.jsx)(`p`,{style:{margin:0},children:`Employee Name:`}),(0,import_jsx_runtime.jsx)(`div`,{style:{borderBottom:`1px solid #000`,paddingBottom:`5px`,marginTop:`5px`},children:(0,import_jsx_runtime.jsx)(`strong`,{children:u??`N/A`})})]}),(0,import_jsx_runtime.jsxs)(`td`,{style:{width:`50%`,paddingBottom:`40px`,paddingLeft:`20px`,verticalAlign:`bottom`},children:[(0,import_jsx_runtime.jsx)(`p`,{style:{margin:0},children:`Employee Signature:`}),(0,import_jsx_runtime.jsx)(`div`,{style:{borderBottom:`1px solid #000`,paddingBottom:`5px`,marginTop:`5px`,height:`40px`,display:`flex`,alignItems:`flex-end`},children:p?.signature?(0,import_jsx_runtime.jsx)(`img`,{className:`signature`,src:`${o}/storage/signature/${p.signature}`,alt:`Signature`,style:{maxHeight:`50px`,maxWidth:`100%`}}):(0,import_jsx_runtime.jsx)(`em`,{children:`No signature provided`})})]})]}),(0,import_jsx_runtime.jsxs)(`tr`,{children:[(0,import_jsx_runtime.jsxs)(`td`,{style:{paddingTop:`20px`},children:[(0,import_jsx_runtime.jsx)(`p`,{style:{margin:0},children:`Date:`}),(0,import_jsx_runtime.jsx)(`div`,{style:{borderBottom:`1px solid #000`,paddingBottom:`5px`,marginTop:`5px`,display:`inline-block`,minWidth:`150px`},children:(0,import_jsx_runtime.jsx)(`strong`,{children:formatDate(p?.created_at)})})]}),(0,import_jsx_runtime.jsxs)(`td`,{style:{paddingTop:`20px`,paddingLeft:`20px`},children:[(0,import_jsx_runtime.jsx)(`p`,{style:{margin:0},children:`Administrator/Designee Signature:`}),(0,import_jsx_runtime.jsx)(`div`,{style:{borderBottom:`1px solid #000`,paddingBottom:`5px`,marginTop:`5px`,height:`40px`},children:`\xA0`})]})]})]})})})]})}),(0,import_jsx_runtime.jsxs)(`div`,{className:`card-footer bg-white border-top-0 pt-0 pb-3 px-3`,children:[(0,import_jsx_runtime.jsx)(`button`,{onClick:()=>exportToWord({fullname:u,title:`Verification of Professional License`}),className:`btn btn-primary btn-lg me-2`,children:`Print / Export to Word`}),(0,import_jsx_runtime.jsx)(Link,{onClick:()=>window.history.back(),className:`btn btn-info btn-lg`,children:`Back`})]})]})})]})]})})]}),(0,import_jsx_runtime.jsx)(`style`,{jsx:`true`,children:`
+      `})]})}function SignedVerificationForms(){let{username:e}=useParams(),[t,n]=(0,import_react.useState)(!1),[i,a]=(0,import_react.useState)({}),o=`https://lmsapi.1staccesshomecareinc.com`,[s,c]=(0,import_react.useState)({});(0,import_react.useEffect)(()=>{FetchAllEmployeeForms(n,a,c,o,e)},[e,o]);let u=s?.application_form?.profile?.full_name,p=s?.verification,m=`Verification of Professional License`;return(0,import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment,{children:[(0,import_jsx_runtime.jsx)(`title`,{children:`Verification of Professional License - 1staccess Home Care`}),(0,import_jsx_runtime.jsxs)(`div`,{id:`main-wrapper`,children:[(0,import_jsx_runtime.jsx)(MyHeader,{}),(0,import_jsx_runtime.jsx)(Sidebar,{}),(0,import_jsx_runtime.jsx)(`div`,{className:`content-body`,children:(0,import_jsx_runtime.jsxs)(`div`,{className:`container`,children:[(0,import_jsx_runtime.jsx)(`div`,{className:`page-title`,children:(0,import_jsx_runtime.jsxs)(`div`,{className:`row align-items-center justify-content-between`,children:[(0,import_jsx_runtime.jsx)(`div`,{className:`col-md-6`,children:(0,import_jsx_runtime.jsxs)(`div`,{className:`page-title-content`,children:[(0,import_jsx_runtime.jsx)(`h3`,{children:e}),(0,import_jsx_runtime.jsx)(`p`,{className:`mb-2`,children:`Manage all forms signed by user`})]})}),(0,import_jsx_runtime.jsx)(`div`,{className:`col-auto`,children:(0,import_jsx_runtime.jsxs)(`div`,{className:`breadcrumbs`,children:[(0,import_jsx_runtime.jsx)(`a`,{href:`#`,children:`Profile `}),(0,import_jsx_runtime.jsx)(`span`,{children:(0,import_jsx_runtime.jsx)(`i`,{className:`ri-arrow-right-s-line`})}),(0,import_jsx_runtime.jsx)(`a`,{href:`#`,children:`Forms`})]})})]})}),(0,import_jsx_runtime.jsxs)(`div`,{className:`row`,children:[(0,import_jsx_runtime.jsx)(Nav,{username:e}),t?(0,import_jsx_runtime.jsx)(Spinner,{}):(0,import_jsx_runtime.jsx)(`div`,{className:`col-md-9`,children:(0,import_jsx_runtime.jsxs)(`div`,{className:`card`,children:[(0,import_jsx_runtime.jsx)(`div`,{id:`printArea`,className:`card-body p-0 bg-secondary-light`,children:(0,import_jsx_runtime.jsxs)(`div`,{className:`word-doc`,children:[(0,import_jsx_runtime.jsxs)(`div`,{style:{textAlign:`center`,marginBottom:`40px`},children:[(0,import_jsx_runtime.jsx)(`img`,{src:`/assets/images/main_logo.png`,width:150,alt:`Company Logo`,style:{marginBottom:`20px`}}),(0,import_jsx_runtime.jsx)(`h5`,{style:{fontSize:`14pt`,margin:`0 0 10px 0`,fontWeight:`bold`},children:`1st Access Home Care Incorporated`}),(0,import_jsx_runtime.jsxs)(`p`,{style:{margin:`5px 0`,fontSize:`12pt`},children:[`6600 Fieldtan Trail, Moseley, VA, 23120`,(0,import_jsx_runtime.jsx)(`br`,{}),`Agency Phone: (+1) 804-818-3216`]}),(0,import_jsx_runtime.jsx)(`h4`,{style:{fontSize:`14pt`,margin:`20px 0`,fontWeight:`bold`},children:`Verification of Professional License`})]}),(0,import_jsx_runtime.jsxs)(`div`,{className:`col-12`,style:{padding:0},children:[(0,import_jsx_runtime.jsxs)(`p`,{style:{marginBottom:`30px`},children:[`Employee Name:`,` `,(0,import_jsx_runtime.jsx)(`strong`,{children:(0,import_jsx_runtime.jsx)(`u`,{children:u??`N/A`})})]}),(0,import_jsx_runtime.jsxs)(`div`,{className:`row`,style:{marginBottom:`20px`},children:[(0,import_jsx_runtime.jsxs)(`div`,{className:`col-md-6 mb-3`,children:[(0,import_jsx_runtime.jsx)(`p`,{style:{margin:0},children:`Check Off Discipline Needing Verification:`}),(0,import_jsx_runtime.jsx)(`div`,{style:{borderBottom:`1px solid #000`,paddingBottom:`5px`,marginTop:`5px`},children:(0,import_jsx_runtime.jsx)(`strong`,{children:p?.disciplines||`N/A`})})]}),(0,import_jsx_runtime.jsxs)(`div`,{className:`col-md-6 mb-3`,children:[(0,import_jsx_runtime.jsx)(`p`,{style:{margin:0},children:`License Number:`}),(0,import_jsx_runtime.jsx)(`div`,{style:{borderBottom:`1px solid #000`,paddingBottom:`5px`,marginTop:`5px`},children:(0,import_jsx_runtime.jsx)(`strong`,{children:p?.licenseNumber||`N/A`})})]}),(0,import_jsx_runtime.jsxs)(`div`,{className:`col-md-6 mb-3`,children:[(0,import_jsx_runtime.jsx)(`p`,{style:{margin:0},children:`Expiration Date Of License:`}),(0,import_jsx_runtime.jsx)(`div`,{style:{borderBottom:`1px solid #000`,paddingBottom:`5px`,marginTop:`5px`},children:(0,import_jsx_runtime.jsx)(`strong`,{children:formatDate(p?.expirationDate)})})]}),(0,import_jsx_runtime.jsxs)(`div`,{className:`col-md-6 mb-3`,children:[(0,import_jsx_runtime.jsx)(`p`,{style:{margin:0},children:`Date Verified:`}),(0,import_jsx_runtime.jsx)(`div`,{style:{borderBottom:`1px solid #000`,paddingBottom:`5px`,marginTop:`5px`},children:(0,import_jsx_runtime.jsx)(`strong`,{children:formatDate(p?.dateVerified)})})]}),(0,import_jsx_runtime.jsxs)(`div`,{className:`col-md-6 mb-3`,children:[(0,import_jsx_runtime.jsx)(`p`,{style:{margin:0},children:`License Verified By:`}),(0,import_jsx_runtime.jsx)(`div`,{style:{borderBottom:`1px solid #000`,paddingBottom:`5px`,marginTop:`5px`},children:(0,import_jsx_runtime.jsx)(`strong`,{children:p?.licenseVerifiedBy||`N/A`})})]}),(0,import_jsx_runtime.jsxs)(`div`,{className:`col-md-6 mb-3`,children:[(0,import_jsx_runtime.jsx)(`p`,{style:{margin:0},children:`Action Outstanding:`}),(0,import_jsx_runtime.jsx)(`div`,{style:{borderBottom:`1px solid #000`,paddingBottom:`5px`,marginTop:`5px`},children:(0,import_jsx_runtime.jsx)(`strong`,{children:p?.actionOutstanding||`N/A`})})]})]}),(0,import_jsx_runtime.jsxs)(`div`,{style:{marginBottom:`20px`},children:[(0,import_jsx_runtime.jsx)(`p`,{style:{margin:0},children:`Comments:`}),(0,import_jsx_runtime.jsx)(`div`,{style:{borderBottom:`1px solid #000`,paddingBottom:`5px`,marginTop:`5px`,minHeight:`30px`},children:(0,import_jsx_runtime.jsx)(`strong`,{children:p?.comments||`N/A`})})]})]}),(0,import_jsx_runtime.jsx)(`div`,{style:{marginTop:`60px`,pageBreakInside:`avoid`},children:(0,import_jsx_runtime.jsx)(`table`,{style:{width:`100%`,borderCollapse:`collapse`},children:(0,import_jsx_runtime.jsxs)(`tbody`,{children:[(0,import_jsx_runtime.jsxs)(`tr`,{children:[(0,import_jsx_runtime.jsxs)(`td`,{style:{width:`50%`,paddingBottom:`40px`,verticalAlign:`bottom`},children:[(0,import_jsx_runtime.jsx)(`p`,{style:{margin:0},children:`Employee Name:`}),(0,import_jsx_runtime.jsx)(`div`,{style:{borderBottom:`1px solid #000`,paddingBottom:`5px`,marginTop:`5px`},children:(0,import_jsx_runtime.jsx)(`strong`,{children:u??`N/A`})})]}),(0,import_jsx_runtime.jsxs)(`td`,{style:{width:`50%`,paddingBottom:`40px`,paddingLeft:`20px`,verticalAlign:`bottom`},children:[(0,import_jsx_runtime.jsx)(`p`,{style:{margin:0},children:`Employee Signature:`}),(0,import_jsx_runtime.jsx)(`div`,{style:{borderBottom:`1px solid #000`,paddingBottom:`5px`,marginTop:`5px`,height:`40px`,display:`flex`,alignItems:`flex-end`},children:p?.signature?(0,import_jsx_runtime.jsx)(`img`,{className:`signature`,src:`${o}/storage/signature/${p.signature}`,alt:`Signature`,style:{maxHeight:`50px`,maxWidth:`100%`}}):(0,import_jsx_runtime.jsx)(`em`,{children:`No signature provided`})})]})]}),(0,import_jsx_runtime.jsxs)(`tr`,{children:[(0,import_jsx_runtime.jsxs)(`td`,{style:{paddingTop:`20px`},children:[(0,import_jsx_runtime.jsx)(`p`,{style:{margin:0},children:`Date:`}),(0,import_jsx_runtime.jsx)(`div`,{style:{borderBottom:`1px solid #000`,paddingBottom:`5px`,marginTop:`5px`,display:`inline-block`,minWidth:`150px`},children:(0,import_jsx_runtime.jsx)(`strong`,{children:formatDate(p?.created_at)})})]}),(0,import_jsx_runtime.jsxs)(`td`,{style:{paddingTop:`20px`,paddingLeft:`20px`},children:[(0,import_jsx_runtime.jsx)(`p`,{style:{margin:0},children:`Administrator/Designee Signature:`}),(0,import_jsx_runtime.jsx)(`div`,{style:{borderBottom:`1px solid #000`,paddingBottom:`5px`,marginTop:`5px`,height:`40px`},children:`\xA0`})]})]})]})})})]})}),(0,import_jsx_runtime.jsxs)(`div`,{className:`card-footer bg-white border-top-0 pt-0 pb-3 px-3`,children:[(0,import_jsx_runtime.jsx)(`button`,{onClick:()=>exportToWord({fullname:u,title:`Verification of Professional License`}),className:`btn btn-primary btn-lg me-2`,children:`Print / Export to Word`}),(0,import_jsx_runtime.jsx)(Link,{onClick:()=>window.history.back(),className:`btn btn-info btn-lg`,children:`Back`})]})]})})]})]})})]}),(0,import_jsx_runtime.jsx)(`style`,{jsx:`true`,children:`
         .bg-secondary-light {
           background-color: #f4f4f4; /* Grayish backdrop to highlight the "paper" */
         }
         .word-doc {
-          font-family: 'Times New Roman', Times, serif;
+          font-family: "Times New Roman", Times, serif;
           font-size: 12pt;
           line-height: 1.5;
           color: #000;
@@ -4755,23 +4829,36 @@ use chrome, FireFox or Internet Explorer 11`)}var o=e(`safe-buffer`),s=e(`random
           max-width: 850px; /* Simulates A4/Letter width */
           margin: 0 auto;
           padding: 1in; /* Standard Word margins */
-          box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
           min-height: 1100px; /* Gives it a paper-like appearance */
         }
-        .word-doc h1, .word-doc h2, .word-doc h3, .word-doc h4, .word-doc h5, .word-doc h6 {
+        .word-doc h1,
+        .word-doc h2,
+        .word-doc h3,
+        .word-doc h4,
+        .word-doc h5,
+        .word-doc h6 {
           color: #000;
-          font-family: 'Times New Roman', Times, serif;
+          font-family: "Times New Roman", Times, serif;
+        }
+        .word-doc p,
+        .word-doc li,
+        .word-doc td,
+        .word-doc strong,
+        .word-doc u {
+          font-family: "Times New Roman", Times, serif !important;
         }
         .word-doc p {
           text-align: justify;
           margin-bottom: 12px;
         }
-        
+
         @media print {
           body * {
             visibility: hidden;
           }
-          .word-doc, .word-doc * {
+          .word-doc,
+          .word-doc * {
             visibility: visible;
           }
           .word-doc {
@@ -4804,6 +4891,9 @@ use chrome, FireFox or Internet Explorer 11`)}var o=e(`safe-buffer`),s=e(`random
         .word-doc h1, .word-doc h2, .word-doc h3, .word-doc h4, .word-doc h5, .word-doc h6 {
           color: #000;
           font-family: 'Times New Roman', Times, serif;
+        }
+          .word-doc p, .word-doc li, .word-doc td, .word-doc strong, .word-doc u {
+          font-family: 'Times New Roman', Times, serif !important;
         }
         .word-doc p {
           text-align: justify;
@@ -5586,6 +5676,9 @@ pdfjs-digital-signature-properties-sub-signatures =
         .word-doc h1, .word-doc h2, .word-doc h3 {
           color: #000;
           font-family: 'Times New Roman', Times, serif;
+        }
+          .word-doc p, .word-doc li, .word-doc td, .word-doc strong, .word-doc u {
+          font-family: 'Times New Roman', Times, serif !important;
         }
         .word-doc h3 {
           font-size: 14pt;

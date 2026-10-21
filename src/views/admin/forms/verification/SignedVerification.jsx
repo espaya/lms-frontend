@@ -22,7 +22,7 @@ export default function SignedVerificationForms() {
       setErrors,
       setAllForms,
       apiBase,
-      username
+      username,
     );
   }, [username, apiBase]);
 
@@ -65,27 +65,43 @@ export default function SignedVerificationForms() {
               ) : (
                 <div className="col-md-9">
                   <div className="card">
-                    
                     {/* MS Word Style Container */}
-                    <div id="printArea" className="card-body p-0 bg-secondary-light">
+                    <div
+                      id="printArea"
+                      className="card-body p-0 bg-secondary-light"
+                    >
                       <div className="word-doc">
-                        
                         {/* Header */}
-                        <div style={{ textAlign: "center", marginBottom: "40px" }}>
+                        <div
+                          style={{ textAlign: "center", marginBottom: "40px" }}
+                        >
                           <img
                             src="/assets/images/main_logo.png"
                             width={150}
                             alt="Company Logo"
                             style={{ marginBottom: "20px" }}
                           />
-                          <h5 style={{ fontSize: "14pt", margin: "0 0 10px 0", fontWeight: "bold" }}>
+                          <h5
+                            style={{
+                              fontSize: "14pt",
+                              margin: "0 0 10px 0",
+                              fontWeight: "bold",
+                            }}
+                          >
                             1st Access Home Care Incorporated
                           </h5>
                           <p style={{ margin: "5px 0", fontSize: "12pt" }}>
-                            6600 Fieldtan Trail, Moseley, VA, 23120<br />
+                            6600 Fieldtan Trail, Moseley, VA, 23120
+                            <br />
                             Agency Phone: (+1) 804-818-3216
                           </p>
-                          <h4 style={{ fontSize: "14pt", margin: "20px 0", fontWeight: "bold" }}>
+                          <h4
+                            style={{
+                              fontSize: "14pt",
+                              margin: "20px 0",
+                              fontWeight: "bold",
+                            }}
+                          >
                             Verification of Professional License
                           </h4>
                         </div>
@@ -93,78 +109,179 @@ export default function SignedVerificationForms() {
                         {/* Body */}
                         <div className="col-12" style={{ padding: 0 }}>
                           <p style={{ marginBottom: "30px" }}>
-                            Employee Name: <strong><u>{fullname ?? "N/A"}</u></strong>
+                            Employee Name:{" "}
+                            <strong>
+                              <u>{fullname ?? "N/A"}</u>
+                            </strong>
                           </p>
 
                           <div className="row" style={{ marginBottom: "20px" }}>
                             <div className="col-md-6 mb-3">
-                              <p style={{ margin: 0 }}>Check Off Discipline Needing Verification:</p>
-                              <div style={{ borderBottom: "1px solid #000", paddingBottom: "5px", marginTop: "5px" }}>
+                              <p style={{ margin: 0 }}>
+                                Check Off Discipline Needing Verification:
+                              </p>
+                              <div
+                                style={{
+                                  borderBottom: "1px solid #000",
+                                  paddingBottom: "5px",
+                                  marginTop: "5px",
+                                }}
+                              >
                                 <strong>{data?.disciplines || "N/A"}</strong>
                               </div>
                             </div>
                             <div className="col-md-6 mb-3">
                               <p style={{ margin: 0 }}>License Number:</p>
-                              <div style={{ borderBottom: "1px solid #000", paddingBottom: "5px", marginTop: "5px" }}>
+                              <div
+                                style={{
+                                  borderBottom: "1px solid #000",
+                                  paddingBottom: "5px",
+                                  marginTop: "5px",
+                                }}
+                              >
                                 <strong>{data?.licenseNumber || "N/A"}</strong>
                               </div>
                             </div>
-                            
+
                             <div className="col-md-6 mb-3">
-                              <p style={{ margin: 0 }}>Expiration Date Of License:</p>
-                              <div style={{ borderBottom: "1px solid #000", paddingBottom: "5px", marginTop: "5px" }}>
-                                <strong>{formatDate(data?.expirationDate)}</strong>
+                              <p style={{ margin: 0 }}>
+                                Expiration Date Of License:
+                              </p>
+                              <div
+                                style={{
+                                  borderBottom: "1px solid #000",
+                                  paddingBottom: "5px",
+                                  marginTop: "5px",
+                                }}
+                              >
+                                <strong>
+                                  {formatDate(data?.expirationDate)}
+                                </strong>
                               </div>
                             </div>
                             <div className="col-md-6 mb-3">
                               <p style={{ margin: 0 }}>Date Verified:</p>
-                              <div style={{ borderBottom: "1px solid #000", paddingBottom: "5px", marginTop: "5px" }}>
-                                <strong>{formatDate(data?.dateVerified)}</strong>
+                              <div
+                                style={{
+                                  borderBottom: "1px solid #000",
+                                  paddingBottom: "5px",
+                                  marginTop: "5px",
+                                }}
+                              >
+                                <strong>
+                                  {formatDate(data?.dateVerified)}
+                                </strong>
                               </div>
                             </div>
 
                             <div className="col-md-6 mb-3">
                               <p style={{ margin: 0 }}>License Verified By:</p>
-                              <div style={{ borderBottom: "1px solid #000", paddingBottom: "5px", marginTop: "5px" }}>
-                                <strong>{data?.licenseVerifiedBy || "N/A"}</strong>
+                              <div
+                                style={{
+                                  borderBottom: "1px solid #000",
+                                  paddingBottom: "5px",
+                                  marginTop: "5px",
+                                }}
+                              >
+                                <strong>
+                                  {data?.licenseVerifiedBy || "N/A"}
+                                </strong>
                               </div>
                             </div>
                             <div className="col-md-6 mb-3">
                               <p style={{ margin: 0 }}>Action Outstanding:</p>
-                              <div style={{ borderBottom: "1px solid #000", paddingBottom: "5px", marginTop: "5px" }}>
-                                <strong>{data?.actionOutstanding || "N/A"}</strong>
+                              <div
+                                style={{
+                                  borderBottom: "1px solid #000",
+                                  paddingBottom: "5px",
+                                  marginTop: "5px",
+                                }}
+                              >
+                                <strong>
+                                  {data?.actionOutstanding || "N/A"}
+                                </strong>
                               </div>
                             </div>
                           </div>
 
                           <div style={{ marginBottom: "20px" }}>
                             <p style={{ margin: 0 }}>Comments:</p>
-                            <div style={{ borderBottom: "1px solid #000", paddingBottom: "5px", marginTop: "5px", minHeight: "30px" }}>
+                            <div
+                              style={{
+                                borderBottom: "1px solid #000",
+                                paddingBottom: "5px",
+                                marginTop: "5px",
+                                minHeight: "30px",
+                              }}
+                            >
                               <strong>{data?.comments || "N/A"}</strong>
                             </div>
                           </div>
                         </div>
 
                         {/* Signature Block */}
-                        <div style={{ marginTop: "60px", pageBreakInside: "avoid" }}>
-                          <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                        <div
+                          style={{
+                            marginTop: "60px",
+                            pageBreakInside: "avoid",
+                          }}
+                        >
+                          <table
+                            style={{
+                              width: "100%",
+                              borderCollapse: "collapse",
+                            }}
+                          >
                             <tbody>
                               <tr>
-                                <td style={{ width: "50%", paddingBottom: "40px", verticalAlign: "bottom" }}>
+                                <td
+                                  style={{
+                                    width: "50%",
+                                    paddingBottom: "40px",
+                                    verticalAlign: "bottom",
+                                  }}
+                                >
                                   <p style={{ margin: 0 }}>Employee Name:</p>
-                                  <div style={{ borderBottom: "1px solid #000", paddingBottom: "5px", marginTop: "5px" }}>
+                                  <div
+                                    style={{
+                                      borderBottom: "1px solid #000",
+                                      paddingBottom: "5px",
+                                      marginTop: "5px",
+                                    }}
+                                  >
                                     <strong>{fullname ?? "N/A"}</strong>
                                   </div>
                                 </td>
-                                <td style={{ width: "50%", paddingBottom: "40px", paddingLeft: "20px", verticalAlign: "bottom" }}>
-                                  <p style={{ margin: 0 }}>Employee Signature:</p>
-                                  <div style={{ borderBottom: "1px solid #000", paddingBottom: "5px", marginTop: "5px", height: "40px", display: "flex", alignItems: "flex-end" }}>
+                                <td
+                                  style={{
+                                    width: "50%",
+                                    paddingBottom: "40px",
+                                    paddingLeft: "20px",
+                                    verticalAlign: "bottom",
+                                  }}
+                                >
+                                  <p style={{ margin: 0 }}>
+                                    Employee Signature:
+                                  </p>
+                                  <div
+                                    style={{
+                                      borderBottom: "1px solid #000",
+                                      paddingBottom: "5px",
+                                      marginTop: "5px",
+                                      height: "40px",
+                                      display: "flex",
+                                      alignItems: "flex-end",
+                                    }}
+                                  >
                                     {data?.signature ? (
                                       <img
                                         className="signature"
                                         src={`${apiBase}/storage/signature/${data.signature}`}
                                         alt="Signature"
-                                        style={{ maxHeight: "50px", maxWidth: "100%" }}
+                                        style={{
+                                          maxHeight: "50px",
+                                          maxWidth: "100%",
+                                        }}
                                       />
                                     ) : (
                                       <em>No signature provided</em>
@@ -175,13 +292,37 @@ export default function SignedVerificationForms() {
                               <tr>
                                 <td style={{ paddingTop: "20px" }}>
                                   <p style={{ margin: 0 }}>Date:</p>
-                                  <div style={{ borderBottom: "1px solid #000", paddingBottom: "5px", marginTop: "5px", display: "inline-block", minWidth: "150px" }}>
-                                    <strong>{formatDate(data?.created_at)}</strong>
+                                  <div
+                                    style={{
+                                      borderBottom: "1px solid #000",
+                                      paddingBottom: "5px",
+                                      marginTop: "5px",
+                                      display: "inline-block",
+                                      minWidth: "150px",
+                                    }}
+                                  >
+                                    <strong>
+                                      {formatDate(data?.created_at)}
+                                    </strong>
                                   </div>
                                 </td>
-                                <td style={{ paddingTop: "20px", paddingLeft: "20px" }}>
-                                  <p style={{ margin: 0 }}>Administrator/Designee Signature:</p>
-                                  <div style={{ borderBottom: "1px solid #000", paddingBottom: "5px", marginTop: "5px", height: "40px" }}>
+                                <td
+                                  style={{
+                                    paddingTop: "20px",
+                                    paddingLeft: "20px",
+                                  }}
+                                >
+                                  <p style={{ margin: 0 }}>
+                                    Administrator/Designee Signature:
+                                  </p>
+                                  <div
+                                    style={{
+                                      borderBottom: "1px solid #000",
+                                      paddingBottom: "5px",
+                                      marginTop: "5px",
+                                      height: "40px",
+                                    }}
+                                  >
                                     &nbsp;
                                   </div>
                                 </td>
@@ -189,10 +330,9 @@ export default function SignedVerificationForms() {
                             </tbody>
                           </table>
                         </div>
-                        
                       </div>
                     </div>
-                    
+
                     {/* Action Buttons (Outside the Word Document style) */}
                     <div className="card-footer bg-white border-top-0 pt-0 pb-3 px-3">
                       <button
@@ -208,7 +348,6 @@ export default function SignedVerificationForms() {
                         Back
                       </Link>
                     </div>
-
                   </div>
                 </div>
               )}
@@ -223,7 +362,7 @@ export default function SignedVerificationForms() {
           background-color: #f4f4f4; /* Grayish backdrop to highlight the "paper" */
         }
         .word-doc {
-          font-family: 'Times New Roman', Times, serif;
+          font-family: "Times New Roman", Times, serif;
           font-size: 12pt;
           line-height: 1.5;
           color: #000;
@@ -231,23 +370,36 @@ export default function SignedVerificationForms() {
           max-width: 850px; /* Simulates A4/Letter width */
           margin: 0 auto;
           padding: 1in; /* Standard Word margins */
-          box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
           min-height: 1100px; /* Gives it a paper-like appearance */
         }
-        .word-doc h1, .word-doc h2, .word-doc h3, .word-doc h4, .word-doc h5, .word-doc h6 {
+        .word-doc h1,
+        .word-doc h2,
+        .word-doc h3,
+        .word-doc h4,
+        .word-doc h5,
+        .word-doc h6 {
           color: #000;
-          font-family: 'Times New Roman', Times, serif;
+          font-family: "Times New Roman", Times, serif;
+        }
+        .word-doc p,
+        .word-doc li,
+        .word-doc td,
+        .word-doc strong,
+        .word-doc u {
+          font-family: "Times New Roman", Times, serif !important;
         }
         .word-doc p {
           text-align: justify;
           margin-bottom: 12px;
         }
-        
+
         @media print {
           body * {
             visibility: hidden;
           }
-          .word-doc, .word-doc * {
+          .word-doc,
+          .word-doc * {
             visibility: visible;
           }
           .word-doc {

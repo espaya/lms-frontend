@@ -251,6 +251,9 @@ export default function SignedEmployeeAgreementForms() {
           color: #000;
           font-family: 'Times New Roman', Times, serif;
         }
+          .word-doc p, .word-doc li, .word-doc td, .word-doc strong, .word-doc u {
+          font-family: 'Times New Roman', Times, serif !important;
+        }
         .word-doc p {
           text-align: justify;
           margin-bottom: 12px;
