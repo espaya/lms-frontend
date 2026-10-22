@@ -5,7 +5,7 @@ export default function StepThree({
   errors,
   loading,
   addQuestion,
-  handleSubmit,          // accepts optional schedule object
+  handleSubmit, // accepts optional schedule object
   removeQuestion,
   setStep,
   updateQuestionText,
@@ -49,7 +49,7 @@ export default function StepThree({
     setIsDragging(false);
 
     const files = Array.from(e.dataTransfer.files).filter(
-      (file) => file.type === "application/pdf"
+      (file) => file.type === "application/pdf",
     );
 
     if (files.length > 0) {
@@ -59,7 +59,7 @@ export default function StepThree({
 
   const handleFileSelect = (e) => {
     const files = Array.from(e.target.files).filter(
-      (file) => file.type === "application/pdf"
+      (file) => file.type === "application/pdf",
     );
 
     if (files.length > 0) {
@@ -89,7 +89,6 @@ export default function StepThree({
 
     const { startDate, endDate, durationMinutes } = scheduleData;
 
-    // Start date is required
     if (!startDate) {
       setScheduleError("Please select a start date/time.");
       return;
@@ -102,24 +101,21 @@ export default function StepThree({
       return;
     }
 
-    // End date is OPTIONAL — but if provided, must be after start
-    let end = null;
     if (endDate) {
-      end = new Date(endDate);
+      const end = new Date(endDate);
       if (end <= start) {
         setScheduleError("End date/time must be after the start date/time.");
         return;
       }
     }
 
-    // Submit the quiz WITH the schedule (endDate may be null → no closing date)
+    // ⬇ FIX: Convert to ISO string so the backend knows the exact timezone
     handleSubmit({
-      startDate,
-      endDate: endDate || null,
+      startDate: start.toISOString(),
+      endDate: endDate ? new Date(endDate).toISOString() : null,
       durationMinutes: durationMinutes ? Number(durationMinutes) : null,
     });
 
-    // Reset + close
     setIsScheduleModalOpen(false);
     setScheduleData({ startDate: "", endDate: "", durationMinutes: "" });
     setScheduleError("");
@@ -356,8 +352,8 @@ export default function StepThree({
                   min={scheduleData.startDate || undefined}
                 />
                 <small className="text-muted">
-                  Leave blank to keep the quiz available indefinitely (until
-                  you manually close it).
+                  Leave blank to keep the quiz available indefinitely (until you
+                  manually close it).
                 </small>
               </div>
 
