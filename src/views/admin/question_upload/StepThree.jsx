@@ -383,7 +383,8 @@ export default function StepThree({
                   Cancel
                 </button>
                 <button
-                  type="submit"
+                  type="button"
+                  onClick={handleScheduleSubmit}
                   className="btn btn-danger"
                   disabled={loading}
                 >
