@@ -3,6 +3,7 @@ import Cookies from "js-cookie";
 import ViewQuestions from "../../components/users/questions/ViewQuestions";
 import UserSidebar from "../../components/users/UserSidebar";
 import UserHeader from "../../components/users/UserHeader";
+import { formatDate } from "../../utils/DateFormatter";
 
 export default function Questions() {
   const [questions, setQuestions] = useState([]);
@@ -26,19 +27,16 @@ export default function Questions() {
     setLoading(true);
     try {
       // User-specific endpoint
-      const response = await fetch(
-        `${apiBase}/api/user/quizzes?page=${page}`,
-        {
-          credentials: "include",
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            "X-XSRF-TOKEN": csrfToken ? decodeURIComponent(csrfToken) : "",
-          },
-        }
-      );
+      const response = await fetch(`${apiBase}/api/user/quizzes?page=${page}`, {
+        credentials: "include",
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          "X-XSRF-TOKEN": csrfToken ? decodeURIComponent(csrfToken) : "",
+        },
+      });
 
       const data = await response.json();
 
@@ -89,7 +87,7 @@ export default function Questions() {
             "Content-Type": "application/json",
             "X-XSRF-TOKEN": csrfToken ? decodeURIComponent(csrfToken) : "",
           },
-        }
+        },
       );
 
       const data = await response.json();
@@ -180,7 +178,7 @@ export default function Questions() {
                               <strong>Topic</strong>
                             </div>
                             <div className="rtable-cell date-cell column-heading text-dark">
-                              <strong>Status</strong>
+                              <strong>Date</strong>
                             </div>
                             <div className="rtable-cell receipt-cell column-heading text-dark">
                               <strong>Actions</strong>
@@ -201,25 +199,31 @@ export default function Questions() {
                                       Topic
                                     </div>
                                     <div className="rtable-cell--content date-content">
-                                      {topic.name}
-                                    </div>
-                                  </div>
-                                  
-                                  {/* Status Column - Now showing Percentage */}
-                                  <div className="rtable-cell rtable-cell--foot status-cell">
-                                    <div className="rtable-cell--heading">
-                                      Status
-                                    </div>
-                                    <div className="rtable-cell--content purchase-content">
+                                      {topic.name}{" "}
                                       {topic.is_answered ? (
                                         <span className="badge bg-success">
-                                          Score: {Math.round((topic.score / (topic.total || 1)) * 100)}%
+                                          Score:{" "}
+                                          {Math.round(
+                                            (topic.score / (topic.total || 1)) *
+                                              100,
+                                          )}
+                                          %
                                         </span>
                                       ) : (
                                         <span className="badge bg-warning text-dark">
                                           Not Taken
                                         </span>
                                       )}
+                                    </div>
+                                  </div>
+
+                                  {/* Status Column - Now showing Percentage */}
+                                  <div className="rtable-cell rtable-cell--foot status-cell">
+                                    <div className="rtable-cell--heading">
+                                      Status
+                                    </div>
+                                    <div className="rtable-cell--content purchase-content">
+                                      {formatDate(topic.created_at)}
                                     </div>
                                   </div>
 
@@ -232,9 +236,15 @@ export default function Questions() {
                                       <a
                                         href="#"
                                         className={`icon-link payout-icon ${
-                                          topic.is_answered ? "text-info" : "text-success"
+                                          topic.is_answered
+                                            ? "text-info"
+                                            : "text-success"
                                         }`}
-                                        title={topic.is_answered ? "View Results" : "Take Quiz"}
+                                        title={
+                                          topic.is_answered
+                                            ? "View Results"
+                                            : "Take Quiz"
+                                        }
                                         onClick={(e) => {
                                           e.preventDefault();
                                           fetchQuestionsForTopic(topic.id);
@@ -242,7 +252,11 @@ export default function Questions() {
                                       >
                                         <i
                                           style={{ fontSize: "18px" }}
-                                          className={topic.is_answered ? "ri-eye-line" : "ri-play-circle-line"}
+                                          className={
+                                            topic.is_answered
+                                              ? "ri-eye-line"
+                                              : "ri-play-circle-line"
+                                          }
                                         />
                                       </a>
                                     </div>
@@ -262,7 +276,7 @@ export default function Questions() {
                                   />
                                 )}
                               </React.Fragment>
-                            ))
+                            )),
                           )}
                         </div>
 
@@ -270,20 +284,48 @@ export default function Questions() {
                         <div className="d-flex justify-content-center mt-20">
                           <nav aria-label="Page navigation">
                             <ul className="pagination">
-                              <li className={`page-item ${pagination.currentPage === 1 ? "disabled" : ""}`}>
-                                <button className="page-link" onClick={() => handlePageChange(pagination.currentPage - 1)} disabled={pagination.currentPage === 1}>
+                              <li
+                                className={`page-item ${pagination.currentPage === 1 ? "disabled" : ""}`}
+                              >
+                                <button
+                                  className="page-link"
+                                  onClick={() =>
+                                    handlePageChange(pagination.currentPage - 1)
+                                  }
+                                  disabled={pagination.currentPage === 1}
+                                >
                                   Previous
                                 </button>
                               </li>
-                              {Array.from({ length: pagination.lastPage }, (_, i) => i + 1).map((number) => (
-                                <li key={number} className={`page-item ${pagination.currentPage === number ? "active" : ""}`}>
-                                  <button className="page-link" onClick={() => handlePageChange(number)}>
+                              {Array.from(
+                                { length: pagination.lastPage },
+                                (_, i) => i + 1,
+                              ).map((number) => (
+                                <li
+                                  key={number}
+                                  className={`page-item ${pagination.currentPage === number ? "active" : ""}`}
+                                >
+                                  <button
+                                    className="page-link"
+                                    onClick={() => handlePageChange(number)}
+                                  >
                                     {number}
                                   </button>
                                 </li>
                               ))}
-                              <li className={`page-item ${pagination.currentPage === pagination.lastPage ? "disabled" : ""}`}>
-                                <button className="page-link" onClick={() => handlePageChange(pagination.currentPage + 1)} disabled={pagination.currentPage === pagination.lastPage}>
+                              <li
+                                className={`page-item ${pagination.currentPage === pagination.lastPage ? "disabled" : ""}`}
+                              >
+                                <button
+                                  className="page-link"
+                                  onClick={() =>
+                                    handlePageChange(pagination.currentPage + 1)
+                                  }
+                                  disabled={
+                                    pagination.currentPage ===
+                                    pagination.lastPage
+                                  }
+                                >
                                   Next
                                 </button>
                               </li>
