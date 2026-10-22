@@ -3,6 +3,7 @@ import Swal from "sweetalert2";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import { PATHS } from "../../router";
+import { formatDate } from "../../utils/DateFormatter";
 
 export default function AllQuestionsTopic({
   topic,
@@ -97,7 +98,7 @@ export default function AllQuestionsTopic({
         <div className="rtable-cell rtable-cell--foot status-cell">
           <div className="rtable-cell--heading">Created At</div>
           <div className="rtable-cell--content purchase-content">
-            {new Date(topic.created_at).toLocaleDateString()}
+            { formatDate(topic.created_at)}
           </div>
         </div>
         <div className="rtable-cell rtable-cell--foot receipt-cell">
