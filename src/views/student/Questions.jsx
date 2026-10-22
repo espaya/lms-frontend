@@ -22,12 +22,12 @@ export default function Questions() {
   const csrfToken = Cookies.get("XSRF-TOKEN");
   const authToken = localStorage.getItem("auth_token");
 
-
   const fetchQuestions = async (page = 1) => {
     setLoading(true);
     try {
+      // User-specific endpoint
       const response = await fetch(
-        `${apiBase}/api/admin/dashboard/get-subjects?page=${page}`,
+        `${apiBase}/api/user/quizzes?page=${page}`,
         {
           credentials: "include",
           method: "GET",
@@ -44,6 +44,7 @@ export default function Questions() {
 
       if (!response.ok) {
         setErrors({ general: data.message || "Failed to fetch questions" });
+        return;
       }
 
       setQuestions(data.data);
@@ -70,7 +71,6 @@ export default function Questions() {
 
   const fetchQuestionsForTopic = async (topicId) => {
     if (questionsByTopic[topicId]) {
-      // Already fetched, just toggle
       setVisibleQuestions((prev) => ({
         ...prev,
         [topicId]: !prev[topicId],
@@ -96,6 +96,7 @@ export default function Questions() {
 
       if (!response.ok) {
         setErrors({ general: data.message || "Failed to fetch questions" });
+        return;
       }
 
       setQuestionsByTopic((prev) => ({
@@ -122,10 +123,9 @@ export default function Questions() {
     }));
   };
 
-
   return (
     <>
-      <title>All Questions - 1staccess Home Care</title>
+      <title>Available Quizzes - 1staccess Home Care</title>
       <div id="main-wrapper">
         <UserHeader />
         <UserSidebar />
@@ -135,8 +135,8 @@ export default function Questions() {
               <div className="row align-items-center justify-content-between">
                 <div className="col-md-6">
                   <div className="page-title-content">
-                    <h3>Manage Questions</h3>
-                    <p className="mb-2">Answer all available questions here</p>
+                    <h3>Available Quizzes</h3>
+                    <p className="mb-2">Take your scheduled quizzes here</p>
                   </div>
                 </div>
                 <div className="col-auto">
@@ -145,7 +145,7 @@ export default function Questions() {
                     <span>
                       <i className="ri-arrow-right-s-line" />
                     </span>
-                    <a href="#">Manage Questions</a>
+                    <a href="#">Available Quizzes</a>
                   </div>
                 </div>
               </div>
@@ -165,6 +165,10 @@ export default function Questions() {
                           <span className="visually-hidden">Loading...</span>
                         </div>
                       </div>
+                    ) : questions.length === 0 ? (
+                      <div className="alert alert-info text-center py-4">
+                        No quizzes are currently available for you to take.
+                      </div>
                     ) : (
                       <>
                         <div className="rtable rtable--5cols rtable--collapse">
@@ -175,9 +179,8 @@ export default function Questions() {
                             <div className="rtable-cell id-cell column-heading text-dark">
                               <strong>Topic</strong>
                             </div>
-
                             <div className="rtable-cell date-cell column-heading text-dark">
-                              <strong>Created At</strong>
+                              <strong>Status</strong>
                             </div>
                             <div className="rtable-cell receipt-cell column-heading text-dark">
                               <strong>Actions</strong>
@@ -187,7 +190,6 @@ export default function Questions() {
                           {questions.map((subject) =>
                             subject.topics.map((topic) => (
                               <React.Fragment key={`${subject.id}-${topic.id}`}>
-                                {/* Main topic row */}
                                 <div className="rtable-row">
                                   <div className="rtable-cell topic-cell">
                                     <div className="rtable-cell--content title-content">
@@ -202,20 +204,26 @@ export default function Questions() {
                                       {topic.name}
                                     </div>
                                   </div>
+                                  
+                                  {/* Status Column - Now showing Percentage */}
                                   <div className="rtable-cell rtable-cell--foot status-cell">
                                     <div className="rtable-cell--heading">
-                                      Created At
+                                      Status
                                     </div>
                                     <div className="rtable-cell--content purchase-content">
-                                      {new Date(
-                                        topic.created_at
-                                      ).toLocaleDateString("en-US", {
-                                        month: "short", // Feb
-                                        day: "numeric", // 12
-                                        year: "numeric", // 2025
-                                      })}
+                                      {topic.is_answered ? (
+                                        <span className="badge bg-success">
+                                          Score: {Math.round((topic.score / (topic.total || 1)) * 100)}%
+                                        </span>
+                                      ) : (
+                                        <span className="badge bg-warning text-dark">
+                                          Not Taken
+                                        </span>
+                                      )}
                                     </div>
                                   </div>
+
+                                  {/* Action Column */}
                                   <div className="rtable-cell rtable-cell--foot receipt-cell">
                                     <div className="rtable-cell--heading">
                                       Actions
@@ -223,8 +231,10 @@ export default function Questions() {
                                     <div className="rtable-cell--content pdf-content">
                                       <a
                                         href="#"
-                                        className="icon-link payout-icon sm-success-lighten text-success"
-                                        title="View"
+                                        className={`icon-link payout-icon ${
+                                          topic.is_answered ? "text-info" : "text-success"
+                                        }`}
+                                        title={topic.is_answered ? "View Results" : "Take Quiz"}
                                         onClick={(e) => {
                                           e.preventDefault();
                                           fetchQuestionsForTopic(topic.id);
@@ -232,7 +242,7 @@ export default function Questions() {
                                       >
                                         <i
                                           style={{ fontSize: "18px" }}
-                                          className="ri-eye-line"
+                                          className={topic.is_answered ? "ri-eye-line" : "ri-play-circle-line"}
                                         />
                                       </a>
                                     </div>
@@ -246,8 +256,9 @@ export default function Questions() {
                                     handleAnswerChange={handleAnswerChange}
                                     gradesByTopic={gradesByTopic}
                                     setGradesByTopic={setGradesByTopic}
-                                    studentAnswers={studentAnswers} // ✅ pass this in
+                                    studentAnswers={studentAnswers}
                                     fileName={topic.fileName}
+                                    isAnswered={topic.is_answered}
                                   />
                                 )}
                               </React.Fragment>
@@ -255,64 +266,24 @@ export default function Questions() {
                           )}
                         </div>
 
-                        {/* Pagination Component */}
+                        {/* Pagination */}
                         <div className="d-flex justify-content-center mt-20">
                           <nav aria-label="Page navigation">
                             <ul className="pagination">
-                              <li
-                                className={`page-item ${
-                                  pagination.currentPage === 1 ? "disabled" : ""
-                                }`}
-                              >
-                                <button
-                                  className="page-link"
-                                  onClick={() =>
-                                    handlePageChange(pagination.currentPage - 1)
-                                  }
-                                  disabled={pagination.currentPage === 1}
-                                >
+                              <li className={`page-item ${pagination.currentPage === 1 ? "disabled" : ""}`}>
+                                <button className="page-link" onClick={() => handlePageChange(pagination.currentPage - 1)} disabled={pagination.currentPage === 1}>
                                   Previous
                                 </button>
                               </li>
-
-                              {Array.from(
-                                { length: pagination.lastPage },
-                                (_, i) => i + 1
-                              ).map((number) => (
-                                <li
-                                  key={number}
-                                  className={`page-item ${
-                                    pagination.currentPage === number
-                                      ? "active"
-                                      : ""
-                                  }`}
-                                >
-                                  <button
-                                    className="page-link"
-                                    onClick={() => handlePageChange(number)}
-                                  >
+                              {Array.from({ length: pagination.lastPage }, (_, i) => i + 1).map((number) => (
+                                <li key={number} className={`page-item ${pagination.currentPage === number ? "active" : ""}`}>
+                                  <button className="page-link" onClick={() => handlePageChange(number)}>
                                     {number}
                                   </button>
                                 </li>
                               ))}
-
-                              <li
-                                className={`page-item ${
-                                  pagination.currentPage === pagination.lastPage
-                                    ? "disabled"
-                                    : ""
-                                }`}
-                              >
-                                <button
-                                  className="page-link"
-                                  onClick={() =>
-                                    handlePageChange(pagination.currentPage + 1)
-                                  }
-                                  disabled={
-                                    pagination.currentPage ===
-                                    pagination.lastPage
-                                  }
-                                >
+                              <li className={`page-item ${pagination.currentPage === pagination.lastPage ? "disabled" : ""}`}>
+                                <button className="page-link" onClick={() => handlePageChange(pagination.currentPage + 1)} disabled={pagination.currentPage === pagination.lastPage}>
                                   Next
                                 </button>
                               </li>
