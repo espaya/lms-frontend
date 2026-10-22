@@ -1,6 +1,4 @@
 import { useEffect, useState } from "react";
-import Cookies from "js-cookie";
-import { useParams } from "react-router-dom";
 
 export default function EditStepThree({
   formData,
@@ -20,92 +18,64 @@ export default function EditStepThree({
 }) {
   const [isDragging, setIsDragging] = useState(false);
   const apiBase = import.meta.env.VITE_API_URL;
-  const params = useParams();
-  const id = params.id;
 
-  // Load questions from allData into formData
+  // Hydrate formData.questions from allData — preserving `id`
   useEffect(() => {
     if (allData?.length > 0 && allData[0]?.questions) {
-      const questions = allData[0].questions;
-
-      // Format questions for the form
-      const formattedQuestions = questions.map((q) => ({
+      const formattedQuestions = allData[0].questions.map((q) => ({
+        id: q.id, // critical for update sync
         text: q.question_text,
-        options: JSON.parse(q.options || "[]"), // Parse JSON string to array
+        options: Array.isArray(q.options)
+          ? q.options
+          : JSON.parse(q.options || "[]"),
         correctIndex: q.correct_index ?? 0,
       }));
 
-      // Check if formData.questions is empty or needs to be populated
       const hasEmptyQuestions =
         !formData.questions ||
         formData.questions.length === 0 ||
         formData.questions.every((q) => !q.text || !q.text.trim());
 
       if (hasEmptyQuestions) {
-        setFormData((prev) => ({
-          ...prev,
-          questions: formattedQuestions,
-        }));
+        setFormData((prev) => ({ ...prev, questions: formattedQuestions }));
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allData]);
 
-  const handleDragOver = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-  };
-
-  const handleDragEnter = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(true);
-  };
-
-  const handleDragLeave = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragging(false);
-  };
+  const handleDragOver = (e) => { e.preventDefault(); e.stopPropagation(); };
+  const handleDragEnter  = (e) => { e.preventDefault(); e.stopPropagation(); setIsDragging(true); };
+  const handleDragLeave  = (e) => { e.preventDefault(); e.stopPropagation(); setIsDragging(false); };
 
   const handleFileDrop = (e) => {
     e.preventDefault();
     e.stopPropagation();
     setIsDragging(false);
-
     const files = Array.from(e.dataTransfer.files).filter(
-      (file) => file.type === "application/pdf"
+      (f) => f.type === "application/pdf"
     );
-
-    if (files.length > 0) {
-      // Accept only the first file
-      setUploadedFiles([files[0]]);
-    }
+    if (files.length > 0) setUploadedFiles([files[0]]);
   };
 
   const handleFileSelect = (e) => {
     const files = Array.from(e.target.files).filter(
-      (file) => file.type === "application/pdf"
+      (f) => f.type === "application/pdf"
     );
-
-    if (files.length > 0) {
-      setUploadedFiles([files[0]]);
-    }
+    if (files.length > 0) setUploadedFiles([files[0]]);
   };
 
-  const removeFile = () => {
-    setUploadedFiles([]);
-  };
+  const removeFile = () => setUploadedFiles([]);
 
   return (
     <>
       <h4>Step 3: Edit Questions</h4>
 
-      {/* Display current PDF filename from database */}
       {allData?.length > 0 && allData[0]?.fileName && (
         <div className="alert alert-info mb-3">
           <strong>Current PDF:</strong>{" "}
           <a
             target="_blank"
+            rel="noreferrer"
             href={`${apiBase}/storage/questions/${allData[0].fileName}`}
           >
             {allData[0].fileName}
@@ -119,7 +89,7 @@ export default function EditStepThree({
         </div>
       )}
 
-      {/* Drag & Drop Upload */}
+      {/* Drag & Drop */}
       <div
         onDragOver={handleDragOver}
         onDragEnter={handleDragEnter}
@@ -146,16 +116,15 @@ export default function EditStepThree({
       </div>
 
       {/* PDF Preview */}
-      {uploadedFiles.length > 0 ? (
-        // ✅ Show newly uploaded files
-        <div className="mt-3">
-          {uploadedFiles.map((file, index) => (
+      {uploadedFiles.length > 0
+        ? uploadedFiles.map((file, index) => (
             <div key={index} className="mb-3 border p-2 rounded">
               <div className="d-flex justify-content-between align-items-center mb-2">
                 <strong>{file.name}</strong>
                 <button
+                  type="button"
                   className="btn btn-sm btn-danger"
-                  onClick={() => removeFile(index)} // pass index so it removes the right file
+                  onClick={removeFile}
                 >
                   Remove
                 </button>
@@ -167,28 +136,24 @@ export default function EditStepThree({
                 height="200px"
               />
             </div>
-          ))}
-        </div>
-      ) : (
-        // ✅ Show existing file if no new files uploaded
-        allData[0]?.fileName && (
-          <div className="mt-3 mb-3 border p-2 rounded">
-            <strong>Existing File</strong>
-            <embed
-              src={`${apiBase}/storage/questions/${allData[0].fileName}`} // adjust path to your backend storage
-              type="application/pdf"
-              width="100%"
-              height="200px"
-            />
-          </div>
-        )
-      )}
+          ))
+        : allData?.[0]?.fileName && (
+            <div className="mt-3 mb-3 border p-2 rounded">
+              <strong>Existing File</strong>
+              <embed
+                src={`${apiBase}/storage/questions/${allData[0].fileName}`}
+                type="application/pdf"
+                width="100%"
+                height="200px"
+              />
+            </div>
+          )}
 
-      {/* Questions Section */}
+      {/* Questions */}
       {formData.questions && formData.questions.length > 0 ? (
         formData.questions.map((q, qIndex) => (
           <div
-            key={qIndex}
+            key={q.id ?? `new-${qIndex}`}
             className="mb-4 p-3 border rounded position-relative"
           >
             <button
@@ -203,7 +168,7 @@ export default function EditStepThree({
                 errors.questions ? "is-invalid" : ""
               }`}
               placeholder={`Question ${qIndex + 1}`}
-              value={q.text || ""} // Add fallback for undefined
+              value={q.text || ""}
               onChange={(e) => updateQuestionText(qIndex, e.target.value)}
             />
             {q.options && q.options.length > 0 ? (
@@ -215,7 +180,7 @@ export default function EditStepThree({
                       errors.options ? "is-invalid" : ""
                     }`}
                     placeholder={`Option ${optIndex + 1}`}
-                    value={opt || ""} // Add fallback for undefined
+                    value={opt || ""}
                     onChange={(e) =>
                       updateOption(qIndex, optIndex, e.target.value)
                     }
@@ -240,7 +205,6 @@ export default function EditStepThree({
         <div className="alert alert-info">No questions available</div>
       )}
 
-      {/* Add Question Button */}
       <button
         type="button"
         className="btn btn-secondary me-2"
@@ -249,7 +213,6 @@ export default function EditStepThree({
         + Add Question
       </button>
 
-      {/* Navigation Buttons */}
       <div className="mt-3">
         <button
           type="button"
@@ -261,7 +224,7 @@ export default function EditStepThree({
         <button
           type="button"
           className="btn btn-success"
-          onClick={handleSubmit}
+          onClick={() => handleSubmit()}
           disabled={loading}
         >
           {loading ? (

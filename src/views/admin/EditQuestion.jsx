@@ -23,6 +23,7 @@ export default function EditQuestion() {
     topics: [""],
     questions: [
       {
+        id: null,
         text: "",
         options: ["", "", "", ""],
         correctIndex: 0,
@@ -32,83 +33,87 @@ export default function EditQuestion() {
 
   // === Topic Functions ===
   const addTopic = () => {
-    setFormData((prev) => ({
-      ...prev,
-      topics: [...prev.topics, ""],
-    }));
+    setFormData((prev) => ({ ...prev, topics: [...prev.topics, ""] }));
   };
 
   const updateTopic = (index, value) => {
-    const updated = [...formData.topics];
-    updated[index] = value;
-    setFormData((prev) => ({ ...prev, topics: updated }));
+    setFormData((prev) => {
+      const topics = [...prev.topics];
+      topics[index] = value;
+      return { ...prev, topics };
+    });
   };
 
   const removeTopic = (index) => {
     if (formData.topics.length > 1) {
-      const updated = [...formData.topics];
-      updated.splice(index, 1);
-      setFormData((prev) => ({ ...prev, topics: updated }));
+      setFormData((prev) => {
+        const topics = [...prev.topics];
+        topics.splice(index, 1);
+        return { ...prev, topics };
+      });
     }
   };
 
-  // === Question Functions ===
+  // === Question Functions (all spread the question so `id` survives) ===
   const addQuestion = () => {
     setFormData((prev) => ({
       ...prev,
       questions: [
         ...prev.questions,
-        {
-          text: "",
-          options: ["", "", "", ""],
-          correctIndex: 0,
-        },
+        { id: null, text: "", options: ["", "", "", ""], correctIndex: 0 },
       ],
     }));
   };
 
   const updateQuestionText = (qIndex, text) => {
-    const updated = [...formData.questions];
-    updated[qIndex].text = text;
-    setFormData((prev) => ({ ...prev, questions: updated }));
+    setFormData((prev) => {
+      const questions = [...prev.questions];
+      questions[qIndex] = { ...questions[qIndex], text };
+      return { ...prev, questions };
+    });
   };
 
   const updateOption = (qIndex, optIndex, value) => {
-    const updated = [...formData.questions];
-    updated[qIndex].options[optIndex] = value;
-    setFormData((prev) => ({ ...prev, questions: updated }));
+    setFormData((prev) => {
+      const questions = [...prev.questions];
+      const options = [...questions[qIndex].options];
+      options[optIndex] = value;
+      questions[qIndex] = { ...questions[qIndex], options };
+      return { ...prev, questions };
+    });
   };
 
   const updateCorrectAnswer = (qIndex, correctIndex) => {
-    const updated = [...formData.questions];
-    updated[qIndex].correctIndex = correctIndex;
-    setFormData((prev) => ({ ...prev, questions: updated }));
+    setFormData((prev) => {
+      const questions = [...prev.questions];
+      questions[qIndex] = { ...questions[qIndex], correctIndex };
+      return { ...prev, questions };
+    });
   };
 
   const removeQuestion = (qIndex) => {
     if (formData.questions.length > 1) {
-      const updated = [...formData.questions];
-      updated.splice(qIndex, 1);
-      setFormData((prev) => ({ ...prev, questions: updated }));
+      setFormData((prev) => {
+        const questions = [...prev.questions];
+        questions.splice(qIndex, 1);
+        return { ...prev, questions };
+      });
     }
   };
 
-  // === Form Validation ===
+  // === Validation ===
   const validateForm = () => {
     const newErrors = {};
 
     if (!formData.subject.trim()) {
       newErrors.subject = "Subject is required";
     }
-
     if (formData.topics.some((topic) => !topic.trim())) {
       newErrors.topics = "All topics must have content";
     }
-
     if (formData.questions.some((q) => !q.text.trim())) {
       newErrors.questions = "All questions must have content";
     }
-
     if (formData.questions.some((q) => q.options.some((opt) => !opt.trim()))) {
       newErrors.options = "All options must have content";
     }
@@ -125,7 +130,6 @@ export default function EditQuestion() {
     setErrors({});
 
     try {
-      // Get CSRF token first
       await fetch(`${apiBase}/sanctum/csrf-cookie`, {
         credentials: "include",
       });
@@ -133,9 +137,7 @@ export default function EditQuestion() {
       const csrfToken = Cookies.get("XSRF-TOKEN");
       const authToken = localStorage.getItem("auth_token");
 
-      if (!authToken) {
-        throw new Error("Authentication token not found");
-      }
+      if (!authToken) throw new Error("Authentication token not found");
 
       const payload = new FormData();
       payload.append("subject", formData.subject);
@@ -144,15 +146,20 @@ export default function EditQuestion() {
         payload.append(`topics[${i}]`, topic)
       );
 
-      formData.questions.forEach((q, i) => {
-        payload.append(`questions[${i}][text]`, q.text);
-        q.options.forEach((opt, j) => {
-          payload.append(`questions[${i}][options][${j}]`, opt);
-        });
-        payload.append(`questions[${i}][correctIndex]`, q.correctIndex);
-      });
+      // ⬇ Send questions as JSON string WITH id — matches backend update()
+      payload.append(
+        "questions",
+        JSON.stringify(
+          formData.questions.map((q) => ({
+            id: q.id ?? null,
+            text: q.text,
+            options: q.options,
+            correctIndex: q.correctIndex,
+          }))
+        )
+      );
 
-      // Append only one file
+      // Optional replacement PDF
       if (uploadedFiles.length > 0) {
         payload.append("file", uploadedFiles[0]);
       }
@@ -171,37 +178,39 @@ export default function EditQuestion() {
         }
       );
 
-      // Handle empty or non-JSON responses
       const responseText = await response.text();
       const result = responseText ? JSON.parse(responseText) : {};
 
       if (!response.ok) {
+        // Handle 422 validation errors properly
+        if (response.status === 422 && result.errors) {
+          setErrors(
+            Object.fromEntries(
+              Object.entries(result.errors).map(([k, v]) => [k, v[0]])
+            )
+          );
+          throw new Error(result.message || "Please fix the errors above");
+        }
         throw new Error(
           result.message ||
             result.errors?.join?.("\n") ||
-            "Failed to upload questions"
+            "Failed to update questions"
         );
       }
 
-      // Success handling
       await Swal.fire({
         title: "Success!",
-        text: result.message || "Questions uploaded successfully",
+        text: result.message || "Quiz updated successfully",
         icon: "success",
         confirmButtonText: "OK",
       });
 
-      // Reset form
-      setStep(1);
-      setFormData({
-        subject: "",
-        topics: [""],
-        questions: [{ text: "", options: ["", "", "", ""], correctIndex: 0 }],
-      });
+      // Edit flow → return to the list, don't blank the form
+      window.location.href = "/admin/dashboard/all-questions";
     } catch (error) {
       Swal.fire({
         title: "Error!",
-        text: error.message || "An error occurred during upload",
+        text: error.message || "An error occurred during update",
         icon: "error",
         confirmButtonText: "OK",
       });
@@ -210,7 +219,7 @@ export default function EditQuestion() {
     }
   };
 
-  // Get all 
+  // === Fetch topic ===
   useEffect(() => {
     const fetchQuestionData = async () => {
       try {
@@ -235,17 +244,19 @@ export default function EditQuestion() {
         const data = await res.json();
 
         if (!res.ok) {
-          setErrors({ generla: data.message });
+          setErrors({ general: data.message }); // ⬅ was "generla"
         } else {
-          setAllData(data || []);
+          // Defensive: accept either an object or an array-with-one-item
+          setAllData(Array.isArray(data) ? data : data ? [data] : []);
         }
       } catch (err) {
-        console.error("Error fetching subjects:", err);
+        console.error("Error fetching topic:", err);
+        setErrors({ general: err.message });
       }
     };
 
     fetchQuestionData();
-  }, []);
+  }, [apiBase, id]);
 
   // === UI ===
   return (
@@ -273,13 +284,9 @@ export default function EditQuestion() {
                 <div className="col-auto">
                   <div className="breadcrumbs">
                     <a href="#">Home </a>
-                    <span>
-                      <i className="ri-arrow-right-s-line" />
-                    </span>
+                    <span><i className="ri-arrow-right-s-line" /></span>
                     <a href="#">Manage Questions</a>
-                    <span>
-                      <i className="ri-arrow-right-s-line" />
-                    </span>
+                    <span><i className="ri-arrow-right-s-line" /></span>
                     <a href="#">Add Questions</a>
                   </div>
                   <div className="d-flex justify-content-between align-items-center">
@@ -324,24 +331,22 @@ export default function EditQuestion() {
                 )}
 
                 {step === 3 && (
-                  <>
-                    <EditStepThree
-                      formData={formData}
-                      errors={errors}
-                      loading={loading}
-                      addQuestion={addQuestion}
-                      handleSubmit={handleSubmit}
-                      removeQuestion={removeQuestion}
-                      setStep={setStep}
-                      updateQuestionText={updateQuestionText}
-                      updateOption={updateOption}
-                      updateCorrectAnswer={updateCorrectAnswer}
-                      uploadedFiles={uploadedFiles}
-                      setUploadedFiles={setUploadedFiles}
-                      setFormData={setFormData}
-                      allData={allData}
-                    />
-                  </>
+                  <EditStepThree
+                    formData={formData}
+                    errors={errors}
+                    loading={loading}
+                    addQuestion={addQuestion}
+                    handleSubmit={handleSubmit}
+                    removeQuestion={removeQuestion}
+                    setStep={setStep}
+                    updateQuestionText={updateQuestionText}
+                    updateOption={updateOption}
+                    updateCorrectAnswer={updateCorrectAnswer}
+                    uploadedFiles={uploadedFiles}
+                    setUploadedFiles={setUploadedFiles}
+                    setFormData={setFormData}
+                    allData={allData}
+                  />
                 )}
               </div>
             </div>
