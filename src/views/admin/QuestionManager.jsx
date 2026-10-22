@@ -116,7 +116,7 @@ export default function QuestionManager() {
   };
 
   // === Submit ===
-  const handleSubmit = async () => {
+  const handleSubmit = async (schedule = null) => {
     if (!validateForm()) return;
 
     setLoading(true);
@@ -139,7 +139,7 @@ export default function QuestionManager() {
       payload.append("subject", formData.subject);
 
       formData.topics.forEach((topic, i) =>
-        payload.append(`topics[${i}]`, topic)
+        payload.append(`topics[${i}]`, topic),
       );
 
       formData.questions.forEach((q, i) => {
@@ -155,6 +155,18 @@ export default function QuestionManager() {
         payload.append("file", uploadedFiles[0]);
       }
 
+      // ⬇ NEW: Append the schedule data if the admin clicked "Schedule Quiz"
+      if (schedule) {
+        payload.append(
+          "schedule",
+          JSON.stringify({
+            startDate: schedule.startDate,
+            endDate: schedule.endDate,
+            durationMinutes: schedule.durationMinutes,
+          }),
+        );
+      }
+
       const response = await fetch(
         `${apiBase}/api/admin/dashboard/upload-questions`,
         {
@@ -166,7 +178,7 @@ export default function QuestionManager() {
           },
           body: payload,
           credentials: "include",
-        }
+        },
       );
 
       // Handle empty or non-JSON responses
@@ -177,7 +189,7 @@ export default function QuestionManager() {
         throw new Error(
           result.message ||
             result.errors?.join?.("\n") ||
-            "Failed to upload questions"
+            "Failed to upload questions",
         );
       }
 
