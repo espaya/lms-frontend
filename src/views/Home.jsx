@@ -14,7 +14,7 @@ export default function Home() {
     email: "",
     password: "",
     remember: false,
-    captcha_token: "",
+    // captcha_token: "",
   });
 
   const [showPassword, setShowPassword] = useState(false);
@@ -30,27 +30,27 @@ export default function Home() {
     }));
   };
 
-  const handleCaptchaChange = (token) => {
-    setFormData((prev) => ({
-      ...prev,
-      captcha_token: token || "",
-    }));
-  };
+  // const handleCaptchaChange = (token) => {
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     captcha_token: token || "",
+  //   }));
+  // };
 
   const handleOnSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
 
     // ✅ Skip captcha validation in localhost
-    if (!isLocalhost && !formData.captcha_token) {
-      setErrors({ general: "Please complete the captcha" });
-      return;
-    }
+    // if (!isLocalhost && !formData.captcha_token) {
+    //   setErrors({ general: "Please complete the captcha" });
+    //   return;
+    // }
 
     try {
       const userData = await login({
         ...formData,
-        captcha_token: isLocalhost ? "bypass_local" : formData.captcha_token, // send bypass token for local
+        // captcha_token: isLocalhost ? "bypass_local" : formData.captcha_token, // send bypass token for local
       });
 
       if (userData?.role) {
@@ -58,7 +58,7 @@ export default function Home() {
           email: "",
           password: "",
           remember: false,
-          captcha_token: "",
+          // captcha_token: "",
         });
 
         if (!isLocalhost) {
@@ -178,7 +178,7 @@ export default function Home() {
                     </div>
 
                     {/* ✅ Google reCAPTCHA */}
-                    {!isLocalhost && (
+                    {/* {!isLocalhost && (
                       <div className="my-3">
                         <ReCAPTCHA
                           sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
@@ -186,7 +186,7 @@ export default function Home() {
                           ref={captchaRef}
                         />
                       </div>
-                    )}
+                    )} */}
 
                     <div className="mt-16 d-grid gap-2">
                       <button
