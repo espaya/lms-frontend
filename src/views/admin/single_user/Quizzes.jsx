@@ -7,21 +7,27 @@ import { useParams } from "react-router-dom";
 import Pagination from "../../../components/Pagination";
 
 export default function Quizzes() {
-  const [showDropdown, setShowDropdown] = useState(false);
+  // ⬇ Changed from boolean to store the ID of the open row
+  const [openDropdownId, setOpenDropdownId] = useState(null);
   const dropdownRef = useRef(null);
+  
   const [errors, setErrors] = useState({});
   const [quizzes, setQuizzes] = useState([]);
   const apiBase = import.meta.env.VITE_API_URL;
   const { username } = useParams();
   const [loading, setLoading] = useState(false);
 
-  const toggleDropdown = () => setShowDropdown((prev) => !prev);
+  // Toggle logic specifically for the clicked row
+  const toggleDropdown = (id) => {
+    setOpenDropdownId((prevId) => (prevId === id ? null : id));
+  };
 
   // Close dropdown on outside click
   useEffect(() => {
     const handleClickOutside = (event) => {
+      // If the click is outside the dropdown container, close it
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setShowDropdown(false);
+        setOpenDropdownId(null);
       }
     };
 
@@ -29,9 +35,9 @@ export default function Quizzes() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  //   Get quiz reports for this user
+  // Get quiz reports for this user
   useEffect(() => {
-    const Quizzes = async () => {
+    const fetchQuizzes = async () => {
       setErrors({});
       setLoading(true);
       try {
@@ -71,7 +77,7 @@ export default function Quizzes() {
         setLoading(false);
       }
     };
-    Quizzes();
+    fetchQuizzes();
   }, [apiBase, username]);
 
   return (
@@ -153,18 +159,20 @@ export default function Quizzes() {
                               </div>
 
                               {/* Export Icon Button */}
+                              {/* ⬇ We use quiz.id (or index if id is missing) */}
                               <div
                                 className="position-relative"
-                                ref={dropdownRef}
+                                ref={openDropdownId === (quiz.id || index) ? dropdownRef : null}
                               >
                                 <button
                                   className="btn btn-primary"
-                                  onClick={toggleDropdown}
+                                  onClick={() => toggleDropdown(quiz.id || index)}
                                 >
                                   <i className="ri-download-2-line" />
                                 </button>
 
-                                {showDropdown && (
+                                {/* ⬇ Only show if this specific row is open */}
+                                {openDropdownId === (quiz.id || index) && (
                                   <ul
                                     className="dropdown-menu show"
                                     style={{
