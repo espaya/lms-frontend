@@ -33,6 +33,18 @@ export default function Sidebar() {
             </a>
           </li>
 
+          <li className={isActive(PATHS.ADMIN_FORMS) ? "active" : ""}>
+            <a
+              onClick={() => navigate(PATHS.ADMIN_FORMS)}
+              style={{ cursor: "pointer" }}
+            >
+              <span>
+                <i className="ri-file-text-fill" />
+              </span>
+              <span className="nav-text">Forms & Documents</span>
+            </a>
+          </li>
+
           <li
             className={`nav-item dropdown ${
               isActive(PATHS.ALL_QUESTIONS) || isActive(PATHS.QUESTION_MANAGER)

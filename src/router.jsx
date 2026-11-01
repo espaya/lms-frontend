@@ -59,7 +59,6 @@ import SignedEmployeeOrientation from "./views/admin/forms/employee_orientation/
 import SignedEmployeeReferenceCheck from "./views/admin/forms/employee_reference_check/SignedEmployeeReferenceCheck";
 import SignedHealthSafety from "./views/admin/forms/health_safety/SignedHealthSafety";
 import SignedInfectionControl from "./views/admin/forms/infection_control/SignedInfectionControl";
-// import SignedMainForms from "./views/admin/forms/main/SignedMainForms";
 import SignedMainForms from "./views/admin/forms/main/SignedMain";
 import SignedNonCompete from "./views/admin/forms/non_compete/SignedNonCompete";
 import SignedPolicyProcedure from "./views/admin/forms/policy_procedure/SignedPolicyProcedure";
@@ -73,6 +72,8 @@ import ForgotPassword from "./views/ForgotPassword";
 import ResetPassword from "./views/ResetPassword";
 import EmployeeHandbook from "./views/student/forms/EmployeeHandbook";
 import SignedEmployeeHandbook from "./views/admin/forms/employee_handbook/SignedEmployeeHandbook";
+import AdminForms from "./views/admin/forms/AdminForms";
+import AdminUploadForms from "./views/admin/forms/AdminUploadForms";
 
 // Centralized route configuration with metadata
 export const ROUTE_CONFIG = {
@@ -132,6 +133,22 @@ export const ROUTE_CONFIG = {
     name: "Question Manager",
     isProtected: true,
     roles: ["ADMIN"], // ✅ restrict to ADMIN only
+  },
+
+  ADMIN_FORMS: {
+    path: "/admin/dashboard/system-forms", // ⬅ Changed from "/forms"
+    element: <AdminForms />,
+    name: "Admin Forms",
+    isProtected: true,
+    roles: ["ADMIN"],
+  },
+
+  ADMIN_UPLOAD_FORMS: {
+    path: "/admin/dashboard/system-forms/upload", // ⬅ Changed from "/upload-forms"
+    element: <AdminUploadForms />,
+    name: "Admin Upload Forms",
+    isProtected: true,
+    roles: ["ADMIN"],
   },
 
   REPORTS: {
@@ -409,10 +426,10 @@ export const ROUTE_CONFIG = {
 
   SIGNED_EMPLOYEE_HANDBOOK: {
     path: "/admin/dashboard/users/:username/forms/employee-handbook",
-    element: <SignedEmployeeHandbook/>,
+    element: <SignedEmployeeHandbook />,
     name: "Employee Handbook",
     isProtected: true,
-    roles: ["ADMIN"]
+    roles: ["ADMIN"],
   },
   // End signed forms for admin
 
