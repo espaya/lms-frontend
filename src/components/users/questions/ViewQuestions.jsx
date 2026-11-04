@@ -30,13 +30,33 @@ export default function ViewQuestions({
   const csrfToken = Cookies.get("XSRF-TOKEN");
   const [answered, setAnswered] = useState({});
 
+  // ⬇ SAFE PARSER: Prevents React from crashing on malformed DB strings
+  const safeParseOptions = (options) => {
+    if (Array.isArray(options)) return options; // Already an array
+    
+    if (typeof options === "string") {
+      try {
+        const parsed = JSON.parse(options);
+        // If JSON.parse returns a string (double-encoded), try parsing it again
+        if (typeof parsed === "string") {
+          return JSON.parse(parsed);
+        }
+        return Array.isArray(parsed) ? parsed : [parsed];
+      } catch (e) {
+        // If it's a plain string like "A. using a...", wrap it in an array
+        return [options];
+      }
+    }
+    return [];
+  };
+
   const clearSignature = () => {
     sigPadRef.current.clear();
     setSignature("");
   };
 
   useEffect(() => {
-    // get sumitted answers
+    // get submitted answers
     fetchSubmittedAnswers(
       topic,
       setSubmittedAnswers,
@@ -213,6 +233,9 @@ export default function ViewQuestions({
                         is_correct,
                       } = answer;
 
+                      // ⬇ Use the safe parser here
+                      const parsedOptions = safeParseOptions(options);
+
                       return (
                         <li key={id} className="list-group-item">
                           <strong>Q{index + 1}:</strong> {question_text}{" "}
@@ -228,8 +251,8 @@ export default function ViewQuestions({
                             </span>
                           )}
                           <div>
-                            {Array.isArray(options) && options.length > 0 ? (
-                              options.map((opt, i) => {
+                            {parsedOptions.length > 0 ? (
+                              parsedOptions.map((opt, i) => {
                                 const isUserChoice = i === user_answer;
                                 const isRightAnswer = i === correct_index;
 
@@ -290,14 +313,8 @@ export default function ViewQuestions({
                     })
                   : // ANSWERING MODE
                     questions.map((question, qIndex) => {
-                      let options = question.options;
-                      if (typeof options === "string") {
-                        try {
-                          options = JSON.parse(options);
-                        } catch {
-                          options = [];
-                        }
-                      }
+                      // ⬇ Use the safe parser here as well
+                      const options = safeParseOptions(question.options);
 
                       return (
                         <li key={question.id} className="list-group-item">
