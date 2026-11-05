@@ -4,6 +4,7 @@ import Sidebar from "./Sidebar";
 import { useEffect, useRef, useState } from "react";
 import Cookies from "js-cookie";
 import ExportReport from "./admin/ExportReport";
+import  {formatDate}  from "../utils/DateFormatter";
 
 export default function PreviewReport() {
   // fixing things here
@@ -34,7 +35,7 @@ export default function PreviewReport() {
               Accept: "application/json",
               "Content-Type": "application/json",
             },
-          }
+          },
         );
 
         const data = await response.json(); // Added await here
@@ -61,10 +62,10 @@ export default function PreviewReport() {
   const reports = Array.isArray(previewReport)
     ? previewReport
     : previewReport?.data
-    ? Array.isArray(previewReport.data)
-      ? previewReport.data
-      : [previewReport.data]
-    : [];
+      ? Array.isArray(previewReport.data)
+        ? previewReport.data
+        : [previewReport.data]
+      : [];
 
   return (
     <>
@@ -186,7 +187,7 @@ export default function PreviewReport() {
                                 <div className="rtable-cell--content date-content">
                                   {report.total > 0
                                     ? Math.round(
-                                        (report.score / report.total) * 100
+                                        (report.score / report.total) * 100,
                                       )
                                     : 0}
                                   %
@@ -220,15 +221,7 @@ export default function PreviewReport() {
                               <div className="rtable-cell card-cell">
                                 <div className="rtable-cell--heading">Date</div>
                                 <div className="rtable-cell--content replay-link-content">
-                                  {new Date(
-                                    report.created_at
-                                  ).toLocaleDateString("en-US", {
-                                    month: "short",
-                                    day: "numeric",
-                                    year: "numeric",
-                                    hour: "2-digit",
-                                    minute: "2-digit",
-                                  })}
+                                  {formatDate(report.created_at)}
                                 </div>
                               </div>
                             </div>
@@ -257,7 +250,7 @@ export default function PreviewReport() {
                               <td>
                                 {report.total > 0
                                   ? Math.round(
-                                      (report.score / report.total) * 100
+                                      (report.score / report.total) * 100,
                                     )
                                   : 0}
                                 %
@@ -276,7 +269,7 @@ export default function PreviewReport() {
                                     year: "numeric",
                                     hour: "2-digit",
                                     minute: "2-digit",
-                                  }
+                                  },
                                 )}
                               </td>
                             </tr>
