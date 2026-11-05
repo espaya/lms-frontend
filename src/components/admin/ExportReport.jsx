@@ -1,4 +1,3 @@
-import html2pdf from "html2pdf.js";
 import Cookies from "js-cookie";
 import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
@@ -6,43 +5,60 @@ import { saveAs } from "file-saver";
 export default function ExportReport({ reportRef, reports }) {
   const apiBase = import.meta.env.VITE_API_URL;
 
-  // Helper function to convert image URL to Base64
-  const getBase64Image = async (url) => {
-    try {
-      const response = await fetch(url);
-      const blob = await response.blob();
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onloadend = () => resolve(reader.result);
-        reader.onerror = reject;
-        reader.readAsDataURL(blob);
-      });
-    } catch (err) {
-      console.error("Failed to load image:", url);
-      return ""; // Return empty if image fails
-    }
+  // 1. Helper: Load, Resize, and Convert Image to Base64
+  const getResizedBase64Image = (url, maxWidth = 150, maxHeight = 60) => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.crossOrigin = "Anonymous";
+      img.src = url;
+
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        let width = img.width;
+        let height = img.height;
+
+        // Calculate aspect ratio to fit within max dimensions
+        if (width > maxWidth) {
+          height = Math.floor(height * (maxWidth / width));
+          width = maxWidth;
+        }
+        if (height > maxHeight) {
+          width = Math.floor(width * (maxHeight / height));
+          height = maxHeight;
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, width, height);
+
+        // Set exact physical dimensions for Word
+        const base64 = canvas.toDataURL("image/png");
+        resolve(`<img src="${base64}" width="${width}" height="${height}" style="width: ${width}px; height: ${height}px;" />`);
+      };
+
+      img.onerror = () => resolve("Not signed");
+    });
   };
 
   const exportToWord = async () => {
     try {
-      // 1. Fetch all signature images and convert to Base64
-      const reportsWithBase64 = await Promise.all(
+      // 2. Process all images in parallel
+      const processedReports = await Promise.all(
         reports.map(async (report) => {
-          let base64Sig = "";
+          let signatureHtml = "Not signed";
           if (report.signature) {
-            // Note: Make sure this matches the exact URL your frontend uses to fetch the image
             const imgUrl = `${apiBase}/view-answer-signature/${report.signature}`;
-            base64Sig = await getBase64Image(imgUrl);
+            signatureHtml = await getResizedBase64Image(imgUrl);
           }
-          return { ...report, base64Sig };
+          return { ...report, signatureHtml };
         })
       );
 
-      // 2. Build the HTML table
-      let tableRows = reportsWithBase64
+      // 3. Build the table rows with explicit widths
+      const tableRows = processedReports
         .map((report) => {
-          const grade =
-            report.total > 0 ? Math.round((report.score / report.total) * 100) : 0;
+          const grade = report.total > 0 ? Math.round((report.score / report.total) * 100) : 0;
           const dateStr = new Date(report.created_at).toLocaleDateString("en-US", {
             month: "short",
             day: "numeric",
@@ -51,38 +67,44 @@ export default function ExportReport({ reportRef, reports }) {
             minute: "2-digit",
           });
 
+          // Use explicit widths on <td> and valign="middle" to keep things centered
           return `
             <tr>
-              <td>
+              <td width="25%" valign="middle">
                 <strong>${report.profile?.full_name || report.user?.name}</strong><br/>
-                <span style="color: #666; font-size: 10pt;">${report.user?.email || ""}</span>
+                <span style="color: #666; font-size: 9pt;">${report.user?.email || ""}</span>
               </td>
-              <td>${report.topic?.name || "Untitled"}</td>
-              <td>${grade}%</td>
-              <td style="text-align: center;">
-                ${
-                  report.base64Sig
-                    ? `<img src="${report.base64Sig}" style="max-height: 50px; max-width: 120px;" />`
-                    : "Not signed"
-                }
+              <td width="30%" valign="middle">
+                ${report.topic?.name || "Untitled"}
               </td>
-              <td>${dateStr}</td>
+              <td width="10%" valign="middle" align="center">
+                ${grade}%
+              </td>
+              <td width="20%" valign="middle" align="center">
+                ${report.signatureHtml}
+              </td>
+              <td width="15%" valign="middle">
+                ${dateStr}
+              </td>
             </tr>
           `;
         })
         .join("");
 
+      // 4. Wrap in Word-compatible HTML
       const htmlContent = `
         <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
         <head>
           <meta charset='utf-8'>
           <title>Quiz Report</title>
           <style>
-            body { font-family: Arial, sans-serif; font-size: 11pt; }
-            h2 { text-align: center; color: #333; }
-            table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-            th, td { border: 1px solid #000; padding: 8px; text-align: left; vertical-align: middle; }
-            th { background-color: #f2f2f2; font-weight: bold; }
+            /* Ensure the table is constrained and text wraps nicely */
+            @page { size: 8.5in 11in; margin: 1in; }
+            body { font-family: 'Arial', sans-serif; font-size: 10pt; line-height: 1.3; }
+            h2 { text-align: center; color: #333; font-size: 16pt; }
+            table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+            th, td { border: 1px solid #000; padding: 6px; vertical-align: middle; word-wrap: break-word; }
+            th { background-color: #f2f2f2; font-weight: bold; text-align: left; font-size: 11pt; }
           </style>
         </head>
         <body>
@@ -90,11 +112,11 @@ export default function ExportReport({ reportRef, reports }) {
           <table>
             <thead>
               <tr>
-                <th>Name</th>
-                <th>Topic</th>
-                <th>Grade</th>
-                <th>Signature</th>
-                <th>Date</th>
+                <th width="25%">Name</th>
+                <th width="30%">Topic</th>
+                <th width="10%">Grade</th>
+                <th width="20%">Signature</th>
+                <th width="15%">Date</th>
               </tr>
             </thead>
             <tbody>
@@ -105,14 +127,13 @@ export default function ExportReport({ reportRef, reports }) {
         </html>
       `;
 
-      // 3. Create and download the .doc file
       const blob = new Blob(["\ufeff", htmlContent], {
         type: "application/msword",
       });
       saveAs(blob, "Quiz_Report.doc");
     } catch (error) {
       console.error("Word export failed:", error);
-      alert("Failed to export to Word. Check the console.");
+      alert("Failed to export to Word.");
     }
   };
 
@@ -166,7 +187,6 @@ export default function ExportReport({ reportRef, reports }) {
             Export to Excel
           </button>
         </li>
-        {/* You can re-add the PDF button here if you get the backend route working */}
       </ul>
     </div>
   );
