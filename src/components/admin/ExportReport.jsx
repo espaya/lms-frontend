@@ -1,6 +1,7 @@
 import Cookies from "js-cookie";
 import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
+import { formatDate } from "../../utils/DateFormatter";
 
 export default function ExportReport({ reportRef, reports }) {
   const apiBase = import.meta.env.VITE_API_URL;
@@ -34,7 +35,9 @@ export default function ExportReport({ reportRef, reports }) {
 
         // Set exact physical dimensions for Word
         const base64 = canvas.toDataURL("image/png");
-        resolve(`<img src="${base64}" width="${width}" height="${height}" style="width: ${width}px; height: ${height}px;" />`);
+        resolve(
+          `<img src="${base64}" width="${width}" height="${height}" style="width: ${width}px; height: ${height}px;" />`
+        );
       };
 
       img.onerror = () => resolve("Not signed");
@@ -55,19 +58,15 @@ export default function ExportReport({ reportRef, reports }) {
         })
       );
 
-      // 3. Build the table rows with explicit widths
+      // 3. Build the table rows
       const tableRows = processedReports
         .map((report) => {
-          const grade = report.total > 0 ? Math.round((report.score / report.total) * 100) : 0;
-          const dateStr = new Date(report.created_at).toLocaleDateString("en-US", {
-            month: "short",
-            day: "numeric",
-            year: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
-          });
+          const grade =
+            report.total > 0
+              ? Math.round((report.score / report.total) * 100)
+              : 0;
+          const dateStr = formatDate(report.created_at);
 
-          // Use explicit widths on <td> and valign="middle" to keep things centered
           return `
             <tr>
               <td width="25%" valign="middle">
@@ -91,24 +90,30 @@ export default function ExportReport({ reportRef, reports }) {
         })
         .join("");
 
-      // 4. Wrap in Word-compatible HTML
+      // Get the topic name dynamically from the first report (if available)
+      const topicName = reports[0]?.topic?.name || "All Topics";
+
+      // 4. Wrap in Word-compatible HTML (Added <!DOCTYPE html> to fix literal <table> tags)
       const htmlContent = `
+        <!DOCTYPE html>
         <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
         <head>
           <meta charset='utf-8'>
           <title>Quiz Report</title>
           <style>
-            /* Ensure the table is constrained and text wraps nicely */
             @page { size: 8.5in 11in; margin: 1in; }
             body { font-family: 'Arial', sans-serif; font-size: 10pt; line-height: 1.3; }
-            h2 { text-align: center; color: #333; font-size: 16pt; }
+            h1 { text-align: center; color: #333; font-size: 18pt; margin-bottom: 5px; }
+            h3 { text-align: center; color: #555; font-size: 14pt; margin-top: 0; margin-bottom: 20px; font-weight: normal; }
             table { width: 100%; border-collapse: collapse; table-layout: fixed; }
-            th, td { border: 1px solid #000; padding: 6px; vertical-align: middle; word-wrap: break-word; }
+            th, td { border: 1px solid #000; padding: 8px; vertical-align: middle; word-wrap: break-word; }
             th { background-color: #f2f2f2; font-weight: bold; text-align: left; font-size: 11pt; }
           </style>
         </head>
         <body>
-          <h2>Quiz Report Preview</h2>
+          <h1>Quiz Report</h1>
+          <h3>${topicName}</h3>
+          
           <table>
             <thead>
               <tr>
@@ -130,7 +135,7 @@ export default function ExportReport({ reportRef, reports }) {
       const blob = new Blob(["\ufeff", htmlContent], {
         type: "application/msword",
       });
-      saveAs(blob, "Quiz_Report.doc");
+      saveAs(blob, `Quiz_Report_${topicName.replace(/\s+/g, '_')}.doc`);
     } catch (error) {
       console.error("Word export failed:", error);
       alert("Failed to export to Word.");
@@ -180,11 +185,6 @@ export default function ExportReport({ reportRef, reports }) {
         <li>
           <button className="dropdown-item" onClick={exportToWord}>
             Export to Word
-          </button>
-        </li>
-        <li>
-          <button className="dropdown-item" onClick={exportToExcel}>
-            Export to Excel
           </button>
         </li>
       </ul>
