@@ -138,36 +138,6 @@ export default function ExportReport({ reportRef, reports }) {
     }
   };
 
-  const exportToExcel = async () => {
-    try {
-      const workbook = new ExcelJS.Workbook();
-      const worksheet = workbook.addWorksheet("Report Data");
-
-      // Add Headers
-      worksheet.addRow(["Name", "Email", "Grade", "Date"]);
-
-      // Add Data
-      reports.forEach((report) => {
-        const grade = report.total > 0 ? `${Math.round((report.score / report.total) * 100)}%` : "0%";
-        const dateStr = formatDate(report.created_at);
-
-        worksheet.addRow([
-          report.profile?.full_name || report.user?.name || "User",
-          report.user?.email || "",
-          grade,
-          dateStr
-        ]);
-      });
-
-      const buffer = await workbook.xlsx.writeBuffer();
-      const blob = new Blob([buffer], {
-        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      });
-      saveAs(blob, "Quiz_Report.xlsx");
-    } catch (error) {
-      console.error("Excel export failed:", error);
-    }
-  };
 
   return (
     <div className="dropdown">
@@ -184,11 +154,6 @@ export default function ExportReport({ reportRef, reports }) {
         <li>
           <button className="dropdown-item" onClick={exportToWord}>
             Export to Word
-          </button>
-        </li>
-        <li>
-          <button className="dropdown-item" onClick={exportToExcel}>
-            Export to Excel
           </button>
         </li>
       </ul>
