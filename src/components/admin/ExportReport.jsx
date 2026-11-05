@@ -58,7 +58,7 @@ export default function ExportReport({ reportRef, reports }) {
         })
       );
 
-      // 3. Build the table rows
+      // 3. Build the table rows (Topic column REMOVED)
       const tableRows = processedReports
         .map((report) => {
           const grade =
@@ -69,20 +69,17 @@ export default function ExportReport({ reportRef, reports }) {
 
           return `
             <tr>
-              <td width="25%" valign="middle">
+              <td width="35%" valign="middle">
                 <strong>${report.profile?.full_name || report.user?.name}</strong><br/>
                 <span style="color: #666; font-size: 9pt;">${report.user?.email || ""}</span>
               </td>
-              <td width="30%" valign="middle">
-                ${report.topic?.name || "Untitled"}
-              </td>
-              <td width="10%" valign="middle" align="center">
+              <td width="15%" valign="middle" align="center">
                 ${grade}%
               </td>
-              <td width="20%" valign="middle" align="center">
+              <td width="25%" valign="middle" align="center">
                 ${report.signatureHtml}
               </td>
-              <td width="15%" valign="middle">
+              <td width="25%" valign="middle">
                 ${dateStr}
               </td>
             </tr>
@@ -93,7 +90,7 @@ export default function ExportReport({ reportRef, reports }) {
       // Get the topic name dynamically from the first report (if available)
       const topicName = reports[0]?.topic?.name || "All Topics";
 
-      // 4. Wrap in Word-compatible HTML (Added <!DOCTYPE html> to fix literal <table> tags)
+      // 4. Wrap in Word-compatible HTML
       const htmlContent = `
         <!DOCTYPE html>
         <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
@@ -117,11 +114,10 @@ export default function ExportReport({ reportRef, reports }) {
           <table>
             <thead>
               <tr>
-                <th width="25%">Name</th>
-                <th width="30%">Topic</th>
-                <th width="10%">Grade</th>
-                <th width="20%">Signature</th>
-                <th width="15%">Date</th>
+                <th width="35%">Name</th>
+                <th width="15%">Grade</th>
+                <th width="25%">Signature</th>
+                <th width="25%">Date</th>
               </tr>
             </thead>
             <tbody>
@@ -144,20 +140,23 @@ export default function ExportReport({ reportRef, reports }) {
 
   const exportToExcel = async () => {
     try {
-      const element = reportRef?.current;
-      if (!element) return;
-      const table = element.querySelector("table");
-      if (!table) return;
-
       const workbook = new ExcelJS.Workbook();
       const worksheet = workbook.addWorksheet("Report Data");
-      const rows = Array.from(table.querySelectorAll("tr"));
 
-      rows.forEach((row) => {
-        const cells = Array.from(row.querySelectorAll("th, td")).map(
-          (cell) => cell.innerText
-        );
-        worksheet.addRow(cells);
+      // Add Headers
+      worksheet.addRow(["Name", "Email", "Grade", "Date"]);
+
+      // Add Data
+      reports.forEach((report) => {
+        const grade = report.total > 0 ? `${Math.round((report.score / report.total) * 100)}%` : "0%";
+        const dateStr = formatDate(report.created_at);
+
+        worksheet.addRow([
+          report.profile?.full_name || report.user?.name || "User",
+          report.user?.email || "",
+          grade,
+          dateStr
+        ]);
       });
 
       const buffer = await workbook.xlsx.writeBuffer();
@@ -185,6 +184,11 @@ export default function ExportReport({ reportRef, reports }) {
         <li>
           <button className="dropdown-item" onClick={exportToWord}>
             Export to Word
+          </button>
+        </li>
+        <li>
+          <button className="dropdown-item" onClick={exportToExcel}>
+            Export to Excel
           </button>
         </li>
       </ul>
