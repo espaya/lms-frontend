@@ -202,7 +202,6 @@ export default function PreviewReport() {
                                     <img
                                       id="signature"
                                       src={`${apiBase}/view-answer-signature/${report.signature}`}
-                                      // src={`${apiBase}/storage/signature/${report.signature}`}
                                       alt="Signature"
                                       className="img-thumbnail"
                                       onError={(e) => {
@@ -229,53 +228,6 @@ export default function PreviewReport() {
                         )}
                       </div>
 
-                      {/* Hidden HTML table for Excel export */}
-                      <table style={{ display: "none" }}>
-                        <thead>
-                          <tr>
-                            <th>Name</th>
-                            <th>Topic</th>
-                            <th>Grade</th>
-                            <th>Signature</th>
-                            <th>Date</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {reports.map((report) => (
-                            <tr
-                              key={`excel-${report.user_id}-${report.topic_id}`}
-                            >
-                              <td>{report.user?.name || "User"}</td>
-                              <td>{report.topic?.name || "Untitled"}</td>
-                              <td>
-                                {report.total > 0
-                                  ? Math.round(
-                                      (report.score / report.total) * 100,
-                                    )
-                                  : 0}
-                                %
-                              </td>
-                              <td>
-                                {report.signature
-                                  ? `${apiBase}/storage/signature/${report.signature}`
-                                  : "Not signed"}
-                              </td>
-                              <td>
-                                {new Date(report.created_at).toLocaleDateString(
-                                  "en-US",
-                                  {
-                                    month: "short",
-                                    day: "numeric",
-                                    year: "numeric",
-                                    hour: "2-digit",
-                                    minute: "2-digit",
-                                  },
-                                )}
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
                     </div>
                   </div>
                 </div>
