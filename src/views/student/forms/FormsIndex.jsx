@@ -57,6 +57,7 @@ export default function FormsIndex() {
   const [precautions, setPrecautions] = useState([]);
   const [verification, setVerification] = useState([]);
   const [handbook, setHandbook] = useState([]);
+
   useEffect(() => {
     fetchApplicationForms(setDocument, setLoading, apiBase, setErrors);
     FetchAttendance(apiBase, setLoading, setErrors, getAttendance);
@@ -89,7 +90,6 @@ export default function FormsIndex() {
     FetechEmployeeHandbook(setLoading, setErrors, setHandbook, apiBase);
   }, []);
 
-
   const forms = [
     {
       application: {
@@ -98,161 +98,138 @@ export default function FormsIndex() {
         form: documents?.employmentApplication,
         created_at: documents?.employmentApplication?.created_at,
       },
-
       attendace: {
         name: "Attendance, Tardiness, Absenteeism & Leave",
         url: PATHS.USER_ATTENDANCE_FORM,
         form: attendace?.attendanceData,
         created_at: attendace?.attendanceData?.created_at,
       },
-
       cellular_use: {
         name: "Employee Safety (Cellular Phone Use)",
         url: PATHS.USER_EMPLOYEE_CELLULAR_USE_FORM,
         form: cellular?.empSafety,
         created_at: cellular?.empSafety?.created_at,
       },
-
       confidentiality: {
         name: "Confidentiality of Information Agreement",
         url: PATHS.USER_CONFIDENTIALITY_FORM,
         form: confidentiality?.confidentiality,
         created_at: confidentiality?.confidentiality?.created_at,
       },
-
       criminal: {
         name: "Criminal History Search",
         url: PATHS.USER_CRIMINAL_FORM,
         form: criminal?.criminalHistory,
         created_at: criminal?.criminalHistory?.created_at,
       },
-
       disclaimer: {
         name: "Disclaimer And Waiver Of Liability",
         url: PATHS.USER_DISCLAIMER_FORM,
         form: disclaimer?.disclaimer,
         created_at: disclaimer?.disclaimer?.created_at,
       },
-
       disclosure: {
         name: "Sworn Disclosure Statement",
         url: PATHS.USER_DISCLOSURE_FORM,
         form: disclosure?.sworn,
         created_at: disclosure?.sworn?.created_at,
       },
-
       dress_code: {
         name: "Employee Dress Code",
         url: PATHS.USER_EMPLOYEE_DRESS_CODE_FORM,
         form: dressCode?.dressCode,
         created_at: dressCode?.dressCode?.created_at,
       },
-
       drug_testing: {
         name: "Drug Testing Policy",
         url: PATHS.USER_DRUG_TESTING_FORM,
         form: drugTesting?.drugTesting,
         created_at: drugTesting?.drugTesting?.created_at,
       },
-
       employee_agreement: {
         name: "Employee Agreement",
         url: PATHS.USER_EMPLOYEE_AGREEMENT_FORM,
         form: agreement?.agree,
         created_at: agreement?.agree?.created_at,
       },
-
       employee_conduct: {
         name: "Employee Notification of Policy: Employee Conduct",
         url: PATHS.USER_EMPLOYEE_CONDUCT_FORM,
         form: conduct?.empConduct,
         created_at: conduct?.empConduct?.created_at,
       },
-
       employee_handbook: {
         name: "Employee Handbook",
         url: PATHS.USER_EMPLOYEE_HANDBOOK_FORM,
         form: handbook?.handbook,
         created_at: handbook?.handbook?.created_at,
       },
-
       employee_orientation: {
         name: "Employee Orientation",
         url: PATHS.USER_EMPLOYEE_ORIENTATION_FORM,
         form: orientation?.employeeOrientation,
         created_at: orientation?.employeeOrientation?.created_at,
       },
-
       health_safety: {
         name: "Health & Safety Agreement",
         url: PATHS.USER_EMPLOYEE_HEALTH_SAFETY_FORM,
         form: health?.healthData,
         created_at: health?.healthData?.created_at,
       },
-
       hha: {
         name: "Home Health Aide",
         url: PATHS.USER_HHA_FORM,
         form: HHA?.homeHealthData,
         created_at: HHA?.homeHealthData?.created_at,
       },
-
       infection_control: {
         name: "Infection Control Agreement",
         url: PATHS.USER_INFECTION_CONTROL_FORM,
         form: infection?.infectionData,
         created_at: infection?.infectionData?.created_at,
       },
-
       non_compete: {
         name: "Non-Compete Agreement",
         url: PATHS.USER_NON_COMPETE_FORM,
         form: nonCompete?.nonCompete,
         created_at: nonCompete?.nonCompete?.created_at,
       },
-
       policy_procedure: {
         name: "Policies And Procedures Orientation Acknowledgement",
         url: PATHS.USER_POLICIES_PROCEDURES_FORM,
         form: policy?.policy,
         created_at: policy?.policy?.created_at,
       },
-
       reference_check: {
         name: "Employee Reference Check",
         url: PATHS.USER_EMPLOYEE_REFERENCE_CHECK_FORM,
         form: reference?.empRefCheck,
         created_at: reference?.empRefCheck?.created_at,
       },
-
       reporting: {
         name: "Reporting: Abuse/Neglect/Exploitation",
         url: PATHS.USER_REPORTING_FORM,
         form: reporting?.reportingData,
         created_at: reporting?.reportingData?.created_at,
       },
-
       sexual_harassment: {
         name: "Sexual Harassment",
         url: PATHS.USER_SEXUAL_HARASSMENT_FORM,
         form: sexual?.sexualData,
         created_at: sexual?.sexualData?.created_at,
       },
-
       smoking: {
         name: "Employee Notification of Policy: Smoking in The Workplace",
         url: PATHS.USER_SMOKING_FORM,
         form: smoking?.smoking,
         created_at: smoking?.smoking?.created_at,
       },
-
       universal_precautions: {
         name: "Universal Precautions Training Document",
         url: PATHS.USER_UNIVERSAL_PRECAUTIONS_FORM,
         form: precautions?.precautionsData,
         created_at: precautions?.precautionsData?.created_at,
       },
-
       verification: {
         name: "Verification of Professional License",
         url: PATHS.USER_VERIFICATION_FORM,
@@ -262,8 +239,8 @@ export default function FormsIndex() {
     },
   ];
 
-  // flatten the object into an array
-  const formList = Object.values(forms[0]);
+  // flatten the object into an array and FILTER OUT forms that have a `form` value
+  const formList = Object.values(forms[0]).filter((f) => !f.form);
 
   return (
     <>
@@ -300,85 +277,86 @@ export default function FormsIndex() {
               <div className="col-12">
                 <div className="card transparent">
                   <div className="card-body">
-                    <div className="rtable rtable--5cols rtable--collapse">
-                      <div className="rtable-row rtable-row--head bg-transparent">
-                        <div className="rtable-cell topic-cell column-heading text-dark">
-                          <strong>Form Name</strong>
-                        </div>
-                        <div className="rtable-cell impression-cell column-heading text-dark">
-                          <strong>Signature</strong>
-                        </div>
-                        <div className="rtable-cell sales-cell column-heading text-dark">
-                          <strong>Date Signed</strong>
-                        </div>
-                        <div className="rtable-cell earning-cell column-heading text-dark">
-                          <strong>Action</strong>
-                        </div>
+                    
+                    {/* Added a fallback UI if all forms are signed */}
+                    {formList.length === 0 ? (
+                      <div className="text-center py-5">
+                        <h4 className="text-success mb-2">All Done!</h4>
+                        <p className="text-muted">You have signed all available forms.</p>
                       </div>
-
-                      {formList.map((f, index) => (
-                        <div className="rtable-row" key={index}>
-                          <div className="rtable-cell topic-cell">
-                            <div className="rtable-cell--content title-content d-flex align-items-center">
-                              <i
-                                style={{ marginRight: "10px" }}
-                                className="ri-file-list-3-fill fs-18 text-primary rounded-circle bg-primary-lighten"
-                              ></i>
-                              <span className="topic-cell-span">{f.name}</span>
-                            </div>
+                    ) : (
+                      <div className="rtable rtable--5cols rtable--collapse">
+                        <div className="rtable-row rtable-row--head bg-transparent">
+                          <div className="rtable-cell topic-cell column-heading text-dark">
+                            <strong>Form Name</strong>
                           </div>
-                          <div className="rtable-cell impression-cell">
-                            <div className="rtable-cell--heading">
-                              Signature
+                          <div className="rtable-cell impression-cell column-heading text-dark">
+                            <strong>Signature</strong>
+                          </div>
+                          <div className="rtable-cell sales-cell column-heading text-dark">
+                            <strong>Date Signed</strong>
+                          </div>
+                          <div className="rtable-cell earning-cell column-heading text-dark">
+                            <strong>Action</strong>
+                          </div>
+                        </div>
+
+                        {formList.map((f, index) => (
+                          <div className="rtable-row" key={index}>
+                            <div className="rtable-cell topic-cell">
+                              <div className="rtable-cell--content title-content d-flex align-items-center">
+                                <i
+                                  style={{ marginRight: "10px" }}
+                                  className="ri-file-list-3-fill fs-18 text-primary rounded-circle bg-primary-lighten"
+                                ></i>
+                                <span className="topic-cell-span">{f.name}</span>
+                              </div>
                             </div>
-                            <div className="rtable-cell--content replay-link-content ">
-                              {f.form ? (
-                                <a
-                                  className="icon mx-16 my-16 py-8 px-8 rounded-circle bg-primary-lighten"
-                                  href="#"
-                                >
-                                  <i className="ri-check-line fs-18 text-primary"></i>
-                                </a>
-                              ) : (
+                            <div className="rtable-cell impression-cell">
+                              <div className="rtable-cell--heading">
+                                Signature
+                              </div>
+                              <div className="rtable-cell--content replay-link-content ">
+                                {/* Because we filter out signed forms, this will ALWAYS be red (unsigned) now */}
                                 <a
                                   className="icon mx-16 my-16 py-8 px-8 rounded-circle bg-danger-lighten"
                                   href="#"
                                 >
                                   <i className="ri-close-line fs-18 text-danger"></i>
                                 </a>
-                              )}
+                              </div>
+                            </div>
+                            <div className="rtable-cell rtable-cell--foot sales-cell">
+                              <div className="rtable-cell--heading">
+                                Date Signed
+                              </div>
+                              <div className="rtable-cell--content earning-content">
+                                {formatDate(f.created_at) ?? "N/A"}
+                              </div>
+                            </div>
+                            <div className="rtable-cell rtable-cell--foot earning-cell">
+                              <div className="rtable-cell--heading">Actions</div>
+                              <div className="rtable-cell--content earning-content">
+                                {f.url ? (
+                                  <Link
+                                    to={{ pathname: f.url }}
+                                    className="icon-link payout-icon sm-success-lighten text-success"
+                                    title="View"
+                                  >
+                                    <i
+                                      className="ri-eye-line"
+                                      style={{ fontSize: "18px" }}
+                                    ></i>
+                                  </Link>
+                                ) : (
+                                  <span className="text-muted">N/A</span>
+                                )}
+                              </div>
                             </div>
                           </div>
-                          <div className="rtable-cell rtable-cell--foot sales-cell">
-                            <div className="rtable-cell--heading">
-                              Date Signed
-                            </div>
-                            <div className="rtable-cell--content earning-content">
-                              {formatDate(f.created_at) ?? "N/A"}
-                            </div>
-                          </div>
-                          <div className="rtable-cell rtable-cell--foot earning-cell">
-                            <div className="rtable-cell--heading">Actions</div>
-                            <div className="rtable-cell--content earning-content">
-                              {f.url ? (
-                                <Link
-                                  to={{ pathname: f.url }}
-                                  className="icon-link payout-icon sm-success-lighten text-success"
-                                  title="View"
-                                >
-                                  <i
-                                    className="ri-eye-line"
-                                    style={{ fontSize: "18px" }}
-                                  ></i>
-                                </Link>
-                              ) : (
-                                <span className="text-muted">N/A</span>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
