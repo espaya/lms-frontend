@@ -199,7 +199,7 @@ export default function MyHeader() {
                           </div>
                         </div>
                       </div>
-                      <a
+                      {/* <a
                         className="dropdown-item ps-20 pe-20 pt-10 pb-10 d-flex align-items-center border-top  undefined"
                         href="profile.html"
                       >
@@ -234,7 +234,7 @@ export default function MyHeader() {
                           <i className="ri-lock-line" />
                         </span>
                         Lock
-                      </a>
+                      </a> */}
                       <a
                         className="dropdown-item ps-20 pe-20 pt-10 pb-10 d-flex align-items-center border-top  text-danger"
                         href="#"
