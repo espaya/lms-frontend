@@ -42,7 +42,7 @@ const getAvatar = (email) => {
 };
 
   return (
-    <div className="col-lg-6 col-xl-8">
+    <div className="col-lg-12 col-xl-12">
       <div className="card">
         <div className="card-header">
           <h5 className="card-title">Recent Users</h5>

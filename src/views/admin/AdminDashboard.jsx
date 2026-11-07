@@ -54,31 +54,6 @@ export default function AdminDashboard() {
               <TotalFormsSigned />
               <Graph />
               <Notification />
-
-              <div className="col-lg-6 col-xl-4 ">
-                <div className="card">
-                  <div className="card-header">
-                    <h4 className="card-title">Total Sales</h4>
-                  </div>
-                  <div className="card-body">
-                    <div className="chartjs-size-monitor">
-                      <div className="chartjs-size-monitor-expand">
-                        <div className="" />
-                      </div>
-                      <div className="chartjs-size-monitor-shrink">
-                        <div className="" />
-                      </div>
-                    </div>
-                    <canvas
-                      id="TotalSales"
-                      height={305}
-                      style={{ display: "block", width: 410, height: 305 }}
-                      width={410}
-                      className="chartjs-render-monitor"
-                    />
-                  </div>
-                </div>
-              </div>
               <RecentUsers />
               <QuickQctions />
               <UsersLocation />
