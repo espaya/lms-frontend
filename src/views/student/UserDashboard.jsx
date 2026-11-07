@@ -70,7 +70,6 @@ export default function UserDashboard() {
   const [recentQuizzes, setRecentQuizzes] = useState([]);
 
   // Fetch Quizzes
-  // Fetch Quizzes
   const fetchQuizzes = async () => {
     try {
       const response = await fetch(`${apiBase}/api/user/quizzes?page=1`, {
@@ -87,20 +86,17 @@ export default function UserDashboard() {
       const data = await response.json();
 
       if (response.ok && data.data) {
-        // Flatten the data: Quizzes -> Topics
         const flattenedTopics = data.data.flatMap((quiz) =>
           quiz.topics.map((topic) => {
-            // Check if answered (handles both boolean true and integer 1)
             const isAnswered =
               topic.is_answered === true || topic.is_answered === 1;
 
-            // Calculate score safely
             let calculatedScore = null;
             if (isAnswered && topic.total > 0) {
               calculatedScore =
                 Math.round((topic.score / topic.total) * 100) + "%";
             } else if (isAnswered) {
-              calculatedScore = "0%"; // If answered but total is 0
+              calculatedScore = "0%";
             }
 
             return {
@@ -125,7 +121,6 @@ export default function UserDashboard() {
       setLoading(true);
       try {
         await Promise.all([
-          // Fetch Forms
           fetchApplicationForms(setDocument, setLoading, apiBase, setErrors),
           FetchAttendance(apiBase, setLoading, setErrors, getAttendance),
           FetchCellularUse(setCellular, setLoading, setErrors, apiBase),
@@ -190,8 +185,6 @@ export default function UserDashboard() {
             apiBase,
           ),
           FetechEmployeeHandbook(setLoading, setErrors, setHandbook, apiBase),
-
-          // Fetch Quizzes
           fetchQuizzes(),
         ]);
       } catch (err) {
@@ -204,12 +197,10 @@ export default function UserDashboard() {
     fetchAllData();
   }, [apiBase]);
 
-  // Helper to check if a form is signed based on the API response structure
   const isSigned = (formState, propName) => {
     return formState && formState[propName] ? true : false;
   };
 
-  // Define all forms and map them to their specific API response property
   const formList = [
     {
       name: "Application For Employment",
@@ -280,7 +271,10 @@ export default function UserDashboard() {
   const totalForms = formList.length;
   const signedFormsCount = formList.filter((f) => f.signed).length;
   const pendingFormsCount = totalForms - signedFormsCount;
-  const complianceStatus = pendingFormsCount === 0 ? "Complete" : "In Progress";
+
+  // Calculate Percentage
+  const compliancePercentage =
+    totalForms === 0 ? 0 : Math.round((signedFormsCount / totalForms) * 100);
 
   // Calculate Quiz Metrics
   const pendingQuizzesCount = recentQuizzes.filter(
@@ -345,11 +339,13 @@ export default function UserDashboard() {
             )}
 
             {/* Top Stat Widgets */}
-            <div className="row">
+            <div className="row mt-20">
               {/* Pending Forms */}
               <div className="col-xl-3 col-lg-6 col-sm-6">
                 <div className="widget-stat card">
-                  <div className="card-body p-4">
+                  <div className="card-body p-50">
+                    {" "}
+                    {/* Increased padding */}
                     <div className="media ai-icon">
                       <span className="me-3 bgl-danger text-danger">
                         <svg
@@ -384,7 +380,9 @@ export default function UserDashboard() {
               {/* Signed Forms */}
               <div className="col-xl-3 col-lg-6 col-sm-6">
                 <div className="widget-stat card">
-                  <div className="card-body p-4">
+                  <div className="card-body p-50">
+                    {" "}
+                    {/* Increased padding */}
                     <div className="media ai-icon">
                       <span className="me-3 bgl-success text-success">
                         <svg
@@ -417,7 +415,9 @@ export default function UserDashboard() {
               {/* Pending Quizzes */}
               <div className="col-xl-3 col-lg-6 col-sm-6">
                 <div className="widget-stat card">
-                  <div className="card-body p-4">
+                  <div className="card-body p-50">
+                    {" "}
+                    {/* Increased padding */}
                     <div className="media ai-icon">
                       <span className="me-3 bgl-warning text-warning">
                         <svg
@@ -445,13 +445,15 @@ export default function UserDashboard() {
                 </div>
               </div>
 
-              {/* Compliance Status */}
-              <div className="col-xl-3 col-lg-6 col-sm-6">
+              {/* Compliance Status (Progress Bar) */}
+              <div className="col-xl-3 col-lg-6 col-sm-6 ">
                 <div className="widget-stat card">
-                  <div className="card-body p-4">
-                    <div className="media ai-icon">
+                  <div className="card-body p-45">
+                    {" "}
+                    {/* Increased padding */}
+                    <div className="media ai-icon mb-3">
                       <span
-                        className={`me-3 ${complianceStatus === "Complete" ? "bgl-success text-success" : "bgl-primary text-primary"}`}
+                        className={`me-3 ${compliancePercentage === 100 ? "bgl-success text-success" : "bgl-primary text-primary"}`}
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -470,9 +472,20 @@ export default function UserDashboard() {
                       <div className="media-body">
                         <p className="mb-1">Compliance Status</p>
                         <h4 className="mb-0">
-                          {loading ? "..." : complianceStatus}
+                          {loading ? "..." : `${compliancePercentage}%`}
                         </h4>
                       </div>
+                    </div>
+                    {/* Progress Bar */}
+                    <div className="progress mt-2" style={{ height: "8px" }}>
+                      <div
+                        className={`progress-bar ${compliancePercentage === 100 ? "bg-success" : "bg-primary"}`}
+                        role="progressbar"
+                        style={{ width: `${compliancePercentage}%` }}
+                        aria-valuenow={compliancePercentage}
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                      ></div>
                     </div>
                   </div>
                 </div>
@@ -492,7 +505,7 @@ export default function UserDashboard() {
                       View All
                     </Link>
                   </div>
-                  <div className="card-body">
+                  <div className="card-body p-50">
                     <div className="table-responsive">
                       <table className="table table-responsive-md">
                         <thead>
@@ -540,7 +553,6 @@ export default function UserDashboard() {
                                 <td>{quiz.name}</td>
                                 <td>{quiz.date}</td>
                                 <td>
-                                  {/* Check explicitly for null/undefined so 0% shows up */}
                                   {quiz.score !== null &&
                                   quiz.score !== undefined ? (
                                     <span className="badge light badge-success">
