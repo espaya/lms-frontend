@@ -96,10 +96,10 @@ export default function StepThree({
 
     const start = new Date(startDate);
 
-    if (start < new Date()) {
-      setScheduleError("Start date/time cannot be in the past.");
-      return;
-    }
+    // if (start < new Date()) {
+    //   setScheduleError("Start date/time cannot be in the past.");
+    //   return;
+    // }
 
     if (endDate) {
       const end = new Date(endDate);
@@ -330,7 +330,6 @@ export default function StepThree({
                   name="startDate"
                   value={scheduleData.startDate}
                   onChange={handleScheduleChange}
-                  min={new Date().toISOString().slice(0, 16)}
                   required
                 />
                 <small className="text-muted">
