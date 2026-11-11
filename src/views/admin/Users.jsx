@@ -276,7 +276,7 @@ export default function Users() {
                                     }
                                     style={{ fontSize: "16px" }}
                                     href="#"
-                                    className="btn btn-sm btn-info"
+                                    className="btn btn-sm btn-info text-white"
                                     title="Mark as Previous Employee"
                                   >
                                     <i className="ri-draft-fill"></i>
