@@ -114,6 +114,49 @@ export default function Users() {
     }
   };
 
+  const handleMarkAsPreviousEmployee = async (id) => {
+    setErrors({});
+    try {
+      Swal.fire({
+        title: "Confirm",
+        text: "Are you sure you want to mark this user as a previous employee?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes",
+        cancelButtonText: "No",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          const response = await fetch(
+            `${apiBase}/api/user/mark-previous/${id}`,
+            {
+              method: "POST",
+              credentials: "include",
+              headers: {
+                Accept: "application/json",
+                "X-XSRF-TOKEN": decodeURIComponent(Cookies.get("XSRF-TOKEN")),
+                Authorization: `Bearer ${authToken}`,
+              },
+            },
+          );
+
+          const data = await response.json();
+
+          if (!response.ok) {
+            setErrors({ general: data.message });
+            return;
+          }
+          Swal.fire({
+            title: "Success",
+            icon: "success",
+            text: data.message,
+          });
+        }
+      });
+    } catch (err) {
+      setErrors({ general: err.message });
+    }
+  };
+
   return (
     <>
       <title>Users - 1staccess Home Care</title>
@@ -196,7 +239,7 @@ export default function Users() {
                               <div className="rtable-cell date-cell">
                                 <div className="rtable-cell--content">
                                   {new Date(
-                                    user.created_at
+                                    user.created_at,
                                   ).toLocaleDateString()}
                                 </div>
                               </div>
@@ -219,13 +262,25 @@ export default function Users() {
                                     }} // add marginRight for spacing
                                     to={`${PATHS.SINGLE_USER.replace(
                                       ":username",
-                                      user.name
+                                      user.name,
                                     )}`}
                                     className="btn btn-sm btn-primary"
                                     title="View User"
                                   >
                                     <i className="ri-eye-line" />
                                   </Link>
+
+                                  <a
+                                    onClick={() =>
+                                      handleMarkAsPreviousEmployee(user.id)
+                                    }
+                                    style={{ fontSize: "16px" }}
+                                    href="#"
+                                    className="btn btn-sm btn-info"
+                                    title="Mark as Previous Employee"
+                                  >
+                                    <i className="ri-draft-fill"></i>
+                                  </a>
 
                                   <a
                                     onClick={() =>
