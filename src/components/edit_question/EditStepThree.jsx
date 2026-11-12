@@ -19,6 +19,15 @@ export default function EditStepThree({
   const [isDragging, setIsDragging] = useState(false);
   const apiBase = import.meta.env.VITE_API_URL;
 
+  // ---- Schedule modal state ----
+  const [isScheduleModalOpen, setIsScheduleModalOpen] = useState(false);
+  const [scheduleData, setScheduleData] = useState({
+    startDate: "",
+    endDate: "",
+    durationMinutes: "",
+  });
+  const [scheduleError, setScheduleError] = useState("");
+
   // Hydrate formData.questions from allData — preserving `id`
   useEffect(() => {
     if (allData?.length > 0 && allData[0]?.questions) {
@@ -43,28 +52,91 @@ export default function EditStepThree({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allData]);
 
-  const handleDragOver = (e) => { e.preventDefault(); e.stopPropagation(); };
-  const handleDragEnter  = (e) => { e.preventDefault(); e.stopPropagation(); setIsDragging(true); };
-  const handleDragLeave  = (e) => { e.preventDefault(); e.stopPropagation(); setIsDragging(false); };
+  // ---- Drag & Drop handlers ----
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+  const handleDragEnter = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  };
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  };
 
   const handleFileDrop = (e) => {
     e.preventDefault();
     e.stopPropagation();
     setIsDragging(false);
     const files = Array.from(e.dataTransfer.files).filter(
-      (f) => f.type === "application/pdf"
+      (f) => f.type === "application/pdf",
     );
     if (files.length > 0) setUploadedFiles([files[0]]);
   };
 
   const handleFileSelect = (e) => {
     const files = Array.from(e.target.files).filter(
-      (f) => f.type === "application/pdf"
+      (f) => f.type === "application/pdf",
     );
     if (files.length > 0) setUploadedFiles([files[0]]);
   };
 
   const removeFile = () => setUploadedFiles([]);
+
+  // ---- Option 1: Save & make available immediately ----
+  const handleSaveNow = () => {
+    // No schedule → parent publishes the quiz right away (clears schedule)
+    handleSubmit();
+  };
+
+  // ---- Option 2: Schedule for a specific date ----
+  const handleScheduleChange = (e) => {
+    const { name, value } = e.target;
+    setScheduleData((prev) => ({ ...prev, [name]: value }));
+    if (scheduleError) setScheduleError("");
+  };
+
+  const handleScheduleSubmit = (e) => {
+    e.preventDefault();
+
+    const { startDate, endDate, durationMinutes } = scheduleData;
+
+    if (!startDate) {
+      setScheduleError("Please select a start date/time.");
+      return;
+    }
+
+    const start = new Date(startDate);
+
+    // We allow past dates for backdating, but if an end date is set, it must be after the start date
+    if (endDate) {
+      const end = new Date(endDate);
+      if (end <= start) {
+        setScheduleError("End date/time must be after the start date/time.");
+        return;
+      }
+    }
+
+    // Convert to ISO string so the backend knows the exact timezone
+    handleSubmit({
+      startDate: start.toISOString(),
+      endDate: endDate ? new Date(endDate).toISOString() : null,
+      durationMinutes: durationMinutes ? Number(durationMinutes) : null,
+    });
+
+    setIsScheduleModalOpen(false);
+    setScheduleData({ startDate: "", endDate: "", durationMinutes: "" });
+    setScheduleError("");
+  };
+
+  const closeScheduleModal = () => {
+    setIsScheduleModalOpen(false);
+    setScheduleError("");
+  };
 
   return (
     <>
@@ -213,34 +285,173 @@ export default function EditStepThree({
         + Add Question
       </button>
 
-      <div className="mt-3">
-        <button
-          type="button"
-          className="btn btn-secondary me-2"
-          onClick={() => setStep(2)}
-        >
-          Back
-        </button>
-        <button
-          type="button"
-          className="btn btn-success"
-          onClick={() => handleSubmit()}
-          disabled={loading}
-        >
-          {loading ? (
-            <>
-              <span
-                className="spinner-border spinner-border-sm me-2"
-                role="status"
-                aria-hidden="true"
-              ></span>
-              Submitting...
-            </>
-          ) : (
-            "Update"
-          )}
-        </button>
+      {/* =============================== */}
+      {/* PUBLISHING OPTIONS */}
+      {/* =============================== */}
+      <div className="mt-4 p-3 border rounded bg-light mt-20">
+        <p className="mb-2 fw-semibold">When should this quiz be available?</p>
+        <div className="d-flex flex-wrap gap-2">
+          {/* 1) SAVE — Available now */}
+          <button
+            type="button"
+            className="btn btn-success"
+            onClick={handleSaveNow}
+            disabled={loading}
+            title="Publish this quiz and make it available immediately"
+          >
+            {loading ? (
+              <>
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                Saving...
+              </>
+            ) : (
+              "Save (Available Now)"
+            )}
+          </button>
+
+          {/* 2) SCHEDULE — Available on a specific date */}
+          <button
+            type="button"
+            className="btn btn-danger"
+            onClick={() => setIsScheduleModalOpen(true)}
+            disabled={loading}
+            title="Choose a start date for this quiz"
+          >
+            Schedule Quiz
+          </button>
+
+          {/* Back */}
+          <button
+            type="button"
+            className="btn btn-info ms-auto"
+            onClick={() => setStep(2)}
+            disabled={loading}
+          >
+            Back
+          </button>
+        </div>
       </div>
+
+      {/* ========================================== */}
+      {/* SCHEDULE QUIZ MODAL OVERLAY */}
+      {/* ========================================== */}
+      {isScheduleModalOpen && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 1050,
+          }}
+        >
+          <div
+            className="bg-white rounded shadow-lg"
+            style={{ width: "100%", maxWidth: "500px", padding: "20px" }}
+          >
+            <div className="d-flex justify-content-between align-items-center mb-3">
+              <h5 className="mb-0">Schedule Quiz</h5>
+              <button
+                type="button"
+                className="btn-close"
+                onClick={closeScheduleModal}
+              />
+            </div>
+
+            {scheduleError && (
+              <div className="alert alert-danger py-2">{scheduleError}</div>
+            )}
+
+            <form onSubmit={handleScheduleSubmit}>
+              <div className="mb-3">
+                <label className="form-label">Start Date &amp; Time</label>
+                <input
+                  type="datetime-local"
+                  className="form-control"
+                  name="startDate"
+                  value={scheduleData.startDate}
+                  onChange={handleScheduleChange}
+                  required
+                />
+                <small className="text-muted">
+                  When the quiz will become available.
+                </small>
+              </div>
+
+              <div className="mb-3">
+                <label className="form-label">
+                  End Date &amp; Time{" "}
+                  <span className="text-muted">(Optional)</span>
+                </label>
+                <input
+                  type="datetime-local"
+                  className="form-control"
+                  name="endDate"
+                  value={scheduleData.endDate}
+                  onChange={handleScheduleChange}
+                  min={scheduleData.startDate || undefined}
+                />
+                <small className="text-muted">
+                  Leave blank to keep the quiz available indefinitely (until you
+                  manually close it).
+                </small>
+              </div>
+
+              <div className="mb-4">
+                <label className="form-label">
+                  Time Limit (Minutes){" "}
+                  <span className="text-muted">(Optional)</span>
+                </label>
+                <input
+                  type="number"
+                  className="form-control"
+                  name="durationMinutes"
+                  placeholder="e.g. 60"
+                  value={scheduleData.durationMinutes}
+                  onChange={handleScheduleChange}
+                  min="1"
+                />
+              </div>
+
+              <div className="d-flex justify-content-end gap-2">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={closeScheduleModal}
+                  disabled={loading}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={handleScheduleSubmit}
+                  className="btn btn-danger"
+                  disabled={loading}
+                >
+                  {loading ? (
+                    <>
+                      <span
+                        className="spinner-border spinner-border-sm me-2"
+                        role="status"
+                        aria-hidden="true"
+                      ></span>
+                      Scheduling...
+                    </>
+                  ) : (
+                    "Confirm Schedule"
+                  )}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </>
   );
 }
