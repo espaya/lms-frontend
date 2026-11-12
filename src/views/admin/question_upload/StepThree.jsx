@@ -1,5 +1,16 @@
 import { useState } from "react";
 
+// ⬇ Helper to format backend dates for the datetime-local input
+const formatForInput = (dateString) => {
+  if (!dateString) return "";
+  const d = new Date(dateString);
+  if (isNaN(d.getTime())) return "";
+
+  // Pad month, day, hour, and minute with leading zeros if needed
+  const pad = (n) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+};
+
 export default function StepThree({
   formData,
   errors,
@@ -77,7 +88,19 @@ export default function StepThree({
     handleSubmit();
   };
 
-  // ---- Option 2: Schedule for a future date ----
+  // ---- Option 2: Schedule for a specific date ----
+  const openScheduleModal = () => {
+    // If you want to pre-fill the modal with "now", you can do it here.
+    // For now, it opens blank since this is a new quiz.
+    setScheduleData({
+      startDate: "",
+      endDate: "",
+      durationMinutes: "",
+    });
+    setScheduleError("");
+    setIsScheduleModalOpen(true);
+  };
+
   const handleScheduleChange = (e) => {
     const { name, value } = e.target;
     setScheduleData((prev) => ({ ...prev, [name]: value }));
@@ -96,11 +119,7 @@ export default function StepThree({
 
     const start = new Date(startDate);
 
-    // if (start < new Date()) {
-    //   setScheduleError("Start date/time cannot be in the past.");
-    //   return;
-    // }
-
+    // We allow past dates for backdating, but if an end date is set, it must be after the start date
     if (endDate) {
       const end = new Date(endDate);
       if (end <= start) {
@@ -266,13 +285,13 @@ export default function StepThree({
             )}
           </button>
 
-          {/* 2) SCHEDULE — Available on a future date */}
+          {/* 2) SCHEDULE — Available on a specific date */}
           <button
             type="button"
             className="btn btn-danger"
-            onClick={() => setIsScheduleModalOpen(true)}
+            onClick={openScheduleModal}
             disabled={loading}
-            title="Choose a future start date for this quiz"
+            title="Choose a start date for this quiz"
           >
             Schedule Quiz
           </button>

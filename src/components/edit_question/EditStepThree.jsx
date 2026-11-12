@@ -1,5 +1,16 @@
 import { useEffect, useState } from "react";
 
+// ⬇ Helper to format backend dates for the datetime-local input
+const formatForInput = (dateString) => {
+  if (!dateString) return "";
+  const d = new Date(dateString);
+  if (isNaN(d.getTime())) return "";
+
+  // Pad month, day, hour, and minute with leading zeros if needed
+  const pad = (n) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+};
+
 export default function EditStepThree({
   formData,
   errors,
@@ -19,7 +30,6 @@ export default function EditStepThree({
   const [isDragging, setIsDragging] = useState(false);
   const apiBase = import.meta.env.VITE_API_URL;
 
-  // ---- Schedule modal state ----
   const [isScheduleModalOpen, setIsScheduleModalOpen] = useState(false);
   const [scheduleData, setScheduleData] = useState({
     startDate: "",
@@ -28,11 +38,11 @@ export default function EditStepThree({
   });
   const [scheduleError, setScheduleError] = useState("");
 
-  // Hydrate formData.questions from allData — preserving `id`
+  // Hydrate formData.questions from allData
   useEffect(() => {
     if (allData?.length > 0 && allData[0]?.questions) {
       const formattedQuestions = allData[0].questions.map((q) => ({
-        id: q.id, // critical for update sync
+        id: q.id,
         text: q.question_text,
         options: Array.isArray(q.options)
           ? q.options
@@ -52,7 +62,7 @@ export default function EditStepThree({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [allData]);
 
-  // ---- Drag & Drop handlers ----
+  // ---- Drag & Drop ----
   const handleDragOver = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -87,13 +97,24 @@ export default function EditStepThree({
 
   const removeFile = () => setUploadedFiles([]);
 
-  // ---- Option 1: Save & make available immediately ----
+  // ---- Scheduling ----
   const handleSaveNow = () => {
-    // No schedule → parent publishes the quiz right away (clears schedule)
     handleSubmit();
   };
 
-  // ---- Option 2: Schedule for a specific date ----
+  const openScheduleModal = () => {
+    // ⬇ Pre-fill the modal with existing schedule data (if any)
+    const currentQ = allData?.[0]?.questions?.[0];
+
+    setScheduleData({
+      startDate: formatForInput(currentQ?.available_from),
+      endDate: formatForInput(currentQ?.available_until),
+      durationMinutes: currentQ?.duration_minutes ?? "",
+    });
+    setScheduleError("");
+    setIsScheduleModalOpen(true);
+  };
+
   const handleScheduleChange = (e) => {
     const { name, value } = e.target;
     setScheduleData((prev) => ({ ...prev, [name]: value }));
@@ -102,7 +123,6 @@ export default function EditStepThree({
 
   const handleScheduleSubmit = (e) => {
     e.preventDefault();
-
     const { startDate, endDate, durationMinutes } = scheduleData;
 
     if (!startDate) {
@@ -112,7 +132,6 @@ export default function EditStepThree({
 
     const start = new Date(startDate);
 
-    // We allow past dates for backdating, but if an end date is set, it must be after the start date
     if (endDate) {
       const end = new Date(endDate);
       if (end <= start) {
@@ -121,7 +140,6 @@ export default function EditStepThree({
       }
     }
 
-    // Convert to ISO string so the backend knows the exact timezone
     handleSubmit({
       startDate: start.toISOString(),
       endDate: endDate ? new Date(endDate).toISOString() : null,
@@ -140,6 +158,8 @@ export default function EditStepThree({
 
   return (
     <>
+      {/* ... (Keep all your existing JSX for the Drag&Drop and Questions) ... */}
+
       <h4>Step 3: Edit Questions</h4>
 
       {allData?.length > 0 && allData[0]?.fileName && (
@@ -167,9 +187,7 @@ export default function EditStepThree({
         onDragEnter={handleDragEnter}
         onDragLeave={handleDragLeave}
         onDrop={handleFileDrop}
-        className={`border border-2 border-dashed rounded p-4 text-center mb-3 ${
-          isDragging ? "bg-light" : ""
-        }`}
+        className={`border border-2 border-dashed rounded p-4 text-center mb-3 ${isDragging ? "bg-light" : ""}`}
         style={{ cursor: "pointer", height: "100px" }}
         onClick={() => document.getElementById("fileInput").click()}
       >
@@ -236,9 +254,7 @@ export default function EditStepThree({
             />
             <input
               type="text"
-              className={`form-control mb-2 ${
-                errors.questions ? "is-invalid" : ""
-              }`}
+              className={`form-control mb-2 ${errors.questions ? "is-invalid" : ""}`}
               placeholder={`Question ${qIndex + 1}`}
               value={q.text || ""}
               onChange={(e) => updateQuestionText(qIndex, e.target.value)}
@@ -248,9 +264,7 @@ export default function EditStepThree({
                 <div key={optIndex} className="input-group mb-1">
                   <input
                     type="text"
-                    className={`form-control ${
-                      errors.options ? "is-invalid" : ""
-                    }`}
+                    className={`form-control ${errors.options ? "is-invalid" : ""}`}
                     placeholder={`Option ${optIndex + 1}`}
                     value={opt || ""}
                     onChange={(e) =>
@@ -285,13 +299,10 @@ export default function EditStepThree({
         + Add Question
       </button>
 
-      {/* =============================== */}
       {/* PUBLISHING OPTIONS */}
-      {/* =============================== */}
       <div className="mt-4 p-3 border rounded bg-light mt-20">
         <p className="mb-2 fw-semibold">When should this quiz be available?</p>
         <div className="d-flex flex-wrap gap-2">
-          {/* 1) SAVE — Available now */}
           <button
             type="button"
             className="btn btn-success"
@@ -313,18 +324,16 @@ export default function EditStepThree({
             )}
           </button>
 
-          {/* 2) SCHEDULE — Available on a specific date */}
           <button
             type="button"
             className="btn btn-danger"
-            onClick={() => setIsScheduleModalOpen(true)}
+            onClick={openScheduleModal}
             disabled={loading}
             title="Choose a start date for this quiz"
           >
             Schedule Quiz
           </button>
 
-          {/* Back */}
           <button
             type="button"
             className="btn btn-info ms-auto"
@@ -336,9 +345,7 @@ export default function EditStepThree({
         </div>
       </div>
 
-      {/* ========================================== */}
       {/* SCHEDULE QUIZ MODAL OVERLAY */}
-      {/* ========================================== */}
       {isScheduleModalOpen && (
         <div
           style={{
