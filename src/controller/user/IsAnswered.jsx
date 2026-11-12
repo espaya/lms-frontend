@@ -12,8 +12,6 @@ const isAnswered = async (apiBase, setErrors, setAnswered, csrfToken, topic_id) 
 
     const data = await response.json();
 
-    console.log(data);
-
     if (!response.ok) {
       setErrors({ general: data.message });
     } else {
