@@ -123,7 +123,7 @@ export default function PreviousUsers() {
     try {
       Swal.fire({
         title: "Confirm",
-        text: "Are you sure you want to mark this user as a previous employee?",
+        text: "Are you sure you want to mark this user as an active employee?",
         icon: "warning",
         showCancelButton: true,
         confirmButtonText: "Yes",
