@@ -1,0 +1,324 @@
+import { useEffect, useState } from "react";
+import MyHeader from "../../components/MyHeader";
+import Sidebar from "../../components/Sidebar";
+import Cookies from "js-cookie";
+import Pagination from "../../components/Pagination"; // You'll need to create this component
+import { PATHS } from "../../router";
+import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
+import { formatDate } from "../../utils/DateFormatter";
+
+export default function PreviousUsers() {
+  const csrfToken = Cookies.get("XSRF-TOKEN");
+  const authToken = localStorage.getItem("auth_token");
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [errors, setErrors] = useState({});
+  const [pagination, setPagination] = useState({
+    current_page: 1,
+    last_page: 1,
+    per_page: 10,
+    total: 0,
+  });
+  const apiBase = import.meta.env.VITE_API_URL;
+
+  const fetchUsers = async (page = 1) => {
+    setLoading(true);
+    try {
+      await fetch(`${apiBase}/sanctum/csrf-cookie`, {
+        credentials: "include",
+      });
+
+      const response = await fetch(
+        `${apiBase}/api/admin/dashboard/get-previous-employees?page=${page}`,
+        {
+          credentials: "include",
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            "X-XSRF-TOKEN": decodeURIComponent(csrfToken),
+          },
+        },
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to fetch users");
+      }
+
+      setUsers(data.data || []);
+      setPagination({
+        current_page: data.meta?.current_page || 1,
+        last_page: data.meta?.last_page || 1,
+        per_page: data.meta?.per_page || 10,
+        total: data.meta?.total || 0,
+      });
+    } catch (err) {
+      setErrors({ general: err.message });
+      console.error("Fetch error:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  const handlePageChange = (page) => {
+    fetchUsers(page);
+  };
+
+  const handleDeleteUser = async (id, username) => {
+    setErrors({});
+    try {
+      Swal.fire({
+        title: "Confirm",
+        text: `Are you sure you want to permanently delete "${username}"?`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes",
+        cancelButtonText: "No",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          // ✅ Proceed with deletion only if confirmed
+          const response = await fetch(`${apiBase}/api/user/delete/${id}`, {
+            method: "DELETE",
+            credentials: "include",
+            headers: {
+              Accept: "application/json",
+              "X-XSRF-TOKEN": decodeURIComponent(Cookies.get("XSRF-TOKEN")),
+              Authorization: `Bearer ${authToken}`,
+            },
+          });
+
+          const data = await response.json();
+
+          if (!response.ok) {
+            setErrors({ general: data.message });
+            return;
+          }
+
+          Swal.fire({
+            title: "Success",
+            icon: "success",
+            text: data.message,
+          });
+
+          setTimeout(() => {
+            window.location.reload();
+          }, 3000);
+        }
+      });
+    } catch (err) {
+      setErrors({ general: err.message });
+    }
+  };
+
+  const handleMarkAsActiveEmployee = async (id) => {
+    setErrors({});
+    try {
+      Swal.fire({
+        title: "Confirm",
+        text: "Are you sure you want to mark this user as a previous employee?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes",
+        cancelButtonText: "No",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          const response = await fetch(
+            `${apiBase}/api/admin/dashboard/mark-as-active-user/${id}`,
+            {
+              method: "POST",
+              credentials: "include",
+              headers: {
+                Accept: "application/json",
+                "X-XSRF-TOKEN": decodeURIComponent(Cookies.get("XSRF-TOKEN")),
+                Authorization: `Bearer ${authToken}`,
+              },
+            },
+          );
+
+          const data = await response.json();
+
+          if (!response.ok) {
+            setErrors({ general: data.message });
+            return;
+          }
+          Swal.fire({
+            title: "Success",
+            icon: "success",
+            text: data.message,
+          });
+
+          setTimeout(() => {
+            window.location.reload();
+          }, 3000);
+        }
+      });
+    } catch (err) {
+      setErrors({ general: err.message });
+    }
+  };
+
+  return (
+    <>
+      <title>Previous Users - 1staccess Home Care</title>
+
+      <div id="main-wrapper">
+        <MyHeader />
+        <Sidebar />
+        <div className="content-body">
+          <div className="container">
+            <div className="page-title">
+              <div className="row align-items-center justify-content-between">
+                <div className="col-md-6">
+                  <div className="page-title-content">
+                    <h3>Previous Users</h3>
+                    <p className="mb-2">Management of previous employees</p>
+                  </div>
+                </div>
+                <div className="col-auto">
+                  <div className="breadcrumbs">
+                    <a href="#">Home</a>
+                    <span>
+                      <i className="ri-arrow-right-s-line" />
+                    </span>
+                    <a href="#">Previous Users</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {errors.general && (
+              <div className="alert alert-danger">{errors.general}</div>
+            )}
+
+            <div className="row">
+              <div className="col-12">
+                <div className="card transparent">
+                  <div className="card-body">
+                    {loading ? (
+                      <div className="text-center py-5">
+                        <div className="spinner-border" role="status">
+                          <span className="visually-hidden">Loading...</span>
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        <div className="rtable rtable--5cols rtable--collapse">
+                          <div className="rtable-row rtable-row--head bg-transparent">
+                            <div className="rtable-cell topic-cell column-heading text-dark">
+                              <strong>Name</strong>
+                            </div>
+                            <div className="rtable-cell id-cell column-heading text-dark">
+                              <strong>Email</strong>
+                            </div>
+                            <div className="rtable-cell date-cell column-heading text-dark">
+                              <strong>Date</strong>
+                            </div>
+                            <div className="rtable-cell amount-cell column-heading text-dark">
+                              <strong>Privacy</strong>
+                            </div>
+                            <div className="rtable-cell card-cell column-heading text-dark">
+                              <strong>Role</strong>
+                            </div>
+                            <div className="rtable-cell receipt-cell column-heading text-dark">
+                              <strong>Actions</strong>
+                            </div>
+                          </div>
+
+                          {users.map((user) => (
+                            <div className="rtable-row" key={user.id}>
+                              <div className="rtable-cell topic-cell">
+                                <div className="rtable-cell--content title-content">
+                                  <h5>{user.name}</h5>
+                                </div>
+                              </div>
+                              <div className="rtable-cell id-cell">
+                                <div className="rtable-cell--content">
+                                  {user.email}
+                                </div>
+                              </div>
+                              <div className="rtable-cell date-cell">
+                                <div className="rtable-cell--content">
+                                  {formatDate(user.created_at)}
+                                </div>
+                              </div>
+                              <div className="rtable-cell amount-cell">
+                                <div className="rtable-cell--content">
+                                  {user.privacy_level || "Standard"}
+                                </div>
+                              </div>
+                              <div className="rtable-cell card-cell">
+                                <div className="rtable-cell--content">
+                                  {user.role}
+                                </div>
+                              </div>
+                              <div className="rtable-cell receipt-cell">
+                                <div className="rtable-cell--content">
+                                  <Link
+                                    style={{
+                                      fontSize: "16px",
+                                      marginRight: "8px",
+                                    }} // add marginRight for spacing
+                                    to={`${PATHS.SINGLE_USER.replace(
+                                      ":username",
+                                      user.name,
+                                    )}`}
+                                    className="btn btn-sm btn-primary"
+                                    title="View User"
+                                  >
+                                    <i className="ri-eye-line" />
+                                  </Link>
+
+                                  <a
+                                    onClick={() =>
+                                      handleMarkAsActiveEmployee(user.id)
+                                    }
+                                    style={{ fontSize: "16px" }}
+                                    href="#"
+                                    className="btn btn-sm btn-info text-white"
+                                    title="Mark as Active Employee"
+                                  >
+                                    <i className="ri-history-line"></i>
+                                  </a>
+
+                                  <a
+                                    onClick={() =>
+                                      handleDeleteUser(user.id, user.name)
+                                    }
+                                    style={{ fontSize: "16px" }}
+                                    href="#"
+                                    className="btn btn-sm btn-danger"
+                                    title="Delete User"
+                                  >
+                                    <i className="ri-delete-bin-line"></i>
+                                  </a>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+
+                        <Pagination
+                          currentPage={pagination.current_page}
+                          totalPages={pagination.last_page}
+                          onPageChange={handlePageChange}
+                        />
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}

@@ -105,7 +105,7 @@ export default function Sidebar() {
               <span>
                 <i className="ri-group-fill" />
               </span>
-              <span className="nav-text">Manage Users</span>
+              <span className="nav-text">Manage Employees</span>
             </a>
             <ul
               className="dropdown-menu dark-dropdown"
@@ -117,7 +117,17 @@ export default function Sidebar() {
                   onClick={() => navigate(PATHS.ADMIN_USERS)}
                   style={{ cursor: "pointer" }}
                 >
-                  All Users
+                  Active Employees
+                </a>
+              </li>
+
+              <li className={isActive(PATHS.ADMIN_PREVIOUS_USERS) ? "active" : ""}>
+                <a
+                  className="dropdown-item"
+                  onClick={() => navigate(PATHS.ADMIN_PREVIOUS_USERS)}
+                  style={{ cursor: "pointer" }}
+                >
+                  Previous Employees
                 </a>
               </li>
 

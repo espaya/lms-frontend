@@ -74,6 +74,7 @@ import EmployeeHandbook from "./views/student/forms/EmployeeHandbook";
 import SignedEmployeeHandbook from "./views/admin/forms/employee_handbook/SignedEmployeeHandbook";
 import AdminForms from "./views/admin/forms/AdminForms";
 import AdminUploadForms from "./views/admin/forms/AdminUploadForms";
+import PreviousUsers from "./views/admin/PreviousUsers";
 
 // Centralized route configuration with metadata
 export const ROUTE_CONFIG = {
@@ -187,6 +188,14 @@ export const ROUTE_CONFIG = {
     path: "/admin/dashboard/users/",
     element: <Users />,
     name: "All Users ",
+    isProtected: true,
+    roles: ["ADMIN"], // ✅ restrict to ADMIN only
+  },
+
+  ADMIN_PREVIOUS_USERS: {
+    path: "/admin/dashboard/previous-users/",
+    element: <PreviousUsers />,
+    name: "Previous Users ",
     isProtected: true,
     roles: ["ADMIN"], // ✅ restrict to ADMIN only
   },

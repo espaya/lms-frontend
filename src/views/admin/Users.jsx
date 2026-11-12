@@ -6,6 +6,7 @@ import Pagination from "../../components/Pagination"; // You'll need to create t
 import { PATHS } from "../../router";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
+import { formatDate } from "../../utils/DateFormatter";
 
 export default function Users() {
   const csrfToken = Cookies.get("XSRF-TOKEN");
@@ -127,7 +128,7 @@ export default function Users() {
       }).then(async (result) => {
         if (result.isConfirmed) {
           const response = await fetch(
-            `${apiBase}/api/user/mark-previous/${id}`,
+            `${apiBase}/api/admin/dashboard/mark-as-previous-employee/${id}`,
             {
               method: "POST",
               credentials: "include",
@@ -150,6 +151,10 @@ export default function Users() {
             icon: "success",
             text: data.message,
           });
+
+          setTimeout(() => {
+            window.location.reload();
+          }, 3000);
         }
       });
     } catch (err) {
@@ -238,9 +243,7 @@ export default function Users() {
                               </div>
                               <div className="rtable-cell date-cell">
                                 <div className="rtable-cell--content">
-                                  {new Date(
-                                    user.created_at,
-                                  ).toLocaleDateString()}
+                                  {formatDate(user.created_at)}
                                 </div>
                               </div>
                               <div className="rtable-cell amount-cell">
