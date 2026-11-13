@@ -40,7 +40,6 @@ export default function Questions() {
 
       const data = await response.json();
 
-      console.log(data);
 
       if (!response.ok) {
         setErrors({ general: data.message || "Failed to fetch questions" });
