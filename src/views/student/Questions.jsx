@@ -223,7 +223,7 @@ export default function Questions() {
                                       Status
                                     </div>
                                     <div className="rtable-cell--content purchase-content">
-                                      {formatDate(topic.created_at)}
+                                      {formatDate(topic.available_from)}
                                     </div>
                                   </div>
 
