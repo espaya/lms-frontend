@@ -1,155 +1,91 @@
-import React, { useState } from "react";
-import Swal from "sweetalert2";
-import Cookies from "js-cookie";
+import React from "react";
 import { useNavigate } from "react-router-dom";
-import { PATHS } from "../../router";
-import { formatDate } from "../../utils/DateFormatter";
 
 export default function AllQuestionsTopic({
   topic,
-  fetchQuestionsForTopic,
   subject,
+  fetchQuestionsForTopic,
 }) {
-  const apiBase = import.meta.env.VITE_API_URL;
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleDelete = async () => {
-    // Show confirmation dialog first
-    const result = await Swal.fire({
-      title: "Are you sure?",
-      text: `You are about to delete "${topic.name}" and all its questions. This action cannot be undone!`,
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
-      cancelButtonText: "Cancel",
-      reverseButtons: true,
-    });
+  // ⬇ SAFE ACCESS: If topic or topic.questions is undefined, return null safely
+  const firstQuestion =
+    topic?.questions?.length > 0 ? topic.questions[0] : null;
+  const availableFrom = firstQuestion?.available_from;
 
-    // If user confirmed deletion
-    if (result.isConfirmed) {
-      setLoading(true);
-
-      try {
-        await fetch(`${apiBase}/sanctum/csrf-cookie`, {
-          credentials: "include",
-        });
-
-        const csrfToken = Cookies.get("XSRF-TOKEN");
-        const authToken = localStorage.getItem("auth_token");
-
-        const response = await fetch(
-          `${apiBase}/api/delete-topic-subject-question/${topic.id}`,
-          {
-            method: "DELETE",
-            credentials: "include",
-            headers: {
-              Authorization: `Bearer ${authToken}`,
-              "X-XSRF-TOKEN": decodeURIComponent(csrfToken),
-            },
-          }
-        );
-
-        const data = await response.json();
-
-        if (!response.ok) {
-          Swal.fire({
-            icon: "error",
-            title: "Error",
-            text: data.message || "Failed to delete topic",
-          });
-        } else {
-          Swal.fire({
-            icon: "success",
-            title: "Deleted!",
-            text: data.message || "Topic deleted successfully",
-          });
-          // Optionally refresh the data after successful deletion
-          fetchQuestionsForTopic(topic.id);
-          // reload window
-          setTimeout(() => window.location.reload(), 3000);
-        }
-      } catch (err) {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: err.message || "An error occurred",
-        });
-      } finally {
-        setLoading(false);
-      }
-    }
-  };
+  // ⬇ If topic is completely missing, don't render anything for this row
+  if (!topic) return null;
 
   return (
-    <>
-      <div className="rtable-row">
-        <div className="rtable-cell topic-cell">
-          <div className="rtable-cell--content title-content">
-            <h5>{subject.name}</h5>
-          </div>
-        </div>
-        <div className="rtable-cell id-cell">
-          <div className="rtable-cell--heading">Topic</div>
-          <div className="rtable-cell--content date-content">{topic.name}</div>
-        </div>
-        <div className="rtable-cell rtable-cell--foot status-cell">
-          <div className="rtable-cell--heading">Date </div>
-          <div className="rtable-cell--content purchase-content">
-            { formatDate(topic.created_at) }
-          </div>
-        </div>
-        <div className="rtable-cell rtable-cell--foot receipt-cell">
-          <div className="rtable-cell--heading">Actions</div>
-          <div className="rtable-cell--content pdf-content">
-            <a
-              href="#"
-              className="icon-link"
-              title="View"
-              onClick={(e) => {
-                e.preventDefault();
-                fetchQuestionsForTopic(topic.id);
-              }}
-            >
-              <i style={{ fontSize: "18px" }} className="ri-eye-line" />
-            </a>
-
-            <a
-              onClick={(e) => {
-                e.preventDefault();
-                navigate(`/admin/dashboard/all-questions/${topic.id}`);
-              }}
-              href="#"
-              className="icon-link"
-              title="Edit"
-            >
-              <i style={{ fontSize: "18px" }} className="ri-edit-line" />
-            </a>
-
-            <a
-              href="#"
-              onClick={(e) => {
-                e.preventDefault();
-                handleDelete();
-              }}
-              className="icon-link"
-              title="Delete"
-              disabled={loading}
-            >
-              {loading ? (
-                <i className="ri-loader-4-line animate-spin" />
-              ) : (
-                <i
-                  style={{ fontSize: "18px" }}
-                  className="ri-delete-bin-line"
-                />
-              )}
-            </a>
-          </div>
+    <div className="rtable-row">
+      <div className="rtable-cell topic-cell">
+        <div className="rtable-cell--content title-content">
+          <h5>{subject?.name || "No Subject"}</h5>
         </div>
       </div>
-    </>
+
+      <div className="rtable-cell id-cell">
+        <div className="rtable-cell--heading">Topic</div>
+        <div className="rtable-cell--content date-content">
+          {topic?.name || "No Topic"}
+        </div>
+      </div>
+
+      <div className="rtable-cell rtable-cell--foot status-cell">
+        <div className="rtable-cell--heading">Date</div>
+        <div className="rtable-cell--content purchase-content">
+          {availableFrom ? (
+            <span className="badge bg-warning text-dark">
+              Scheduled:{" "}
+              {new Date(availableFrom).toLocaleDateString("en-US", {
+                month: "short",
+                day: "numeric",
+                year: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+            </span>
+          ) : (
+            <span>
+              {topic?.created_at
+                ? new Date(topic.created_at).toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "numeric",
+                    year: "numeric",
+                  })
+                : "N/A"}
+            </span>
+          )}
+        </div>
+      </div>
+
+      <div className="rtable-cell rtable-cell--foot receipt-cell">
+        <div className="rtable-cell--heading">Actions</div>
+        <div className="rtable-cell--content pdf-content d-flex gap-2">
+          <button
+            className="icon-link payout-icon sm-success-lighten text-success border-0 bg-transparent"
+            title="View Questions"
+            onClick={(e) => {
+              e.preventDefault();
+              if (topic?.id) fetchQuestionsForTopic(topic.id);
+            }}
+          >
+            <i style={{ fontSize: "18px" }} className="ri-eye-line" />
+          </button>
+
+          <button
+            className="icon-link payout-icon text-primary border-0 bg-transparent"
+            title="Edit Quiz"
+            onClick={(e) => {
+              e.preventDefault();
+              if (topic?.id)
+                navigate(`/admin/dashboard/all-questions/${topic.id}`);
+            }}
+          >
+            <i style={{ fontSize: "18px" }} className="ri-edit-line" />
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }
