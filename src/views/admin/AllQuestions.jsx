@@ -191,7 +191,7 @@ export default function AllQuestions() {
                               <strong>Topic</strong>
                             </div>
                             <div className="rtable-cell date-cell column-heading text-dark">
-                              <strong>Date</strong>
+                              <strong>Created At</strong>
                             </div>
                             <div className="rtable-cell receipt-cell column-heading text-dark">
                               <strong>Actions</strong>
