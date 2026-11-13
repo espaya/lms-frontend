@@ -6,9 +6,16 @@ const formatForInput = (dateString) => {
   const d = new Date(dateString);
   if (isNaN(d.getTime())) return "";
 
-  // Pad month, day, hour, and minute with leading zeros if needed
+  // We use local getters to ensure the date matches the admin's current browser time
   const pad = (n) => String(n).padStart(2, "0");
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+
+  const year = d.getFullYear();
+  const month = pad(d.getMonth() + 1);
+  const day = pad(d.getDate());
+  const hours = pad(d.getHours());
+  const minutes = pad(d.getMinutes());
+
+  return `${year}-${month}-${day}T${hours}:${minutes}`;
 };
 
 export default function EditStepThree({
