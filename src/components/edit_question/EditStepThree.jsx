@@ -137,19 +137,24 @@ export default function EditStepThree({
       return;
     }
 
-    const start = new Date(startDate);
+    const start = new Date(startDate); // local wall clock
+    if (isNaN(start.getTime())) {
+      setScheduleError("Invalid start date/time.");
+      return;
+    }
 
+    let end = null;
     if (endDate) {
-      const end = new Date(endDate);
-      if (end <= start) {
+      end = new Date(endDate);
+      if (isNaN(end.getTime()) || end <= start) {
         setScheduleError("End date/time must be after the start date/time.");
         return;
       }
     }
 
     handleSubmit({
-      startDate: start.toISOString(),
-      endDate: endDate ? new Date(endDate).toISOString() : null,
+      startDate: start.toISOString(), // explicit UTC instant
+      endDate: end ? end.toISOString() : null,
       durationMinutes: durationMinutes ? Number(durationMinutes) : null,
     });
 
