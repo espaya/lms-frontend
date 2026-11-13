@@ -13,7 +13,7 @@ const isAnswered = async (apiBase, setErrors, setAnswered, csrfToken, topic_id) 
     const data = await response.json();
 
     if (!response.ok) {
-      setErrors({ general: data.message });
+      setErrors({ general: data.message }); 
     } else {
       setAnswered(data.answered);
     }

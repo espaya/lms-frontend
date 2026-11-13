@@ -66,19 +66,20 @@ export default function UserSidebar() {
 
           {/* ⬇ Only show the Forms link if loading is done and NOT all forms are signed */}
           {!loading && !isSigned && (
-            <li className={isActive(PATHS.USER_FORMS) ? "active" : ""}>
-              <a
-                onClick={() => {
-                  navigate(PATHS.USER_FORMS);
-                }}
-                style={{ cursor: "pointer" }}
-              >
-                <span>
-                  <i className="ri-file-list-3-fill" />
-                </span>
-                <span className="nav-text">Forms</span>
-              </a>
-            </li>
+            // <li className={isActive(PATHS.USER_FORMS) ? "active" : ""}>
+            //   <a
+            //     onClick={() => {
+            //       navigate(PATHS.USER_FORMS);
+            //     }}
+            //     style={{ cursor: "pointer" }}
+            //   >
+            //     <span>
+            //       <i className="ri-file-list-3-fill" />
+            //     </span>
+            //     <span className="nav-text">Forms</span>
+            //   </a>
+            // </li>
+            <></>
           )}
         </ul>
       </div>

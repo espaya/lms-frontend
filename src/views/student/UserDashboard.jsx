@@ -272,6 +272,9 @@ export default function UserDashboard() {
   const signedFormsCount = formList.filter((f) => f.signed).length;
   const pendingFormsCount = totalForms - signedFormsCount;
 
+  // ⬇ NEW: Add this check
+  const isAllFormsSigned = totalForms > 0 && signedFormsCount === totalForms;
+
   // Calculate Percentage
   const compliancePercentage =
     totalForms === 0 ? 0 : Math.round((signedFormsCount / totalForms) * 100);
@@ -315,7 +318,7 @@ export default function UserDashboard() {
             </div>
 
             {/* Action Alert if forms are pending */}
-            {pendingFormsCount > 0 && (
+            {!isAllFormsSigned && pendingFormsCount > 0 && (
               <div
                 className="alert alert-warning alert-dismissible fade show mb-4"
                 role="alert"
@@ -340,84 +343,88 @@ export default function UserDashboard() {
 
             {/* Top Stat Widgets */}
             <div className="row mt-20">
-              {/* Pending Forms */}
-              <div className="col-xl-3 col-lg-6 col-sm-6">
-                <div className="widget-stat card">
-                  <div className="card-body p-50">
-                    {" "}
-                    {/* Increased padding */}
-                    <div className="media ai-icon">
-                      <span className="me-3 bgl-danger text-danger">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="30"
-                          height="30"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                          <polyline points="14 2 14 8 20 8"></polyline>
-                          <line x1="16" y1="13" x2="8" y2="13"></line>
-                          <line x1="16" y1="17" x2="8" y2="17"></line>
-                          <polyline points="10 9 9 9 8 9"></polyline>
-                        </svg>
-                      </span>
-                      <div className="media-body">
-                        <p className="mb-1">Pending Forms</p>
-                        <h4 className="mb-0">
-                          {loading ? "..." : pendingFormsCount}
-                        </h4>
+              {/* ⬇ NEW: Hide Pending Forms widget if all signed */}
+              {!isAllFormsSigned && (
+                <div className="col-xl-3 col-lg-6 col-sm-6">
+                  <div className="widget-stat card">
+                    <div className="card-body p-50">
+                      <div className="media ai-icon">
+                        <span className="me-3 bgl-danger text-danger">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="30"
+                            height="30"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <polyline points="10 9 9 9 8 9"></polyline>
+                          </svg>
+                        </span>
+                        <div className="media-body">
+                          <p className="mb-1">Pending Forms</p>
+                          <h4 className="mb-0">
+                            {loading ? "..." : pendingFormsCount}
+                          </h4>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              )}
 
-              {/* Signed Forms */}
-              <div className="col-xl-3 col-lg-6 col-sm-6">
-                <div className="widget-stat card">
-                  <div className="card-body p-50">
-                    {" "}
-                    {/* Increased padding */}
-                    <div className="media ai-icon">
-                      <span className="me-3 bgl-success text-success">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="30"
-                          height="30"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                          <polyline points="14 2 14 8 20 8"></polyline>
-                          <path d="M9 15l2 2 4-4"></path>
-                        </svg>
-                      </span>
-                      <div className="media-body">
-                        <p className="mb-1">Signed Forms</p>
-                        <h4 className="mb-0">
-                          {loading ? "..." : signedFormsCount}
-                        </h4>
+              {/* ⬇ NEW: Hide Signed Forms widget if all signed */}
+              {!isAllFormsSigned && (
+                <div className="col-xl-3 col-lg-6 col-sm-6">
+                  <div className="widget-stat card">
+                    <div className="card-body p-50">
+                      <div className="media ai-icon">
+                        <span className="me-3 bgl-success text-success">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="30"
+                            height="30"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <path d="M9 15l2 2 4-4"></path>
+                          </svg>
+                        </span>
+                        <div className="media-body">
+                          <p className="mb-1">Signed Forms</p>
+                          <h4 className="mb-0">
+                            {loading ? "..." : signedFormsCount}
+                          </h4>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              )}
 
-              {/* Pending Quizzes */}
-              <div className="col-xl-3 col-lg-6 col-sm-6">
+              {/* Pending Quizzes (Always visible - resizes dynamically) */}
+              <div
+                className={
+                  isAllFormsSigned
+                    ? "col-xl-6 col-lg-6 col-sm-6"
+                    : "col-xl-3 col-lg-6 col-sm-6"
+                }
+              >
                 <div className="widget-stat card">
                   <div className="card-body p-50">
-                    {" "}
-                    {/* Increased padding */}
                     <div className="media ai-icon">
                       <span className="me-3 bgl-warning text-warning">
                         <svg
@@ -445,12 +452,16 @@ export default function UserDashboard() {
                 </div>
               </div>
 
-              {/* Compliance Status (Progress Bar) */}
-              <div className="col-xl-3 col-lg-6 col-sm-6 ">
+              {/* Compliance Status (Always visible - resizes dynamically) */}
+              <div
+                className={
+                  isAllFormsSigned
+                    ? "col-xl-6 col-lg-6 col-sm-6"
+                    : "col-xl-3 col-lg-6 col-sm-6"
+                }
+              >
                 <div className="widget-stat card">
                   <div className="card-body p-45">
-                    {" "}
-                    {/* Increased padding */}
                     <div className="media ai-icon mb-3">
                       <span
                         className={`me-3 ${compliancePercentage === 100 ? "bgl-success text-success" : "bgl-primary text-primary"}`}
@@ -610,23 +621,26 @@ export default function UserDashboard() {
                       </Link>
                     </div>
 
-                    <div className="d-flex align-items-center mb-3 p-3 border rounded">
-                      <div className="me-3">
-                        <i className="ri-shield-check-line fs-30 text-success"></i>
+                    {/* ⬇ NEW: Hide Signed Forms Link if all signed */}
+                    {!isAllFormsSigned && (
+                      <div className="d-flex align-items-center mb-3 p-3 border rounded">
+                        <div className="me-3">
+                          <i className="ri-shield-check-line fs-30 text-success"></i>
+                        </div>
+                        <div className="flex-grow-1">
+                          <h6 className="mb-1">Signed Forms</h6>
+                          <p className="mb-0 text-muted fs-12">
+                            View your completed forms
+                          </p>
+                        </div>
+                        <Link
+                          to={PATHS.USER_FORMS}
+                          className="btn btn-light btn-sm text-primary"
+                        >
+                          <i className="ri-arrow-right-line"></i>
+                        </Link>
                       </div>
-                      <div className="flex-grow-1">
-                        <h6 className="mb-1">Signed Forms</h6>
-                        <p className="mb-0 text-muted fs-12">
-                          View your completed forms
-                        </p>
-                      </div>
-                      <Link
-                        to={PATHS.USER_FORMS}
-                        className="btn btn-light btn-sm text-primary"
-                      >
-                        <i className="ri-arrow-right-line"></i>
-                      </Link>
-                    </div>
+                    )}
 
                     <div className="d-flex align-items-center p-3 border rounded">
                       <div className="me-3">
