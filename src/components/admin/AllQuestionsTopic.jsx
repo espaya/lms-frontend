@@ -96,9 +96,9 @@ export default function AllQuestionsTopic({
           <div className="rtable-cell--content date-content">{topic.name}</div>
         </div>
         <div className="rtable-cell rtable-cell--foot status-cell">
-          <div className="rtable-cell--heading">Date </div>
+          <div className="rtable-cell--heading">Created At</div>
           <div className="rtable-cell--content purchase-content">
-            { formatDate(topic.available_from) }
+            { formatDate(topic.created_at)}
           </div>
         </div>
         <div className="rtable-cell rtable-cell--foot receipt-cell">
