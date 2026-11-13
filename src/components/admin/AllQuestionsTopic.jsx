@@ -1,79 +1,169 @@
-import React from "react";
+import React, { useState } from "react";
+import Swal from "sweetalert2";
+import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import { formatDate } from "../../utils/DateFormatter";
 
 export default function AllQuestionsTopic({
   topic,
-  subject,
   fetchQuestionsForTopic,
+  subject,
 }) {
+  const apiBase = import.meta.env.VITE_API_URL;
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  // ⬇ SAFE ACCESS: If topic or topic.questions is undefined, return null safely
+  // ⬇ Extract schedule date safely
   const firstQuestion =
     topic?.questions?.length > 0 ? topic.questions[0] : null;
   const availableFrom = firstQuestion?.available_from;
 
-  // ⬇ If topic is completely missing, don't render anything for this row
+  // If topic is completely missing, don't render anything
   if (!topic) return null;
 
+  const handleDelete = async () => {
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: `You are about to delete "${topic.name}" and all its questions. This action cannot be undone!`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
+      reverseButtons: true,
+    });
+
+    if (result.isConfirmed) {
+      setLoading(true);
+
+      try {
+        await fetch(`${apiBase}/sanctum/csrf-cookie`, {
+          credentials: "include",
+        });
+
+        const csrfToken = Cookies.get("XSRF-TOKEN");
+        const authToken = localStorage.getItem("auth_token");
+
+        const response = await fetch(
+          `${apiBase}/api/delete-topic-subject-question/${topic.id}`,
+          {
+            method: "DELETE",
+            credentials: "include",
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+              "X-XSRF-TOKEN": decodeURIComponent(csrfToken),
+            },
+          },
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: data.message || "Failed to delete topic",
+          });
+        } else {
+          Swal.fire({
+            icon: "success",
+            title: "Deleted!",
+            text: data.message || "Topic deleted successfully",
+          });
+          setTimeout(() => window.location.reload(), 3000);
+        }
+      } catch (err) {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: err.message || "An error occurred",
+        });
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
   return (
-    <div className="rtable-row">
-      <div className="rtable-cell topic-cell">
-        <div className="rtable-cell--content title-content">
-          <h5>{subject?.name || "No Subject"}</h5>
+    <>
+      <div className="rtable-row">
+        <div className="rtable-cell topic-cell">
+          <div className="rtable-cell--content title-content">
+            <h5>{subject?.name || "No Subject"}</h5>
+          </div>
         </div>
-      </div>
 
-      <div className="rtable-cell id-cell">
-        <div className="rtable-cell--heading">Topic</div>
-        <div className="rtable-cell--content date-content">
-          {topic?.name || "No Topic"}
+        <div className="rtable-cell id-cell">
+          <div className="rtable-cell--heading">Topic</div>
+          <div className="rtable-cell--content date-content">
+            {topic?.name || "No Topic"}
+          </div>
         </div>
-      </div>
 
-      <div className="rtable-cell rtable-cell--foot status-cell">
-        <div className="rtable-cell--heading">Date</div>
-        <div className="rtable-cell--content purchase-content">
-          {availableFrom ? (
-            <span className="badge bg-warning text-dark">
-              Scheduled: {formatDate(availableFrom)}
-            </span>
-          ) : (
-            <span>
-              {topic?.created_at ? formatDate(topic.created_at) : "N/A"}
-            </span>
-          )}
+        {/* ⬇ UPDATED DATE COLUMN WITH SCHEDULE FALLBACK */}
+        <div className="rtable-cell rtable-cell--foot status-cell">
+          <div className="rtable-cell--heading">Date</div>
+          <div className="rtable-cell--content purchase-content">
+            {availableFrom ? (
+              <span className="badge bg-warning text-dark">
+                Scheduled: {formatDate(availableFrom)}
+              </span>
+            ) : (
+              <span>{formatDate(topic.created_at)}</span>
+            )}
+          </div>
         </div>
-      </div>
 
-      <div className="rtable-cell rtable-cell--foot receipt-cell">
-        <div className="rtable-cell--heading">Actions</div>
-        <div className="rtable-cell--content pdf-content d-flex gap-2">
-          <button
-            className="icon-link payout-icon sm-success-lighten text-success border-0 bg-transparent"
-            title="View Questions"
-            onClick={(e) => {
-              e.preventDefault();
-              if (topic?.id) fetchQuestionsForTopic(topic.id);
-            }}
-          >
-            <i style={{ fontSize: "18px" }} className="ri-eye-line" />
-          </button>
+        <div className="rtable-cell rtable-cell--foot receipt-cell">
+          <div className="rtable-cell--heading">Actions</div>
+          <div className="rtable-cell--content pdf-content">
+            <a
+              href="#"
+              className="icon-link"
+              title="View"
+              onClick={(e) => {
+                e.preventDefault();
+                fetchQuestionsForTopic(topic.id);
+              }}
+            >
+              <i style={{ fontSize: "18px" }} className="ri-eye-line" />
+            </a>
 
-          <button
-            className="icon-link payout-icon text-primary border-0 bg-transparent"
-            title="Edit Quiz"
-            onClick={(e) => {
-              e.preventDefault();
-              if (topic?.id)
+            <a
+              onClick={(e) => {
+                e.preventDefault();
                 navigate(`/admin/dashboard/all-questions/${topic.id}`);
-            }}
-          >
-            <i style={{ fontSize: "18px" }} className="ri-edit-line" />
-          </button>
+              }}
+              href="#"
+              className="icon-link"
+              title="Edit"
+            >
+              <i style={{ fontSize: "18px" }} className="ri-edit-line" />
+            </a>
+
+            <a
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                handleDelete();
+              }}
+              className="icon-link"
+              title="Delete"
+              disabled={loading}
+            >
+              {loading ? (
+                <i className="ri-loader-4-line animate-spin" />
+              ) : (
+                <i
+                  style={{ fontSize: "18px" }}
+                  className="ri-delete-bin-line"
+                />
+              )}
+            </a>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
