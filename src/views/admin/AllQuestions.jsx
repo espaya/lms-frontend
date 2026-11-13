@@ -48,6 +48,9 @@ export default function AllQuestions() {
 
       const data = await response.json();
 
+      
+      console.log(data);
+
       if (!response.ok) {
         throw new Error(data.message || "Failed to fetch questions");
       }
@@ -102,8 +105,6 @@ export default function AllQuestions() {
       );
 
       const data = await response.json();
-
-      console.log("Fetched questions for topic:", data);
 
       if (!response.ok) {
         throw new Error(data.message || "Failed to fetch questions");
