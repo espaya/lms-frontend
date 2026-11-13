@@ -319,26 +319,27 @@ export default function UserDashboard() {
 
             {/* Action Alert if forms are pending */}
             {!isAllFormsSigned && pendingFormsCount > 0 && (
-              <div
-                className="alert alert-warning alert-dismissible fade show mb-4"
-                role="alert"
-              >
-                <i className="ri-error-warning-line me-2 fs-18"></i>
-                <strong>Action Required:</strong> You have {pendingFormsCount}{" "}
-                mandatory form(s) that need to be signed.
-                <Link
-                  to={PATHS.USER_FORMS}
-                  className="alert-link ms-1 text-decoration-underline"
-                >
-                  Review Forms Now
-                </Link>
-                <button
-                  type="button"
-                  className="btn-close"
-                  data-bs-dismiss="alert"
-                  aria-label="Close"
-                ></button>
-              </div>
+              // <div
+              //   className="alert alert-warning alert-dismissible fade show mb-4"
+              //   role="alert"
+              // >
+              //   <i className="ri-error-warning-line me-2 fs-18"></i>
+              //   <strong>Action Required:</strong> You have {pendingFormsCount}{" "}
+              //   mandatory form(s) that need to be signed.
+              //   <Link
+              //     to={PATHS.USER_FORMS}
+              //     className="alert-link ms-1 text-decoration-underline"
+              //   >
+              //     Review Forms Now
+              //   </Link>
+              //   <button
+              //     type="button"
+              //     className="btn-close"
+              //     data-bs-dismiss="alert"
+              //     aria-label="Close"
+              //   ></button>
+              // </div>
+              <></>
             )}
 
             {/* Top Stat Widgets */}
@@ -595,73 +596,7 @@ export default function UserDashboard() {
               </div>
 
               {/* Quick Links / Handbook */}
-              <div className="col-xl-4 col-lg-12">
-                <div className="card">
-                  <div className="card-header border-0 pb-0">
-                    <h4 className="card-title">Important Documents</h4>
-                  </div>
-                  <div className="card-body">
-                    <div className="d-flex align-items-center mb-3 p-3 border rounded">
-                      <div className="me-3">
-                        <i className="ri-book-read-line fs-30 text-primary"></i>
-                      </div>
-                      <div className="flex-grow-1">
-                        <h6 className="mb-1">Employee Handbook</h6>
-                        <p className="mb-0 text-muted fs-12">
-                          {isSigned(handbook, "handbook")
-                            ? "Already Signed"
-                            : "Pending Signature"}
-                        </p>
-                      </div>
-                      <Link
-                        to={PATHS.USER_EMPLOYEE_HANDBOOK_FORM}
-                        className="btn btn-light btn-sm text-primary"
-                      >
-                        <i className="ri-arrow-right-line"></i>
-                      </Link>
-                    </div>
-
-                    {/* ⬇ NEW: Hide Signed Forms Link if all signed */}
-                    {!isAllFormsSigned && (
-                      <div className="d-flex align-items-center mb-3 p-3 border rounded">
-                        <div className="me-3">
-                          <i className="ri-shield-check-line fs-30 text-success"></i>
-                        </div>
-                        <div className="flex-grow-1">
-                          <h6 className="mb-1">Signed Forms</h6>
-                          <p className="mb-0 text-muted fs-12">
-                            View your completed forms
-                          </p>
-                        </div>
-                        <Link
-                          to={PATHS.USER_FORMS}
-                          className="btn btn-light btn-sm text-primary"
-                        >
-                          <i className="ri-arrow-right-line"></i>
-                        </Link>
-                      </div>
-                    )}
-
-                    <div className="d-flex align-items-center p-3 border rounded">
-                      <div className="me-3">
-                        <i className="ri-question-answer-line fs-30 text-warning"></i>
-                      </div>
-                      <div className="flex-grow-1">
-                        <h6 className="mb-1">Need Help?</h6>
-                        <p className="mb-0 text-muted fs-12">
-                          Contact administrator
-                        </p>
-                      </div>
-                      <a
-                        href="mailto:admin@1staccesshomecareinc.com"
-                        className="btn btn-light btn-sm text-primary"
-                      >
-                        <i className="ri-mail-line"></i>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              
             </div>
           </div>
         </div>
