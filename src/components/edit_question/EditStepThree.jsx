@@ -152,8 +152,6 @@ export default function EditStepThree({
       }
     }
 
-    console.log(start.toISOString())
-
     handleSubmit({
       startDate: start.toISOString(), // explicit UTC instant
       endDate: end ? end.toISOString() : null,
