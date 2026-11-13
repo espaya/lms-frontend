@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { formatDate } from "../../utils/DateFormatter";
 
 export default function AllQuestionsTopic({
   topic,
@@ -36,24 +37,11 @@ export default function AllQuestionsTopic({
         <div className="rtable-cell--content purchase-content">
           {availableFrom ? (
             <span className="badge bg-warning text-dark">
-              Scheduled:{" "}
-              {new Date(availableFrom).toLocaleDateString("en-US", {
-                month: "short",
-                day: "numeric",
-                year: "numeric",
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
+              Scheduled: {formatDate(availableFrom)}
             </span>
           ) : (
             <span>
-              {topic?.created_at
-                ? new Date(topic.created_at).toLocaleDateString("en-US", {
-                    month: "short",
-                    day: "numeric",
-                    year: "numeric",
-                  })
-                : "N/A"}
+              {topic?.created_at ? formatDate(topic.created_at) : "N/A"}
             </span>
           )}
         </div>
