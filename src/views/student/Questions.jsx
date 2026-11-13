@@ -40,6 +40,8 @@ export default function Questions() {
 
       const data = await response.json();
 
+      console.log(data);
+
       if (!response.ok) {
         setErrors({ general: data.message || "Failed to fetch questions" });
         return;
@@ -217,13 +219,26 @@ export default function Questions() {
                                     </div>
                                   </div>
 
-                                  {/* Status Column - Now showing Percentage */}
+                                  {/* Date Column */}
                                   <div className="rtable-cell rtable-cell--foot status-cell">
                                     <div className="rtable-cell--heading">
-                                      Status
+                                      Date
                                     </div>
                                     <div className="rtable-cell--content purchase-content">
-                                      {formatDate(topic.created_at)}
+                                      {topic.questions &&
+                                      topic.questions.length > 0 &&
+                                      topic.questions[0].available_from ? (
+                                        <span className="badge bg-warning text-dark">
+                                          Scheduled:{" "}
+                                          {formatDate(
+                                            topic.questions[0].available_from,
+                                          )}
+                                        </span>
+                                      ) : (
+                                        <span>
+                                          {formatDate(topic.created_at)}
+                                        </span>
+                                      )}
                                     </div>
                                   </div>
 
