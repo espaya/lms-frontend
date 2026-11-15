@@ -2,7 +2,8 @@ import { useLocation, useNavigate, Link } from "react-router-dom";
 import { PATHS } from "../../router";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
-import AllFormsSigned from "../../controller/AllFormsSigned"
+import AllFormsSigned from "../../controller/AllFormsSigned";
+import IsShowForms from "../../controller/user/IsShowForms";
 
 export default function UserSidebar() {
   const location = useLocation();
@@ -12,6 +13,7 @@ export default function UserSidebar() {
   const [loading, setLoading] = useState(true);
   const apiBase = import.meta.env.VITE_API_URL;
   const [errors, setErrors] = useState({});
+  const [isShowForms, setIsShowForms] = useState(false);
 
   const csrfToken = Cookies.get("XSRF-TOKEN");
 
@@ -19,8 +21,16 @@ export default function UserSidebar() {
 
   useEffect(() => {
     // Fetch the signature status when the sidebar mounts
-    AllFormsSigned(apiBase, setErrors, setIsSigned, csrfToken)
-      .finally(() => setLoading(false));
+    AllFormsSigned(apiBase, setErrors, setIsSigned, csrfToken).finally(() =>
+      setLoading(false),
+    );
+  }, [apiBase, csrfToken]);
+
+  useEffect(() => {
+    // Fetch the form visibility status when the sidebar mounts
+    IsShowForms(apiBase, setErrors, setIsShowForms, csrfToken).finally(() =>
+      setLoading(false),
+    );
   }, [apiBase, csrfToken]);
 
   return (
@@ -65,21 +75,20 @@ export default function UserSidebar() {
           </li>
 
           {/* ⬇ Only show the Forms link if loading is done and NOT all forms are signed */}
-          {!loading && !isSigned && (
-            // <li className={isActive(PATHS.USER_FORMS) ? "active" : ""}>
-            //   <a
-            //     onClick={() => {
-            //       navigate(PATHS.USER_FORMS);
-            //     }}
-            //     style={{ cursor: "pointer" }}
-            //   >
-            //     <span>
-            //       <i className="ri-file-list-3-fill" />
-            //     </span>
-            //     <span className="nav-text">Forms</span>
-            //   </a>
-            // </li>
-            <></>
+          {(!loading && isShowForms) && (
+            <li className={isActive(PATHS.USER_FORMS) ? "active" : ""}>
+              <a
+                onClick={() => {
+                  navigate(PATHS.USER_FORMS);
+                }}
+                style={{ cursor: "pointer" }}
+              >
+                <span>
+                  <i className="ri-file-list-3-fill" />
+                </span>
+                <span className="nav-text">Forms</span>
+              </a>
+            </li>
           )}
         </ul>
       </div>

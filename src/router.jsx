@@ -75,6 +75,7 @@ import SignedEmployeeHandbook from "./views/admin/forms/employee_handbook/Signed
 import AdminForms from "./views/admin/forms/AdminForms";
 import AdminUploadForms from "./views/admin/forms/AdminUploadForms";
 import PreviousUsers from "./views/admin/PreviousUsers";
+import AdminSettings from "./views/admin/AdminSettings";
 
 // Centralized route configuration with metadata
 export const ROUTE_CONFIG = {
@@ -116,6 +117,14 @@ export const ROUTE_CONFIG = {
     path: "/account",
     element: <Account />,
     name: "Account",
+    isProtected: true,
+    roles: ["USER", "ADMIN"], // ✅ optional
+  },
+
+  ADMIN_SETTINGS: {
+    path: "/admin/dashboard/settings",
+    element: <AdminSettings />,
+    name: "Admin Settings",
     isProtected: true,
     roles: ["USER", "ADMIN"], // ✅ optional
   },

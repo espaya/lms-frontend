@@ -339,7 +339,7 @@ export default function AddUser() {
                                 type="checkbox"
                                 id={`activateForms-${index}`}
                                 name="activateForms"
-                                value={1}
+                                value={0}
                                 onChange={(e) => handleOnChange(index, e)}
                               />
                               <label

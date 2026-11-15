@@ -15,6 +15,7 @@ export default function SingleUser() {
     new_password: "",
     confirm_password: "",
     id: "",
+    activateForms: 0, // Default to 0 (unchecked)
   });
   const [errors, setErrors] = useState({});
   const apiBase = import.meta.env.VITE_API_URL;
@@ -22,10 +23,12 @@ export default function SingleUser() {
   const [loading, setLoading] = useState(false);
 
   const handleOnChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
+
     setFormData((prevData) => ({
       ...prevData,
-      [name]: value,
+      // If it's a checkbox, use 1 or 0. Otherwise, use the string value.
+      [name]: type === "checkbox" ? (checked ? 1 : 0) : value,
     }));
   };
 
@@ -53,7 +56,7 @@ export default function SingleUser() {
               Accept: "application/json",
               "X-XSRF-TOKEN": decodeURIComponent(csrfToken),
             },
-          }
+          },
         );
 
         const data = await response.json();
@@ -63,11 +66,15 @@ export default function SingleUser() {
             setErrors({ general: data.message });
           }
         } else {
+          sessionStorage.removeItem("activateForms"); // ⬅ Clear the cache
+
           setFormData({
             name: data.name || "",
             email: data.email || "",
             role: data.role || "",
             id: data.id || "",
+            // Force the backend value to a number (1 or 0)
+            activateForms: Number(data.activateForms) || 0,
           });
         }
       } catch (err) {
@@ -77,7 +84,7 @@ export default function SingleUser() {
       }
     };
     getProfile();
-  }, []);
+  }, [apiBase, username]);
 
   const handleFormSubmission = async (e) => {
     e.preventDefault();
@@ -104,7 +111,7 @@ export default function SingleUser() {
             Authorization: `Bearer ${authToken}`,
             "X-XSRF-TOKEN": decodeURIComponent(csrfToken),
           },
-        }
+        },
       );
 
       const data = await response.json();
@@ -118,13 +125,14 @@ export default function SingleUser() {
         }
       } else {
         setFormData({
-          email: formData.email || "", // repopulate
-          name: formData.name || "", // repopulate
+          email: formData.email || "",
+          name: formData.name || "",
           role: formData.role || "",
           old_password: "",
           new_password: "",
           confirm_password: "",
           id: formData.id || "",
+          activateForms: formData.activateForms || 0,
         });
 
         Swal.fire({
@@ -167,7 +175,7 @@ export default function SingleUser() {
                 </div>
                 <div className="col-auto">
                   <div className="breadcrumbs">
-                    <a href="#">Users </a>
+                    <a href="#">Employees </a>
                     <span>
                       <i className="ri-arrow-right-s-line" />
                     </span>
@@ -294,7 +302,7 @@ export default function SingleUser() {
                                   </small>
                                 )}
                               </div>
-                              <div className="col-xxl-12 col-xl-12 col-lg-12 mb-16">
+                              <div className="col-xxl-6 col-xl-6 col-lg-6 mb-16">
                                 <label className="form-label">Role</label>
                                 <input
                                   name="role"
@@ -310,13 +318,47 @@ export default function SingleUser() {
                                   </small>
                                 )}
                               </div>
+
+                              {/* ⬇ FIXED: Activate Forms Checkbox */}
+                              <div className="col-xxl-6 col-xl-6 col-lg-6 mb-16 mt-10">
+                                <label className="form-label">
+                                  Activate Forms
+                                </label>
+                                <div className="form-check">
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="activateForms"
+                                    id="activateForms"
+                                    // Checked if activateForms is 1 or true
+                                    checked={
+                                      formData.activateForms === 1 ||
+                                      formData.activateForms === true
+                                    }
+                                    onChange={handleOnChange}
+                                  />
+                                  <label
+                                    className="form-check-label"
+                                    htmlFor="activateForms"
+                                  >
+                                    Activate forms for this employee
+                                  </label>
+                                </div>
+                                {errors.activateForms && (
+                                  <small className="text-danger">
+                                    {errors.activateForms[0]}
+                                  </small>
+                                )}
+                              </div>
                             </div>
                             <div className="mt-16">
                               <button
                                 type="submit"
                                 className="btn btn-primary mr-2"
                               >
-                                {loading ? "Updating user..." : "Update User"}
+                                {loading
+                                  ? "Updating employee..."
+                                  : "Update Employee"}
                               </button>
                             </div>
                           </form>

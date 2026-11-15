@@ -32,6 +32,8 @@ import FetchEmployeeUniversalPrecautions from "../../controller/user/forms/Unive
 import FetchEmployeeVerification from "../../controller/user/forms/VerificationController";
 import FetechEmployeeHandbook from "../../controller/user/forms/EmployeeHandbookController";
 
+import IsShowForms from "../../controller/user/IsShowForms";
+
 export default function UserDashboard() {
   const apiBase = import.meta.env.VITE_API_URL;
   const authToken = localStorage.getItem("auth_token");
@@ -65,6 +67,8 @@ export default function UserDashboard() {
   const [precautions, setPrecautions] = useState(null);
   const [verification, setVerification] = useState(null);
   const [handbook, setHandbook] = useState(null);
+
+  const [isShowForms, setIsShowForms] = useState(false);
 
   // Quiz States
   const [recentQuizzes, setRecentQuizzes] = useState([]);
@@ -284,6 +288,13 @@ export default function UserDashboard() {
     (q) => q.status === "Pending",
   ).length;
 
+  useEffect(() => {
+    // Fetch the form visibility status when the sidebar mounts
+    IsShowForms(apiBase, setErrors, setIsShowForms, csrfToken).finally(() =>
+      setLoading(false),
+    );
+  }, [apiBase, csrfToken]);
+
   return (
     <>
       <title>Dashboard - 1staccess Home Care</title>
@@ -318,34 +329,33 @@ export default function UserDashboard() {
             </div>
 
             {/* Action Alert if forms are pending */}
-            {!isAllFormsSigned && pendingFormsCount > 0 && (
-              // <div
-              //   className="alert alert-warning alert-dismissible fade show mb-4"
-              //   role="alert"
-              // >
-              //   <i className="ri-error-warning-line me-2 fs-18"></i>
-              //   <strong>Action Required:</strong> You have {pendingFormsCount}{" "}
-              //   mandatory form(s) that need to be signed.
-              //   <Link
-              //     to={PATHS.USER_FORMS}
-              //     className="alert-link ms-1 text-decoration-underline"
-              //   >
-              //     Review Forms Now
-              //   </Link>
-              //   <button
-              //     type="button"
-              //     className="btn-close"
-              //     data-bs-dismiss="alert"
-              //     aria-label="Close"
-              //   ></button>
-              // </div>
-              <></>
+            {isShowForms && (
+              <div
+                className="alert alert-warning alert-dismissible fade show mb-4"
+                role="alert"
+              >
+                <i className="ri-error-warning-line me-2 fs-18"></i>
+                <strong>Action Required:</strong> You have {pendingFormsCount}{" "}
+                mandatory form(s) that need to be signed.
+                <Link
+                  to={PATHS.USER_FORMS}
+                  className="alert-link ms-1 text-decoration-underline"
+                >
+                  Review Forms Now
+                </Link>
+                <button
+                  type="button"
+                  className="btn-close"
+                  data-bs-dismiss="alert"
+                  aria-label="Close"
+                ></button>
+              </div>
             )}
 
             {/* Top Stat Widgets */}
             <div className="row mt-20">
               {/* ⬇ NEW: Hide Pending Forms widget if all signed */}
-              {!isAllFormsSigned && (
+              {isShowForms && (
                 <div className="col-xl-3 col-lg-6 col-sm-6">
                   <div className="widget-stat card">
                     <div className="card-body p-50">
@@ -382,7 +392,7 @@ export default function UserDashboard() {
               )}
 
               {/* ⬇ NEW: Hide Signed Forms widget if all signed */}
-              {!isAllFormsSigned && (
+              {isShowForms && (
                 <div className="col-xl-3 col-lg-6 col-sm-6">
                   <div className="widget-stat card">
                     <div className="card-body p-50">
@@ -419,7 +429,7 @@ export default function UserDashboard() {
               {/* Pending Quizzes (Always visible - resizes dynamically) */}
               <div
                 className={
-                  isAllFormsSigned
+                  isShowForms
                     ? "col-xl-6 col-lg-6 col-sm-6"
                     : "col-xl-3 col-lg-6 col-sm-6"
                 }
@@ -456,7 +466,7 @@ export default function UserDashboard() {
               {/* Compliance Status (Always visible - resizes dynamically) */}
               <div
                 className={
-                  isAllFormsSigned
+                  isShowForms
                     ? "col-xl-6 col-lg-6 col-sm-6"
                     : "col-xl-3 col-lg-6 col-sm-6"
                 }
@@ -596,7 +606,74 @@ export default function UserDashboard() {
               </div>
 
               {/* Quick Links / Handbook */}
-              
+              {isShowForms && (
+                <div className="col-xl-4 col-lg-12">
+                  <div className="card">
+                    <div className="card-header border-0 pb-0">
+                      <h4 className="card-title">Important Documents</h4>
+                    </div>
+                    <div className="card-body">
+                      <div className="d-flex align-items-center mb-3 p-3 border rounded">
+                        <div className="me-3">
+                          <i className="ri-book-read-line fs-30 text-primary"></i>
+                        </div>
+                        <div className="flex-grow-1">
+                          <h6 className="mb-1">Employee Handbook</h6>
+                          <p className="mb-0 text-muted fs-12">
+                            {isSigned(handbook, "handbook")
+                              ? "Already Signed"
+                              : "Pending Signature"}
+                          </p>
+                        </div>
+                        <Link
+                          to={PATHS.USER_EMPLOYEE_HANDBOOK_FORM}
+                          className="btn btn-light btn-sm text-primary"
+                        >
+                          <i className="ri-arrow-right-line"></i>
+                        </Link>
+                      </div>
+
+                      {/* ⬇ NEW: Hide Signed Forms Link if all signed */}
+
+                      <div className="d-flex align-items-center mb-3 p-3 border rounded">
+                        <div className="me-3">
+                          <i className="ri-shield-check-line fs-30 text-success"></i>
+                        </div>
+                        <div className="flex-grow-1">
+                          <h6 className="mb-1">Signed Forms</h6>
+                          <p className="mb-0 text-muted fs-12">
+                            View your completed forms
+                          </p>
+                        </div>
+                        <Link
+                          to={PATHS.USER_FORMS}
+                          className="btn btn-light btn-sm text-primary"
+                        >
+                          <i className="ri-arrow-right-line"></i>
+                        </Link>
+                      </div>
+
+                      <div className="d-flex align-items-center p-3 border rounded">
+                        <div className="me-3">
+                          <i className="ri-question-answer-line fs-30 text-warning"></i>
+                        </div>
+                        <div className="flex-grow-1">
+                          <h6 className="mb-1">Need Help?</h6>
+                          <p className="mb-0 text-muted fs-12">
+                            Contact administrator
+                          </p>
+                        </div>
+                        <a
+                          href="mailto:admin@1staccesshomecareinc.com"
+                          className="btn btn-light btn-sm text-primary"
+                        >
+                          <i className="ri-mail-line"></i>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

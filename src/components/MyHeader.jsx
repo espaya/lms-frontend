@@ -1,7 +1,8 @@
 import { useContext } from "react";
 import { AuthContext } from "../auth/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import Swal from "sweetalert2";
+import { PATHS } from "../router";
 
 export default function MyHeader() {
   const { user, logout } = useContext(AuthContext);
@@ -208,15 +209,7 @@ export default function MyHeader() {
                         </span>
                         Profile
                       </a>
-                      <a
-                        className="dropdown-item ps-20 pe-20 pt-10 pb-10 d-flex align-items-center border-top  undefined"
-                        href="settings-profile.html"
-                      >
-                        <span className="fs-18 text-primary me-10">
-                          <i className="ri-settings-3-line" />
-                        </span>
-                        Settings
-                      </a>
+                      
                       <a
                         className="dropdown-item ps-20 pe-20 pt-10 pb-10 d-flex align-items-center border-top  undefined"
                         href="settings-activity.html"
@@ -235,6 +228,15 @@ export default function MyHeader() {
                         </span>
                         Lock
                       </a> */}
+                      <Link
+                        className="dropdown-item ps-20 pe-20 pt-10 pb-10 d-flex align-items-center border-top  undefined"
+                        to={PATHS.ADMIN_SETTINGS}
+                      >
+                        <span className="fs-18 text-primary me-10">
+                          <i className="ri-settings-3-line" />
+                        </span>
+                        Settings
+                      </Link>
                       <a
                         className="dropdown-item ps-20 pe-20 pt-10 pb-10 d-flex align-items-center border-top  text-danger"
                         href="#"

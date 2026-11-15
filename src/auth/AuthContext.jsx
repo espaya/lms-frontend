@@ -39,6 +39,8 @@ export const AuthProvider = ({ children }) => {
         // Store the token in localStorage
         if (data.token) {
           localStorage.setItem("auth_token", data.token);
+          // On successful login:
+          sessionStorage.removeItem("activateForms"); // ⬅ Clear the cache so it fetches fresh data
         }
 
         setSuccessMsg(data.message || "Login successful!");
@@ -104,6 +106,7 @@ export const AuthProvider = ({ children }) => {
         method: "POST",
         credentials: "include",
       });
+      sessionStorage.removeItem("activateForms"); // ⬅ Clear the cache
       setSuccessMsg("Logged out successfully!"); // Set logout success message
       setTimeout(() => setSuccessMsg(""), 3500);
     } catch (error) {
