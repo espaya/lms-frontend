@@ -137,7 +137,7 @@ export default function Sidebar() {
                   onClick={() => navigate(PATHS.ADD_USERS)}
                   style={{ cursor: "pointer" }}
                 >
-                  Add New
+                  Add New Employee
                 </a>
               </li>
             </ul>
