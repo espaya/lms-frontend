@@ -12,23 +12,6 @@ export default function AddUser() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  // const [formData, setFormData] = useState({
-  //   name: "",
-  //   password: "Welcome@1",
-  //   confirm_password: "Welcome@1",
-  //   email: "",
-  //   privacy: "",
-  //   role: "USER",
-  // });
-
-  // const handleOnChange = (e) => {
-  //   const { name, value, type, checked } = e.target;
-
-  //   setFormData((prev) => ({
-  //     ...prev,
-  //     [name]: type === "checkbox" ? checked : value,
-  //   }));
-  // };
 
   const [users, setUsers] = useState([
     {
@@ -39,6 +22,7 @@ export default function AddUser() {
       email: "",
       privacy: "",
       role: "USER",
+      activateForms: "",
     },
   ]);
 
@@ -65,6 +49,7 @@ export default function AddUser() {
         email: "",
         privacy: "",
         role: "USER",
+        activateForms: "",
       },
     ]);
   };
@@ -111,6 +96,7 @@ export default function AddUser() {
             email: "",
             privacy: "",
             role: "USER",
+            activateForms: ""
           },
         ]);
         Swal.fire({
@@ -127,77 +113,12 @@ export default function AddUser() {
     }
   };
 
-  // const onAddUser = async (e) => {
-  //   e.preventDefault();
-  //   setErrors({});
-  //   setLoading(true);
 
-  //   try {
-  //     await fetch(`${apiBase}/sanctum/csrf-cookie`, {
-  //       credentials: "include",
-  //     });
+  window.document.title = "Add Employee - 1staccess Home Care Inc";
 
-  //     const csrfToken = Cookies.get("XSRF-TOKEN");
-  //     const authToken = localStorage.getItem("auth_token");
-
-  //     const response = await fetch(`${apiBase}/api/users/add`, {
-  //       method: "POST",
-  //       body: JSON.stringify(formData),
-  //       credentials: "include",
-  //       headers: {
-  //         Accept: "application/json",
-  //         "Content-Type": "application/json",
-  //         Authorization: `Bearer ${authToken}`,
-  //         "X-XSRF-TOKEN": decodeURIComponent(csrfToken),
-  //       },
-  //     });
-
-  //     const data = await response.json();
-
-  //     if (!response.ok) {
-  //       if (data.errors) {
-  //         setErrors(data.errors);
-  //       } else {
-  //         setErrors({ general: data.message });
-  //         setTimeout(() => setErrors({ general: "" }), 3500);
-  //       }
-  //     } else {
-  //       // clear form fields
-  //       setFormData({
-  //         name: "",
-  //         password: "Welcome@1",
-  //         confirm_password: "Welcome@1",
-  //         email: "",
-  //         privacy: "",
-  //         role: "",
-  //       });
-
-  //       // show sweet alert
-  //       Swal.fire({
-  //         icon: "success",
-  //         title: "Success",
-  //         text: data.message,
-  //         timer: 3500,
-  //       });
-  //     }
-  //   } catch (err) {
-  //     setErrors({ general: err.message });
-  //     setTimeout(() => setErrors({ general: "" }), 3500);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
 
   return (
     <>
-      <link
-        rel="icon"
-        type="image/png"
-        sizes="16x16"
-        href="assets/images/favicon.png"
-      />
-      <title>Add User - 1staccess Home Care Inc</title>
-
       <div id="main-wrapper">
         <MyHeader />
         <Sidebar />
@@ -207,9 +128,9 @@ export default function AddUser() {
               <div className="row align-items-center justify-content-between">
                 <div className="col-md-6">
                   <div className="page-title-content">
-                    <h3>Add User</h3>
+                    <h3>Add Employee</h3>
                     <p className="mb-2">
-                      Fill this form to manually add a user
+                      Fill this form to manually add an employee
                     </p>
                   </div>
                 </div>
@@ -219,7 +140,7 @@ export default function AddUser() {
                     <span>
                       <i className="ri-arrow-right-s-line" />
                     </span>
-                    <a href="#">add user</a>
+                    <a href="#">Add Employee</a>
                   </div>
                 </div>
                 {errors.general && (
@@ -365,7 +286,7 @@ export default function AddUser() {
                           </div>
 
                           {/* Role */}
-                          <div className="col-xxl-6 col-xl-6 col-lg-6 mb-16">
+                          <div className="col-xxl-4 col-xl-4 col-lg-4 mb-16">
                             <label className="form-label">Role</label>
                             <select
                               name="role"
@@ -384,7 +305,7 @@ export default function AddUser() {
                           </div>
 
                           {/* Privacy Policy */}
-                          <div className="col-xxl-6 col-xl-6 col-lg-6 mb-16 mt-10">
+                          <div className="col-xxl-4 col-xl-4 col-lg-4 mb-16 mt-10">
                             <label className="form-label">Privacy Policy</label>
                             <div className="form-check">
                               <input
@@ -408,6 +329,32 @@ export default function AddUser() {
                               </small>
                             )}
                           </div>
+
+                          {/* Activate Forms */}
+                          <div className="col-xxl-4 col-xl-4 col-lg-4 mb-16 mt-10">
+                            <label className="form-label">Activate Forms</label>
+                            <div className="form-check">
+                              <input
+                                className="form-check-input"
+                                type="checkbox"
+                                id={`activateForms-${index}`}
+                                name="activateForms"
+                                value={1}
+                                onChange={(e) => handleOnChange(index, e)}
+                              />
+                              <label
+                                className="form-check-label"
+                                htmlFor={`activateForms-${index}`}
+                              >
+                                Activate forms for this employee
+                              </label>
+                            </div>
+                            {errors.activateForms && (
+                              <small className="text-danger">
+                                {errors.activateForms[0]}
+                              </small>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -423,7 +370,7 @@ export default function AddUser() {
                       className="btn btn-secondary"
                       onClick={addNewUserForm}
                     >
-                      + Add Another User
+                      + Add Another Employee
                     </button>
                   </div>
                 </form>
