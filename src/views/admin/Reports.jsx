@@ -45,7 +45,7 @@ export default function Reports() {
             Accept: "application/json",
             "Content-Type": "application/json",
           },
-        }
+        },
       );
 
       const data = await response.json();
@@ -128,43 +128,58 @@ export default function Reports() {
                           (report) =>
                             report.topics &&
                             report.topics.length > 0 &&
-                            report.topics.map((topic) => (
-                              <div
-                                key={topic.id}
-                                className="bg-white py-12 px-12 rounded d-flex mb-20 justify-content-between align-items-center shadow-sm"
-                              >
-                                <div className="payout-icon bg-success-lighten text-success">
-                                  <i className="ri-file-text-line" />
-                                </div>
-                                <div className="flex-grow-1">
-                                  <h5 className="mb-5">{topic.name}</h5>
-                                  <p className="mb-0">
-                                    {formatDate(topic.created_at)}
-                                  </p>
-                                  <small className="text-muted">
-                                    <a
-                                      href={`${apiBase}/view-question-file/${topic.fileName}`}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                    >
-                                      File: {topic.fileName}
-                                    </a>
-                                  </small>
-                                </div>
-                                <a
-                                  onClick={(e) => {
-                                    e.preventDefault();
-                                    navigate(
-                                      `/admin/dashboard/reports/${topic.id}`
-                                    );
-                                  }}
-                                  className="btn btn-primary"
-                                  href="#"
+                            report.topics.map((topic) => {
+                              // ⬇ Extract schedule date safely
+                              const availableFrom =
+                                topic.questions?.[0]?.available_from;
+
+                              return (
+                                <div
+                                  key={topic.id}
+                                  className="bg-white py-12 px-12 rounded d-flex mb-20 justify-content-between align-items-center shadow-sm"
                                 >
-                                  Preview
-                                </a>
-                              </div>
-                            ))
+                                  <div className="payout-icon bg-success-lighten text-success">
+                                    <i className="ri-file-text-line" />
+                                  </div>
+                                  <div className="flex-grow-1">
+                                    <h5 className="mb-5">{topic.name}</h5>
+                                    <p className="mb-0">
+                                      {/* ⬇ Fallback to created_at if no schedule */}
+                                      {availableFrom ? (
+                                        <span className="badge bg-warning text-dark">
+                                          Scheduled: {formatDate(availableFrom)}
+                                        </span>
+                                      ) : (
+                                        <span>
+                                          {formatDate(topic.created_at)}
+                                        </span>
+                                      )}
+                                    </p>
+                                    <small className="text-muted">
+                                      <a
+                                        href={`${apiBase}/view-question-file/${topic.fileName}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                      >
+                                        File: {topic.fileName}
+                                      </a>
+                                    </small>
+                                  </div>
+                                  <a
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      navigate(
+                                        `/admin/dashboard/reports/${topic.id}`,
+                                      );
+                                    }}
+                                    className="btn btn-primary"
+                                    href="#"
+                                  >
+                                    Preview
+                                  </a>
+                                </div>
+                              );
+                            }),
                         )}
                         <Pagination
                           currentPage={pagination.current_page}

@@ -35,7 +35,7 @@ export default function ExportReport({ reportRef, reports }) {
 
         const base64 = canvas.toDataURL("image/png");
         resolve(
-          `<img src="${base64}" width="${width}" height="${height}" style="width: ${width}px; height: ${height}px;" />`
+          `<img src="${base64}" width="${width}" height="${height}" style="width: ${width}px; height: ${height}px;" />`,
         );
       };
 
@@ -76,7 +76,7 @@ export default function ExportReport({ reportRef, reports }) {
             signatureHtml = await getResizedBase64Image(imgUrl);
           }
           return { ...report, signatureHtml };
-        })
+        }),
       );
 
       // 3. Build the table rows
@@ -109,6 +109,13 @@ export default function ExportReport({ reportRef, reports }) {
         .join("");
 
       const topicName = reports[0]?.topic?.name || "All Topics";
+
+      // ⬇ ADD THIS: Extract the date
+      const topicDate =
+        reports[0]?.topic?.questions?.[0]?.available_from ||
+        reports[0]?.topic?.created_at;
+
+      const formattedTopicDate = topicDate ? formatDate(topicDate) : "No Date";
 
       // 4. Wrap in Word-compatible HTML with the Company Header
       const htmlContent = `
@@ -145,9 +152,12 @@ export default function ExportReport({ reportRef, reports }) {
             <p>Agency Phone: (+1) 804-818-3216</p>
           </div>
 
-          <!-- Report Title -->
+                    <!-- Report Title -->
           <h1>Quiz Report</h1>
-          <h3>${topicName}</h3>
+          <h3>
+            ${topicName} <br/> 
+            <span style="font-size: 11pt; color: #666; font-weight: normal;">Date: ${formattedTopicDate}</span>
+          </h3>
           
           <!-- Data Table -->
           <table>
@@ -170,13 +180,12 @@ export default function ExportReport({ reportRef, reports }) {
       const blob = new Blob(["\ufeff", htmlContent], {
         type: "application/msword",
       });
-      saveAs(blob, `Quiz_Report_${topicName.replace(/\s+/g, '_')}.doc`);
+      saveAs(blob, `Quiz_Report_${topicName.replace(/\s+/g, "_")}.doc`);
     } catch (error) {
       console.error("Word export failed:", error);
       alert("Failed to export to Word.");
     }
   };
-
 
   return (
     <div className="dropdown">
