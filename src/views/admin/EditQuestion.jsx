@@ -123,7 +123,7 @@ export default function EditQuestion() {
   };
 
   // === Submit ===
-  const handleSubmit = async () => {
+  const handleSubmit = async (schedule = null) => {
     if (!validateForm()) return;
 
     setLoading(true);
@@ -143,7 +143,7 @@ export default function EditQuestion() {
       payload.append("subject", formData.subject);
 
       formData.topics.forEach((topic, i) =>
-        payload.append(`topics[${i}]`, topic)
+        payload.append(`topics[${i}]`, topic),
       );
 
       // ⬇ Send questions as JSON string WITH id — matches backend update()
@@ -155,9 +155,22 @@ export default function EditQuestion() {
             text: q.text,
             options: q.options,
             correctIndex: q.correctIndex,
-          }))
-        )
+          })),
+        ),
       );
+
+      // Add this block to include the schedule if provided
+      // ⬇ 2. ADD THIS BLOCK TO SEND THE SCHEDULE
+      if (schedule) {
+        payload.append(
+          "schedule",
+          JSON.stringify({
+            startDate: schedule.startDate,
+            endDate: schedule.endDate,
+            durationMinutes: schedule.durationMinutes,
+          }),
+        );
+      }
 
       // Optional replacement PDF
       if (uploadedFiles.length > 0) {
@@ -175,7 +188,7 @@ export default function EditQuestion() {
           },
           body: payload,
           credentials: "include",
-        }
+        },
       );
 
       const responseText = await response.text();
@@ -186,15 +199,15 @@ export default function EditQuestion() {
         if (response.status === 422 && result.errors) {
           setErrors(
             Object.fromEntries(
-              Object.entries(result.errors).map(([k, v]) => [k, v[0]])
-            )
+              Object.entries(result.errors).map(([k, v]) => [k, v[0]]),
+            ),
           );
           throw new Error(result.message || "Please fix the errors above");
         }
         throw new Error(
           result.message ||
             result.errors?.join?.("\n") ||
-            "Failed to update questions"
+            "Failed to update questions",
         );
       }
 
@@ -284,9 +297,13 @@ export default function EditQuestion() {
                 <div className="col-auto">
                   <div className="breadcrumbs">
                     <a href="#">Home </a>
-                    <span><i className="ri-arrow-right-s-line" /></span>
+                    <span>
+                      <i className="ri-arrow-right-s-line" />
+                    </span>
                     <a href="#">Manage Questions</a>
-                    <span><i className="ri-arrow-right-s-line" /></span>
+                    <span>
+                      <i className="ri-arrow-right-s-line" />
+                    </span>
                     <a href="#">Add Questions</a>
                   </div>
                   <div className="d-flex justify-content-between align-items-center">
